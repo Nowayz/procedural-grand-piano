@@ -1,0 +1,2763 @@
+{
+  "schemaVersion": 2,
+  "source": {
+    "suppliedDirectory": "SalamanderGrandPianoV3_44.1khz16bit",
+    "title": "Salamander Grand Piano V3 (44.1 kHz / 16-bit WAV edition)",
+    "instrument": "Yamaha C5 grand piano",
+    "author": "Alexander Holm",
+    "license": "Creative Commons Attribution 3.0 Unported (CC BY 3.0)",
+    "sourcePage": "https://sfzinstruments.github.io/pianos/salamander/",
+    "licensePage": "https://creativecommons.org/licenses/by/3.0/",
+    "recordingContext": "Two AKG C414 microphones in AB position about 12 cm above the strings; original capture 48 kHz/24-bit; this attached edition is 44.1 kHz/16-bit.",
+    "localSfzHeader": "The supplied SFZ header says Salamander Grand Piano V2, Author: Alexander Holm, License: CC-by; the directory and upstream catalog identify the V3 distribution.",
+    "sfzSha256": "84247d1a6af9a6ec6aa45eb28ea914c86bb8cc4618ee08510f9261dbfebb77a1",
+    "mapping": {
+      "parsedSustainRegions": 480,
+      "sampledPitchSpacing": "minor thirds from A0 through C8",
+      "velocityLayers": 16,
+      "sustainGroup": "amp_veltrack=73, ampeg_release=1 second",
+      "additionalLayers": "chromatic release noises, three string-resonance release strengths, and two pedal-down/two pedal-up recordings"
+    },
+    "redistribution": "No reference WAV data is copied into source, reports, tests, demos, or runtime output. Only scalar measurements are retained."
+  },
+  "preprocessing": {
+    "waveform": "Decode attached PCM16 without resampling; divide signed values by 32768; arithmetic stereo mid is used for waveform peak/RMS/onset.",
+    "spectral": "Analyze L/R separately with a Hann window, average power spectra to avoid AB-microphone phase cancellation, and ignore energy above 16 kHz for centroid.",
+    "onset": "Causal 3 ms sliding RMS (no future samples at the buffer boundary); first crossing at 4% of the first-250-ms maximum; spectral window begins 25 ms after that crossing.",
+    "pitch": "Find a local spectral maximum near equal-tempered pitch. Raw and SFZ-retuned estimates are both reported; PCM is not pitch shifted.",
+    "decay": "Fit dB/second to Hann-windowed partial peaks on microphone channel 1 at fixed post-onset times; T60=-60/slope. This is a proxy and is sensitive to beating/noise floors.",
+    "focusedTransient": "A6v16 uses onset-aligned 0-5/5-10/10-20/20-40/40-80 ms frames on the arithmetic stereo mid, a fixed 50 ms RMS trajectory, and a 1.5 s L/R power-averaged FFT for the unison cluster."
+  },
+  "selectedSustainRecordings": [
+    {
+      "file": "A0v4.wav",
+      "note": "A0",
+      "midi": 21,
+      "expectedHz": 27.5,
+      "layer": 4,
+      "sfzVelocityRange": [
+        37,
+        43
+      ],
+      "normalizedVelocityMidpoint": 0.315,
+      "retunedSfzCents": 10,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 24.7703
+      },
+      "waveform": {
+        "peak": 0.18478,
+        "rms": 0.014311,
+        "dc": -6e-7,
+        "onsetSeconds": 0.01658,
+        "attackToPeakSeconds": 0.0142
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.04159,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 164.34,
+        "rawFundamentalPeakHz": 27.2045,
+        "estimatedAfterRetuneHz": 27.3621,
+        "inharmonicityB": 0.00019835,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 27.205,
+            "relativeDb": -44.21
+          },
+          {
+            "number": 2,
+            "frequencyHz": 54.227,
+            "relativeDb": -26.55
+          },
+          {
+            "number": 3,
+            "frequencyHz": 81.413,
+            "relativeDb": 0
+          },
+          {
+            "number": 4,
+            "frequencyHz": 108.691,
+            "relativeDb": -4.97
+          },
+          {
+            "number": 5,
+            "frequencyHz": 136.233,
+            "relativeDb": -4.06
+          },
+          {
+            "number": 6,
+            "frequencyHz": 163.539,
+            "relativeDb": -8.29
+          },
+          {
+            "number": 7,
+            "frequencyHz": 190.99,
+            "relativeDb": -12.73
+          },
+          {
+            "number": 8,
+            "frequencyHz": 218.97,
+            "relativeDb": -29.82
+          },
+          {
+            "number": 9,
+            "frequencyHz": 246.775,
+            "relativeDb": -21.21
+          },
+          {
+            "number": 10,
+            "frequencyHz": 275.092,
+            "relativeDb": -12.43
+          },
+          {
+            "number": 11,
+            "frequencyHz": 303.721,
+            "relativeDb": -15.76
+          },
+          {
+            "number": 12,
+            "frequencyHz": 332.162,
+            "relativeDb": -15.1
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -0.631,
+          "t60Seconds": 95.048
+        },
+        "2": {
+          "slopeDbPerSecond": -0.848,
+          "t60Seconds": 70.736
+        },
+        "4": {
+          "slopeDbPerSecond": -3.635,
+          "t60Seconds": 16.508
+        }
+      }
+    },
+    {
+      "file": "A0v8.wav",
+      "note": "A0",
+      "midi": 21,
+      "expectedHz": 27.5,
+      "layer": 8,
+      "sfzVelocityRange": [
+        57,
+        64
+      ],
+      "normalizedVelocityMidpoint": 0.4764,
+      "retunedSfzCents": 10,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 24.9995
+      },
+      "waveform": {
+        "peak": 0.30034,
+        "rms": 0.022312,
+        "dc": -9e-7,
+        "onsetSeconds": 0.01222,
+        "attackToPeakSeconds": 0.02231
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03723,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 197.01,
+        "rawFundamentalPeakHz": 27.3777,
+        "estimatedAfterRetuneHz": 27.5363,
+        "inharmonicityB": 0.00009715,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 27.378,
+            "relativeDb": -41.53
+          },
+          {
+            "number": 2,
+            "frequencyHz": 54.233,
+            "relativeDb": -27.02
+          },
+          {
+            "number": 3,
+            "frequencyHz": 81.394,
+            "relativeDb": 0
+          },
+          {
+            "number": 4,
+            "frequencyHz": 108.69,
+            "relativeDb": -4.86
+          },
+          {
+            "number": 5,
+            "frequencyHz": 136.215,
+            "relativeDb": -4.22
+          },
+          {
+            "number": 6,
+            "frequencyHz": 163.547,
+            "relativeDb": -8.49
+          },
+          {
+            "number": 7,
+            "frequencyHz": 190.958,
+            "relativeDb": -12.29
+          },
+          {
+            "number": 8,
+            "frequencyHz": 219.014,
+            "relativeDb": -29.72
+          },
+          {
+            "number": 9,
+            "frequencyHz": 246.774,
+            "relativeDb": -21.05
+          },
+          {
+            "number": 10,
+            "frequencyHz": 275.09,
+            "relativeDb": -11.96
+          },
+          {
+            "number": 11,
+            "frequencyHz": 303.726,
+            "relativeDb": -14.86
+          },
+          {
+            "number": 12,
+            "frequencyHz": 332.165,
+            "relativeDb": -14.12
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": 0,
+          "t60Seconds": null
+        },
+        "2": {
+          "slopeDbPerSecond": 0,
+          "t60Seconds": null
+        },
+        "4": {
+          "slopeDbPerSecond": -3.854,
+          "t60Seconds": 15.567
+        }
+      }
+    },
+    {
+      "file": "A0v12.wav",
+      "note": "A0",
+      "midi": 21,
+      "expectedHz": 27.5,
+      "layer": 12,
+      "sfzVelocityRange": [
+        89,
+        96
+      ],
+      "normalizedVelocityMidpoint": 0.7283,
+      "retunedSfzCents": 10,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 25.6917
+      },
+      "waveform": {
+        "peak": 0.40506,
+        "rms": 0.028848,
+        "dc": 0.0000029,
+        "onsetSeconds": 0.01036,
+        "attackToPeakSeconds": 0.02306
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03537,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 221.39,
+        "rawFundamentalPeakHz": 27.0963,
+        "estimatedAfterRetuneHz": 27.2532,
+        "inharmonicityB": 0.00032056,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 27.096,
+            "relativeDb": -43.03
+          },
+          {
+            "number": 2,
+            "frequencyHz": 54.246,
+            "relativeDb": -26.09
+          },
+          {
+            "number": 3,
+            "frequencyHz": 81.39,
+            "relativeDb": 0
+          },
+          {
+            "number": 4,
+            "frequencyHz": 108.691,
+            "relativeDb": -4.8
+          },
+          {
+            "number": 5,
+            "frequencyHz": 136.215,
+            "relativeDb": -4.31
+          },
+          {
+            "number": 6,
+            "frequencyHz": 163.55,
+            "relativeDb": -8.59
+          },
+          {
+            "number": 7,
+            "frequencyHz": 190.951,
+            "relativeDb": -12.3
+          },
+          {
+            "number": 8,
+            "frequencyHz": 219.027,
+            "relativeDb": -30.11
+          },
+          {
+            "number": 9,
+            "frequencyHz": 246.799,
+            "relativeDb": -20.79
+          },
+          {
+            "number": 10,
+            "frequencyHz": 275.088,
+            "relativeDb": -11.98
+          },
+          {
+            "number": 11,
+            "frequencyHz": 303.737,
+            "relativeDb": -14.68
+          },
+          {
+            "number": 12,
+            "frequencyHz": 332.182,
+            "relativeDb": -13.9
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -1.559,
+          "t60Seconds": 38.476
+        },
+        "2": {
+          "slopeDbPerSecond": -0.822,
+          "t60Seconds": 73.015
+        },
+        "4": {
+          "slopeDbPerSecond": -3.906,
+          "t60Seconds": 15.36
+        }
+      }
+    },
+    {
+      "file": "A0v16.wav",
+      "note": "A0",
+      "midi": 21,
+      "expectedHz": 27.5,
+      "layer": 16,
+      "sfzVelocityRange": [
+        121,
+        127
+      ],
+      "normalizedVelocityMidpoint": 0.9764,
+      "retunedSfzCents": 10,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 25.8626
+      },
+      "waveform": {
+        "peak": 0.64185,
+        "rms": 0.041951,
+        "dc": -0.0000027,
+        "onsetSeconds": 0.02202,
+        "attackToPeakSeconds": 0.02451
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.04703,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 274.68,
+        "rawFundamentalPeakHz": 26.771,
+        "estimatedAfterRetuneHz": 26.926,
+        "inharmonicityB": 0.00079784,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 26.771,
+            "relativeDb": -43.5
+          },
+          {
+            "number": 2,
+            "frequencyHz": 54.001,
+            "relativeDb": -27.18
+          },
+          {
+            "number": 3,
+            "frequencyHz": 81.254,
+            "relativeDb": 0
+          },
+          {
+            "number": 4,
+            "frequencyHz": 108.507,
+            "relativeDb": -4.76
+          },
+          {
+            "number": 5,
+            "frequencyHz": 136.243,
+            "relativeDb": -3.67
+          },
+          {
+            "number": 6,
+            "frequencyHz": 163.557,
+            "relativeDb": -8.14
+          },
+          {
+            "number": 7,
+            "frequencyHz": 190.951,
+            "relativeDb": -11.7
+          },
+          {
+            "number": 8,
+            "frequencyHz": 219.077,
+            "relativeDb": -29.94
+          },
+          {
+            "number": 9,
+            "frequencyHz": 246.849,
+            "relativeDb": -19.79
+          },
+          {
+            "number": 10,
+            "frequencyHz": 275.121,
+            "relativeDb": -11.55
+          },
+          {
+            "number": 11,
+            "frequencyHz": 303.785,
+            "relativeDb": -14.05
+          },
+          {
+            "number": 12,
+            "frequencyHz": 332.224,
+            "relativeDb": -13.42
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -0.82,
+          "t60Seconds": 73.141
+        },
+        "2": {
+          "slopeDbPerSecond": -1.221,
+          "t60Seconds": 49.136
+        },
+        "4": {
+          "slopeDbPerSecond": -3.958,
+          "t60Seconds": 15.159
+        }
+      }
+    },
+    {
+      "file": "A2v4.wav",
+      "note": "A2",
+      "midi": 45,
+      "expectedHz": 110,
+      "layer": 4,
+      "sfzVelocityRange": [
+        37,
+        43
+      ],
+      "normalizedVelocityMidpoint": 0.315,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 16.1963
+      },
+      "waveform": {
+        "peak": 0.1756,
+        "rms": 0.01397,
+        "dc": 0,
+        "onsetSeconds": 0.012,
+        "attackToPeakSeconds": 0.02358
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03701,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 216.11,
+        "rawFundamentalPeakHz": 109.6589,
+        "estimatedAfterRetuneHz": 109.4058,
+        "inharmonicityB": 0.00016727,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 109.659,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 220.115,
+            "relativeDb": -4.37
+          },
+          {
+            "number": 3,
+            "frequencyHz": 329.835,
+            "relativeDb": -8.64
+          },
+          {
+            "number": 4,
+            "frequencyHz": 439.837,
+            "relativeDb": -14.21
+          },
+          {
+            "number": 5,
+            "frequencyHz": 549.983,
+            "relativeDb": -12.95
+          },
+          {
+            "number": 6,
+            "frequencyHz": 660.406,
+            "relativeDb": -12.06
+          },
+          {
+            "number": 7,
+            "frequencyHz": 770.687,
+            "relativeDb": -16.68
+          },
+          {
+            "number": 8,
+            "frequencyHz": 881.405,
+            "relativeDb": -34.17
+          },
+          {
+            "number": 9,
+            "frequencyHz": 992.438,
+            "relativeDb": -19.9
+          },
+          {
+            "number": 10,
+            "frequencyHz": 1103.701,
+            "relativeDb": -24.24
+          },
+          {
+            "number": 11,
+            "frequencyHz": 1215.092,
+            "relativeDb": -24.3
+          },
+          {
+            "number": 12,
+            "frequencyHz": 1326.81,
+            "relativeDb": -33.78
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -3.692,
+          "t60Seconds": 16.253
+        },
+        "2": {
+          "slopeDbPerSecond": -7.373,
+          "t60Seconds": 8.137
+        },
+        "4": {
+          "slopeDbPerSecond": -6.977,
+          "t60Seconds": 8.6
+        }
+      }
+    },
+    {
+      "file": "A2v8.wav",
+      "note": "A2",
+      "midi": 45,
+      "expectedHz": 110,
+      "layer": 8,
+      "sfzVelocityRange": [
+        57,
+        64
+      ],
+      "normalizedVelocityMidpoint": 0.4764,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 15.9352
+      },
+      "waveform": {
+        "peak": 0.23987,
+        "rms": 0.018532,
+        "dc": 7e-7,
+        "onsetSeconds": 0.01469,
+        "attackToPeakSeconds": 0.02426
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03971,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 245.42,
+        "rawFundamentalPeakHz": 109.6543,
+        "estimatedAfterRetuneHz": 109.4013,
+        "inharmonicityB": 0.00016898,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 109.654,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 220.088,
+            "relativeDb": -4.37
+          },
+          {
+            "number": 3,
+            "frequencyHz": 329.84,
+            "relativeDb": -7.97
+          },
+          {
+            "number": 4,
+            "frequencyHz": 439.841,
+            "relativeDb": -13.66
+          },
+          {
+            "number": 5,
+            "frequencyHz": 549.988,
+            "relativeDb": -13
+          },
+          {
+            "number": 6,
+            "frequencyHz": 660.405,
+            "relativeDb": -10.98
+          },
+          {
+            "number": 7,
+            "frequencyHz": 770.687,
+            "relativeDb": -15.06
+          },
+          {
+            "number": 8,
+            "frequencyHz": 881.407,
+            "relativeDb": -31.88
+          },
+          {
+            "number": 9,
+            "frequencyHz": 992.456,
+            "relativeDb": -17.37
+          },
+          {
+            "number": 10,
+            "frequencyHz": 1103.723,
+            "relativeDb": -21.54
+          },
+          {
+            "number": 11,
+            "frequencyHz": 1215.076,
+            "relativeDb": -20.94
+          },
+          {
+            "number": 12,
+            "frequencyHz": 1326.787,
+            "relativeDb": -30.36
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -3.694,
+          "t60Seconds": 16.241
+        },
+        "2": {
+          "slopeDbPerSecond": -7.373,
+          "t60Seconds": 8.138
+        },
+        "4": {
+          "slopeDbPerSecond": -6.778,
+          "t60Seconds": 8.852
+        }
+      }
+    },
+    {
+      "file": "A2v12.wav",
+      "note": "A2",
+      "midi": 45,
+      "expectedHz": 110,
+      "layer": 12,
+      "sfzVelocityRange": [
+        89,
+        96
+      ],
+      "normalizedVelocityMidpoint": 0.7283,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 16.1696
+      },
+      "waveform": {
+        "peak": 0.33266,
+        "rms": 0.025343,
+        "dc": -1e-7,
+        "onsetSeconds": 0.0139,
+        "attackToPeakSeconds": 0.02501
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03891,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 279.29,
+        "rawFundamentalPeakHz": 109.6502,
+        "estimatedAfterRetuneHz": 109.3971,
+        "inharmonicityB": 0.00017048,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 109.65,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 220.078,
+            "relativeDb": -4.52
+          },
+          {
+            "number": 3,
+            "frequencyHz": 329.852,
+            "relativeDb": -7.34
+          },
+          {
+            "number": 4,
+            "frequencyHz": 439.844,
+            "relativeDb": -13.44
+          },
+          {
+            "number": 5,
+            "frequencyHz": 549.988,
+            "relativeDb": -13.26
+          },
+          {
+            "number": 6,
+            "frequencyHz": 660.409,
+            "relativeDb": -10.34
+          },
+          {
+            "number": 7,
+            "frequencyHz": 770.686,
+            "relativeDb": -14.06
+          },
+          {
+            "number": 8,
+            "frequencyHz": 881.418,
+            "relativeDb": -29.98
+          },
+          {
+            "number": 9,
+            "frequencyHz": 992.458,
+            "relativeDb": -15.46
+          },
+          {
+            "number": 10,
+            "frequencyHz": 1103.722,
+            "relativeDb": -19.03
+          },
+          {
+            "number": 11,
+            "frequencyHz": 1215.081,
+            "relativeDb": -18.5
+          },
+          {
+            "number": 12,
+            "frequencyHz": 1326.781,
+            "relativeDb": -28.25
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -3.723,
+          "t60Seconds": 16.118
+        },
+        "2": {
+          "slopeDbPerSecond": -7.307,
+          "t60Seconds": 8.211
+        },
+        "4": {
+          "slopeDbPerSecond": -6.677,
+          "t60Seconds": 8.985
+        }
+      }
+    },
+    {
+      "file": "A2v16.wav",
+      "note": "A2",
+      "midi": 45,
+      "expectedHz": 110,
+      "layer": 16,
+      "sfzVelocityRange": [
+        121,
+        127
+      ],
+      "normalizedVelocityMidpoint": 0.9764,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 16.2815
+      },
+      "waveform": {
+        "peak": 0.59451,
+        "rms": 0.044976,
+        "dc": -0.0000018,
+        "onsetSeconds": 0.0154,
+        "attackToPeakSeconds": 0.02705
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.04041,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 355.09,
+        "rawFundamentalPeakHz": 109.6497,
+        "estimatedAfterRetuneHz": 109.3967,
+        "inharmonicityB": 0.00017324,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 109.65,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 220.077,
+            "relativeDb": -4.46
+          },
+          {
+            "number": 3,
+            "frequencyHz": 329.885,
+            "relativeDb": -6.06
+          },
+          {
+            "number": 4,
+            "frequencyHz": 439.856,
+            "relativeDb": -12.51
+          },
+          {
+            "number": 5,
+            "frequencyHz": 550.011,
+            "relativeDb": -14.25
+          },
+          {
+            "number": 6,
+            "frequencyHz": 660.45,
+            "relativeDb": -9.88
+          },
+          {
+            "number": 7,
+            "frequencyHz": 770.733,
+            "relativeDb": -12.74
+          },
+          {
+            "number": 8,
+            "frequencyHz": 881.415,
+            "relativeDb": -28.15
+          },
+          {
+            "number": 9,
+            "frequencyHz": 992.522,
+            "relativeDb": -13.05
+          },
+          {
+            "number": 10,
+            "frequencyHz": 1103.814,
+            "relativeDb": -15.64
+          },
+          {
+            "number": 11,
+            "frequencyHz": 1215.096,
+            "relativeDb": -15.35
+          },
+          {
+            "number": 12,
+            "frequencyHz": 1326.667,
+            "relativeDb": -25.46
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -3.772,
+          "t60Seconds": 15.908
+        },
+        "2": {
+          "slopeDbPerSecond": -7.832,
+          "t60Seconds": 7.661
+        },
+        "4": {
+          "slopeDbPerSecond": -6.067,
+          "t60Seconds": 9.89
+        }
+      }
+    },
+    {
+      "file": "C4v4.wav",
+      "note": "C4",
+      "midi": 60,
+      "expectedHz": 261.62557,
+      "layer": 4,
+      "sfzVelocityRange": [
+        37,
+        43
+      ],
+      "normalizedVelocityMidpoint": 0.315,
+      "retunedSfzCents": -6,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 15.7273
+      },
+      "waveform": {
+        "peak": 0.1673,
+        "rms": 0.010242,
+        "dc": -0.0000019,
+        "onsetSeconds": 0.01478,
+        "attackToPeakSeconds": 0.02846
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.0398,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 423.68,
+        "rawFundamentalPeakHz": 261.3593,
+        "estimatedAfterRetuneHz": 260.4551,
+        "inharmonicityB": 0.00031454,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 261.359,
+            "relativeDb": -0.76
+          },
+          {
+            "number": 2,
+            "frequencyHz": 523.263,
+            "relativeDb": 0
+          },
+          {
+            "number": 3,
+            "frequencyHz": 785.666,
+            "relativeDb": -20.36
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1048.511,
+            "relativeDb": -19.11
+          },
+          {
+            "number": 5,
+            "frequencyHz": 1311.501,
+            "relativeDb": -22.4
+          },
+          {
+            "number": 6,
+            "frequencyHz": 1577.228,
+            "relativeDb": -19.31
+          },
+          {
+            "number": 7,
+            "frequencyHz": 1843.427,
+            "relativeDb": -26.24
+          },
+          {
+            "number": 8,
+            "frequencyHz": 2111.173,
+            "relativeDb": -38.01
+          },
+          {
+            "number": 9,
+            "frequencyHz": 2381.645,
+            "relativeDb": -43.42
+          },
+          {
+            "number": 10,
+            "frequencyHz": 2651.899,
+            "relativeDb": -43.7
+          },
+          {
+            "number": 11,
+            "frequencyHz": 2926.673,
+            "relativeDb": -50.66
+          },
+          {
+            "number": 12,
+            "frequencyHz": 3201.867,
+            "relativeDb": -48.18
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -4.609,
+          "t60Seconds": 13.018
+        },
+        "2": {
+          "slopeDbPerSecond": -9.18,
+          "t60Seconds": 6.536
+        },
+        "4": {
+          "slopeDbPerSecond": -12.146,
+          "t60Seconds": 4.94
+        }
+      }
+    },
+    {
+      "file": "C4v8.wav",
+      "note": "C4",
+      "midi": 60,
+      "expectedHz": 261.62557,
+      "layer": 8,
+      "sfzVelocityRange": [
+        57,
+        64
+      ],
+      "normalizedVelocityMidpoint": 0.4764,
+      "retunedSfzCents": -6,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 16.1856
+      },
+      "waveform": {
+        "peak": 0.2571,
+        "rms": 0.015107,
+        "dc": 0.0000017,
+        "onsetSeconds": 0.01483,
+        "attackToPeakSeconds": 0.02868
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03984,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 446.14,
+        "rawFundamentalPeakHz": 261.3517,
+        "estimatedAfterRetuneHz": 260.4475,
+        "inharmonicityB": 0.0003152,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 261.352,
+            "relativeDb": -1.42
+          },
+          {
+            "number": 2,
+            "frequencyHz": 523.26,
+            "relativeDb": 0
+          },
+          {
+            "number": 3,
+            "frequencyHz": 785.672,
+            "relativeDb": -20.94
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1048.505,
+            "relativeDb": -17.88
+          },
+          {
+            "number": 5,
+            "frequencyHz": 1311.517,
+            "relativeDb": -20.82
+          },
+          {
+            "number": 6,
+            "frequencyHz": 1577.246,
+            "relativeDb": -18.18
+          },
+          {
+            "number": 7,
+            "frequencyHz": 1843.428,
+            "relativeDb": -21.57
+          },
+          {
+            "number": 8,
+            "frequencyHz": 2111.195,
+            "relativeDb": -31.57
+          },
+          {
+            "number": 9,
+            "frequencyHz": 2381.637,
+            "relativeDb": -35.95
+          },
+          {
+            "number": 10,
+            "frequencyHz": 2651.867,
+            "relativeDb": -34.59
+          },
+          {
+            "number": 11,
+            "frequencyHz": 2926.56,
+            "relativeDb": -41.45
+          },
+          {
+            "number": 12,
+            "frequencyHz": 3201.614,
+            "relativeDb": -38.01
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -4.713,
+          "t60Seconds": 12.732
+        },
+        "2": {
+          "slopeDbPerSecond": -9.24,
+          "t60Seconds": 6.494
+        },
+        "4": {
+          "slopeDbPerSecond": -12.21,
+          "t60Seconds": 4.914
+        }
+      }
+    },
+    {
+      "file": "C4v12.wav",
+      "note": "C4",
+      "midi": 60,
+      "expectedHz": 261.62557,
+      "layer": 12,
+      "sfzVelocityRange": [
+        89,
+        96
+      ],
+      "normalizedVelocityMidpoint": 0.7283,
+      "retunedSfzCents": -6,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 15.7167
+      },
+      "waveform": {
+        "peak": 0.45314,
+        "rms": 0.025468,
+        "dc": -9e-7,
+        "onsetSeconds": 0.01413,
+        "attackToPeakSeconds": 0.02871
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03914,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 473.15,
+        "rawFundamentalPeakHz": 261.3419,
+        "estimatedAfterRetuneHz": 260.4377,
+        "inharmonicityB": 0.00031677,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 261.342,
+            "relativeDb": -1.91
+          },
+          {
+            "number": 2,
+            "frequencyHz": 523.27,
+            "relativeDb": 0
+          },
+          {
+            "number": 3,
+            "frequencyHz": 785.608,
+            "relativeDb": -20.48
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1048.41,
+            "relativeDb": -17.22
+          },
+          {
+            "number": 5,
+            "frequencyHz": 1311.496,
+            "relativeDb": -19.49
+          },
+          {
+            "number": 6,
+            "frequencyHz": 1577.24,
+            "relativeDb": -18.49
+          },
+          {
+            "number": 7,
+            "frequencyHz": 1843.446,
+            "relativeDb": -18.72
+          },
+          {
+            "number": 8,
+            "frequencyHz": 2111.259,
+            "relativeDb": -27.38
+          },
+          {
+            "number": 9,
+            "frequencyHz": 2381.693,
+            "relativeDb": -30.89
+          },
+          {
+            "number": 10,
+            "frequencyHz": 2651.95,
+            "relativeDb": -27.09
+          },
+          {
+            "number": 11,
+            "frequencyHz": 2926.487,
+            "relativeDb": -32.4
+          },
+          {
+            "number": 12,
+            "frequencyHz": 3201.545,
+            "relativeDb": -31.88
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -4.959,
+          "t60Seconds": 12.099
+        },
+        "2": {
+          "slopeDbPerSecond": -9.576,
+          "t60Seconds": 6.266
+        },
+        "4": {
+          "slopeDbPerSecond": -13.127,
+          "t60Seconds": 4.571
+        }
+      }
+    },
+    {
+      "file": "C4v16.wav",
+      "note": "C4",
+      "midi": 60,
+      "expectedHz": 261.62557,
+      "layer": 16,
+      "sfzVelocityRange": [
+        121,
+        127
+      ],
+      "normalizedVelocityMidpoint": 0.9764,
+      "retunedSfzCents": -6,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 15.5142
+      },
+      "waveform": {
+        "peak": 0.58769,
+        "rms": 0.031988,
+        "dc": 0.0000015,
+        "onsetSeconds": 0.01476,
+        "attackToPeakSeconds": 0.02882
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03977,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 481.83,
+        "rawFundamentalPeakHz": 261.341,
+        "estimatedAfterRetuneHz": 260.4368,
+        "inharmonicityB": 0.00031657,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 261.341,
+            "relativeDb": -1.9
+          },
+          {
+            "number": 2,
+            "frequencyHz": 523.276,
+            "relativeDb": 0
+          },
+          {
+            "number": 3,
+            "frequencyHz": 785.6,
+            "relativeDb": -20.56
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1048.426,
+            "relativeDb": -16.92
+          },
+          {
+            "number": 5,
+            "frequencyHz": 1311.511,
+            "relativeDb": -19.09
+          },
+          {
+            "number": 6,
+            "frequencyHz": 1577.25,
+            "relativeDb": -18.54
+          },
+          {
+            "number": 7,
+            "frequencyHz": 1843.454,
+            "relativeDb": -18
+          },
+          {
+            "number": 8,
+            "frequencyHz": 2111.271,
+            "relativeDb": -26.11
+          },
+          {
+            "number": 9,
+            "frequencyHz": 2381.667,
+            "relativeDb": -29.86
+          },
+          {
+            "number": 10,
+            "frequencyHz": 2651.999,
+            "relativeDb": -25.38
+          },
+          {
+            "number": 11,
+            "frequencyHz": 2926.513,
+            "relativeDb": -29.77
+          },
+          {
+            "number": 12,
+            "frequencyHz": 3201.625,
+            "relativeDb": -30.66
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -5.253,
+          "t60Seconds": 11.421
+        },
+        "2": {
+          "slopeDbPerSecond": -9.581,
+          "t60Seconds": 6.262
+        },
+        "4": {
+          "slopeDbPerSecond": -13.222,
+          "t60Seconds": 4.538
+        }
+      }
+    },
+    {
+      "file": "A4v4.wav",
+      "note": "A4",
+      "midi": 69,
+      "expectedHz": 440,
+      "layer": 4,
+      "sfzVelocityRange": [
+        37,
+        43
+      ],
+      "normalizedVelocityMidpoint": 0.315,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 13.6278
+      },
+      "waveform": {
+        "peak": 0.09689,
+        "rms": 0.005482,
+        "dc": 9e-7,
+        "onsetSeconds": 0.0139,
+        "attackToPeakSeconds": 0.0151
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03891,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 482.12,
+        "rawFundamentalPeakHz": 440.4223,
+        "estimatedAfterRetuneHz": 439.4059,
+        "inharmonicityB": 0.00062376,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 440.422,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 881.738,
+            "relativeDb": -13.61
+          },
+          {
+            "number": 3,
+            "frequencyHz": 1324.051,
+            "relativeDb": -17.65
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1769.301,
+            "relativeDb": -23.95
+          },
+          {
+            "number": 5,
+            "frequencyHz": 2218.266,
+            "relativeDb": -32.83
+          },
+          {
+            "number": 6,
+            "frequencyHz": 2670.633,
+            "relativeDb": -38.66
+          },
+          {
+            "number": 7,
+            "frequencyHz": 3128.768,
+            "relativeDb": -41.59
+          },
+          {
+            "number": 8,
+            "frequencyHz": 3595.259,
+            "relativeDb": -43.62
+          },
+          {
+            "number": 9,
+            "frequencyHz": 4063.102,
+            "relativeDb": -63.07
+          },
+          {
+            "number": 10,
+            "frequencyHz": 4539.126,
+            "relativeDb": -68.32
+          },
+          {
+            "number": 11,
+            "frequencyHz": 5025.706,
+            "relativeDb": -80.21
+          },
+          {
+            "number": 12,
+            "frequencyHz": 5523.787,
+            "relativeDb": -84.42
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -7.322,
+          "t60Seconds": 8.195
+        },
+        "2": {
+          "slopeDbPerSecond": -7.679,
+          "t60Seconds": 7.814
+        },
+        "4": {
+          "slopeDbPerSecond": -8.826,
+          "t60Seconds": 6.798
+        }
+      }
+    },
+    {
+      "file": "A4v8.wav",
+      "note": "A4",
+      "midi": 69,
+      "expectedHz": 440,
+      "layer": 8,
+      "sfzVelocityRange": [
+        57,
+        64
+      ],
+      "normalizedVelocityMidpoint": 0.4764,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 13.323
+      },
+      "waveform": {
+        "peak": 0.17343,
+        "rms": 0.009652,
+        "dc": 0,
+        "onsetSeconds": 0.01281,
+        "attackToPeakSeconds": 0.01508
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03782,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 515.51,
+        "rawFundamentalPeakHz": 440.4449,
+        "estimatedAfterRetuneHz": 439.4284,
+        "inharmonicityB": 0.00062081,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 440.445,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 881.654,
+            "relativeDb": -11.67
+          },
+          {
+            "number": 3,
+            "frequencyHz": 1323.977,
+            "relativeDb": -14.74
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1769.306,
+            "relativeDb": -20.81
+          },
+          {
+            "number": 5,
+            "frequencyHz": 2218.018,
+            "relativeDb": -27.83
+          },
+          {
+            "number": 6,
+            "frequencyHz": 2670.772,
+            "relativeDb": -31.97
+          },
+          {
+            "number": 7,
+            "frequencyHz": 3128.836,
+            "relativeDb": -35.29
+          },
+          {
+            "number": 8,
+            "frequencyHz": 3595.518,
+            "relativeDb": -35.81
+          },
+          {
+            "number": 9,
+            "frequencyHz": 4063.231,
+            "relativeDb": -51.42
+          },
+          {
+            "number": 10,
+            "frequencyHz": 4539.593,
+            "relativeDb": -53.51
+          },
+          {
+            "number": 11,
+            "frequencyHz": 5025.614,
+            "relativeDb": -64.94
+          },
+          {
+            "number": 12,
+            "frequencyHz": 5514.954,
+            "relativeDb": -68.43
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -7.82,
+          "t60Seconds": 7.673
+        },
+        "2": {
+          "slopeDbPerSecond": -8.007,
+          "t60Seconds": 7.493
+        },
+        "4": {
+          "slopeDbPerSecond": -10.102,
+          "t60Seconds": 5.94
+        }
+      }
+    },
+    {
+      "file": "A4v12.wav",
+      "note": "A4",
+      "midi": 69,
+      "expectedHz": 440,
+      "layer": 12,
+      "sfzVelocityRange": [
+        89,
+        96
+      ],
+      "normalizedVelocityMidpoint": 0.7283,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 13.7397
+      },
+      "waveform": {
+        "peak": 0.25279,
+        "rms": 0.013922,
+        "dc": -0.000001,
+        "onsetSeconds": 0.01125,
+        "attackToPeakSeconds": 0.01508
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03626,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 528.25,
+        "rawFundamentalPeakHz": 440.4632,
+        "estimatedAfterRetuneHz": 439.4467,
+        "inharmonicityB": 0.00061811,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 440.463,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 881.624,
+            "relativeDb": -11.05
+          },
+          {
+            "number": 3,
+            "frequencyHz": 1323.936,
+            "relativeDb": -14.05
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1769.305,
+            "relativeDb": -20.43
+          },
+          {
+            "number": 5,
+            "frequencyHz": 2217.918,
+            "relativeDb": -26.06
+          },
+          {
+            "number": 6,
+            "frequencyHz": 2670.75,
+            "relativeDb": -30.49
+          },
+          {
+            "number": 7,
+            "frequencyHz": 3128.91,
+            "relativeDb": -33.51
+          },
+          {
+            "number": 8,
+            "frequencyHz": 3595.65,
+            "relativeDb": -33.74
+          },
+          {
+            "number": 9,
+            "frequencyHz": 4063.404,
+            "relativeDb": -48.26
+          },
+          {
+            "number": 10,
+            "frequencyHz": 4537.397,
+            "relativeDb": -47.87
+          },
+          {
+            "number": 11,
+            "frequencyHz": 5025.548,
+            "relativeDb": -58.87
+          },
+          {
+            "number": 12,
+            "frequencyHz": 5514.853,
+            "relativeDb": -62.17
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -8.207,
+          "t60Seconds": 7.311
+        },
+        "2": {
+          "slopeDbPerSecond": -8.186,
+          "t60Seconds": 7.33
+        },
+        "4": {
+          "slopeDbPerSecond": -10.983,
+          "t60Seconds": 5.463
+        }
+      }
+    },
+    {
+      "file": "A4v16.wav",
+      "note": "A4",
+      "midi": 69,
+      "expectedHz": 440,
+      "layer": 16,
+      "sfzVelocityRange": [
+        121,
+        127
+      ],
+      "normalizedVelocityMidpoint": 0.9764,
+      "retunedSfzCents": -4,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 14.928
+      },
+      "waveform": {
+        "peak": 0.44016,
+        "rms": 0.022246,
+        "dc": -0.0000022,
+        "onsetSeconds": 0.01388,
+        "attackToPeakSeconds": 0.01397
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03889,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 534.05,
+        "rawFundamentalPeakHz": 440.4857,
+        "estimatedAfterRetuneHz": 439.4692,
+        "inharmonicityB": 0.00061751,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 440.486,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 881.602,
+            "relativeDb": -10.3
+          },
+          {
+            "number": 3,
+            "frequencyHz": 1323.885,
+            "relativeDb": -14.3
+          },
+          {
+            "number": 4,
+            "frequencyHz": 1769.211,
+            "relativeDb": -20.75
+          },
+          {
+            "number": 5,
+            "frequencyHz": 2217.727,
+            "relativeDb": -24.69
+          },
+          {
+            "number": 6,
+            "frequencyHz": 2670.369,
+            "relativeDb": -31.06
+          },
+          {
+            "number": 7,
+            "frequencyHz": 3129.315,
+            "relativeDb": -32.55
+          },
+          {
+            "number": 8,
+            "frequencyHz": 3593.382,
+            "relativeDb": -30.8
+          },
+          {
+            "number": 9,
+            "frequencyHz": 4061.141,
+            "relativeDb": -44.7
+          },
+          {
+            "number": 10,
+            "frequencyHz": 4537.501,
+            "relativeDb": -39.98
+          },
+          {
+            "number": 11,
+            "frequencyHz": 5025.5,
+            "relativeDb": -55.06
+          },
+          {
+            "number": 12,
+            "frequencyHz": 5514.873,
+            "relativeDb": -58.64
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -9.041,
+          "t60Seconds": 6.637
+        },
+        "2": {
+          "slopeDbPerSecond": -8.122,
+          "t60Seconds": 7.387
+        },
+        "4": {
+          "slopeDbPerSecond": -13.471,
+          "t60Seconds": 4.454
+        }
+      }
+    },
+    {
+      "file": "A6v4.wav",
+      "note": "A6",
+      "midi": 93,
+      "expectedHz": 1760,
+      "layer": 4,
+      "sfzVelocityRange": [
+        37,
+        43
+      ],
+      "normalizedVelocityMidpoint": 0.315,
+      "retunedSfzCents": -12,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 6.3432
+      },
+      "waveform": {
+        "peak": 0.07286,
+        "rms": 0.002938,
+        "dc": 3e-7,
+        "onsetSeconds": 0.01179,
+        "attackToPeakSeconds": 0.02129
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.0368,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 1767.75,
+        "rawFundamentalPeakHz": 1771.1517,
+        "estimatedAfterRetuneHz": 1758.9175,
+        "inharmonicityB": 0.00521165,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 1771.152,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 3569.888,
+            "relativeDb": -25.87
+          },
+          {
+            "number": 3,
+            "frequencyHz": 5322.676,
+            "relativeDb": -60.84
+          },
+          {
+            "number": 4,
+            "frequencyHz": 7179.147,
+            "relativeDb": -86.53
+          },
+          {
+            "number": 5,
+            "frequencyHz": 8849.217,
+            "relativeDb": -85.11
+          },
+          {
+            "number": 6,
+            "frequencyHz": 10469.48,
+            "relativeDb": -88.06
+          },
+          {
+            "number": 7,
+            "frequencyHz": 12694.823,
+            "relativeDb": -88.24
+          },
+          {
+            "number": 8,
+            "frequencyHz": 14009.329,
+            "relativeDb": -87.32
+          },
+          {
+            "number": 9,
+            "frequencyHz": 16067.567,
+            "relativeDb": -87.4
+          },
+          {
+            "number": 10,
+            "frequencyHz": 18218.779,
+            "relativeDb": -88.07
+          },
+          {
+            "number": 11,
+            "frequencyHz": 19208.899,
+            "relativeDb": -87.61
+          },
+          {
+            "number": 12,
+            "frequencyHz": 21087.502,
+            "relativeDb": -87.65
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -14.198,
+          "t60Seconds": 4.226
+        },
+        "2": {
+          "slopeDbPerSecond": -17.782,
+          "t60Seconds": 3.374
+        },
+        "4": {
+          "slopeDbPerSecond": -0.164,
+          "t60Seconds": 364.825
+        }
+      }
+    },
+    {
+      "file": "A6v8.wav",
+      "note": "A6",
+      "midi": 93,
+      "expectedHz": 1760,
+      "layer": 8,
+      "sfzVelocityRange": [
+        57,
+        64
+      ],
+      "normalizedVelocityMidpoint": 0.4764,
+      "retunedSfzCents": -12,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 6.8069
+      },
+      "waveform": {
+        "peak": 0.11581,
+        "rms": 0.004772,
+        "dc": 0.0000015,
+        "onsetSeconds": 0.01211,
+        "attackToPeakSeconds": 0.02122
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03712,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 1778.74,
+        "rawFundamentalPeakHz": 1771.0679,
+        "estimatedAfterRetuneHz": 1758.8342,
+        "inharmonicityB": 0.00518174,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 1771.068,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 3569.561,
+            "relativeDb": -23.58
+          },
+          {
+            "number": 3,
+            "frequencyHz": 5342.084,
+            "relativeDb": -56.95
+          },
+          {
+            "number": 4,
+            "frequencyHz": 7120.386,
+            "relativeDb": -85.19
+          },
+          {
+            "number": 5,
+            "frequencyHz": 8931.828,
+            "relativeDb": -89.91
+          },
+          {
+            "number": 6,
+            "frequencyHz": 10474.917,
+            "relativeDb": -91.22
+          },
+          {
+            "number": 7,
+            "frequencyHz": 12499.498,
+            "relativeDb": -91.75
+          },
+          {
+            "number": 8,
+            "frequencyHz": 14587.523,
+            "relativeDb": -91.31
+          },
+          {
+            "number": 9,
+            "frequencyHz": 15856.848,
+            "relativeDb": -89.16
+          },
+          {
+            "number": 10,
+            "frequencyHz": 18438.543,
+            "relativeDb": -89.96
+          },
+          {
+            "number": 11,
+            "frequencyHz": 20190.854,
+            "relativeDb": -92.14
+          },
+          {
+            "number": 12,
+            "frequencyHz": 21882.321,
+            "relativeDb": -91.55
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -14.589,
+          "t60Seconds": 4.113
+        },
+        "2": {
+          "slopeDbPerSecond": -20.319,
+          "t60Seconds": 2.953
+        },
+        "4": {
+          "slopeDbPerSecond": -1.316,
+          "t60Seconds": 45.588
+        }
+      }
+    },
+    {
+      "file": "A6v12.wav",
+      "note": "A6",
+      "midi": 93,
+      "expectedHz": 1760,
+      "layer": 12,
+      "sfzVelocityRange": [
+        89,
+        96
+      ],
+      "normalizedVelocityMidpoint": 0.7283,
+      "retunedSfzCents": -12,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 6.731
+      },
+      "waveform": {
+        "peak": 0.22231,
+        "rms": 0.009477,
+        "dc": -0.0000014,
+        "onsetSeconds": 0.01129,
+        "attackToPeakSeconds": 0.02122
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.0363,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 1802.39,
+        "rawFundamentalPeakHz": 1771.0121,
+        "estimatedAfterRetuneHz": 1758.7789,
+        "inharmonicityB": 0.00512723,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 1771.012,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 3569.161,
+            "relativeDb": -19.77
+          },
+          {
+            "number": 3,
+            "frequencyHz": 5341.57,
+            "relativeDb": -48.74
+          },
+          {
+            "number": 4,
+            "frequencyHz": 7138.581,
+            "relativeDb": -71.08
+          },
+          {
+            "number": 5,
+            "frequencyHz": 8919.723,
+            "relativeDb": -89.4
+          },
+          {
+            "number": 6,
+            "frequencyHz": 10834.158,
+            "relativeDb": -95.74
+          },
+          {
+            "number": 7,
+            "frequencyHz": 12297.266,
+            "relativeDb": -94.76
+          },
+          {
+            "number": 8,
+            "frequencyHz": 14429.427,
+            "relativeDb": -94.82
+          },
+          {
+            "number": 9,
+            "frequencyHz": 15775.71,
+            "relativeDb": -94.78
+          },
+          {
+            "number": 10,
+            "frequencyHz": 17833.166,
+            "relativeDb": -96.52
+          },
+          {
+            "number": 11,
+            "frequencyHz": 19248.762,
+            "relativeDb": -96.16
+          },
+          {
+            "number": 12,
+            "frequencyHz": 21095.25,
+            "relativeDb": -96.04
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -14.809,
+          "t60Seconds": 4.052
+        },
+        "2": {
+          "slopeDbPerSecond": -23.076,
+          "t60Seconds": 2.6
+        },
+        "4": {
+          "slopeDbPerSecond": -4.641,
+          "t60Seconds": 12.928
+        }
+      }
+    },
+    {
+      "file": "A6v16.wav",
+      "note": "A6",
+      "midi": 93,
+      "expectedHz": 1760,
+      "layer": 16,
+      "sfzVelocityRange": [
+        121,
+        127
+      ],
+      "normalizedVelocityMidpoint": 0.9764,
+      "retunedSfzCents": -12,
+      "format": {
+        "sampleRate": 44100,
+        "channels": 2,
+        "bitsPerSample": 16,
+        "durationSeconds": 6.8336
+      },
+      "waveform": {
+        "peak": 0.46561,
+        "rms": 0.020607,
+        "dc": -9e-7,
+        "onsetSeconds": 0.0122,
+        "attackToPeakSeconds": 0.0212
+      },
+      "spectrum": {
+        "analysisStartSeconds": 0.03721,
+        "windowSamples": 32768,
+        "fftSize": 131072,
+        "centroidHz": 1834.43,
+        "rawFundamentalPeakHz": 1771.1179,
+        "estimatedAfterRetuneHz": 1758.8839,
+        "inharmonicityB": 0.00131278,
+        "partials": [
+          {
+            "number": 1,
+            "frequencyHz": 1771.118,
+            "relativeDb": 0
+          },
+          {
+            "number": 2,
+            "frequencyHz": 3568.73,
+            "relativeDb": -17
+          },
+          {
+            "number": 3,
+            "frequencyHz": 5341.182,
+            "relativeDb": -44.09
+          },
+          {
+            "number": 4,
+            "frequencyHz": 7137.899,
+            "relativeDb": -63.43
+          },
+          {
+            "number": 5,
+            "frequencyHz": 8919.804,
+            "relativeDb": -83.96
+          },
+          {
+            "number": 6,
+            "frequencyHz": 10834.964,
+            "relativeDb": -89.94
+          },
+          {
+            "number": 7,
+            "frequencyHz": 12405.056,
+            "relativeDb": -95.11
+          },
+          {
+            "number": 8,
+            "frequencyHz": 14209.234,
+            "relativeDb": -99.03
+          },
+          {
+            "number": 9,
+            "frequencyHz": 16615.683,
+            "relativeDb": -100.71
+          },
+          {
+            "number": 10,
+            "frequencyHz": 17716.375,
+            "relativeDb": -100.9
+          },
+          {
+            "number": 11,
+            "frequencyHz": 20165.906,
+            "relativeDb": -100.62
+          },
+          {
+            "number": 12,
+            "frequencyHz": 20978.919,
+            "relativeDb": -101.88
+          }
+        ]
+      },
+      "decay": {
+        "1": {
+          "slopeDbPerSecond": -15.357,
+          "t60Seconds": 3.907
+        },
+        "2": {
+          "slopeDbPerSecond": -23.162,
+          "t60Seconds": 2.59
+        },
+        "4": {
+          "slopeDbPerSecond": -9.154,
+          "t60Seconds": 6.555
+        }
+      }
+    }
+  ],
+  "selectedReleaseRecordings": [
+    {
+      "file": "rel1.wav",
+      "durationSeconds": 0.455,
+      "peak": 0.39188,
+      "rms": 0.04703,
+      "attackToPeakSeconds": 0.1924,
+      "centroidHz": 264.36
+    },
+    {
+      "file": "rel40.wav",
+      "durationSeconds": 0.455,
+      "peak": 0.54349,
+      "rms": 0.093901,
+      "attackToPeakSeconds": 0.11197,
+      "centroidHz": 180.98
+    },
+    {
+      "file": "rel73.wav",
+      "durationSeconds": 0.455,
+      "peak": 0.42056,
+      "rms": 0.071534,
+      "attackToPeakSeconds": 0.10177,
+      "centroidHz": 207.99
+    },
+    {
+      "file": "harmSA2.wav",
+      "durationSeconds": 2.059,
+      "peak": 0.00716,
+      "rms": 0.000729,
+      "attackToPeakSeconds": 0.13512,
+      "centroidHz": 399.04
+    },
+    {
+      "file": "harmLA2.wav",
+      "durationSeconds": 2.853,
+      "peak": 0.02885,
+      "rms": 0.002341,
+      "attackToPeakSeconds": 0.05268,
+      "centroidHz": 557.09
+    },
+    {
+      "file": "harmV3A2.wav",
+      "durationSeconds": 2.1494,
+      "peak": 0.00311,
+      "rms": 0.000296,
+      "attackToPeakSeconds": 0.13086,
+      "centroidHz": 247.04
+    }
+  ],
+  "focusedA6v16": {
+    "file": "A6v16.wav",
+    "sfzVelocityRange": [
+      121,
+      127
+    ],
+    "normalizedVelocityMidpoint": 0.976378,
+    "sfzTuneCents": -12,
+    "causalAttack": {
+      "onsetSeconds": 0.0122,
+      "onsetToPeakSeconds": 0.021202,
+      "peakEnvelope": 0.292775
+    },
+    "transientFrames": [
+      {
+        "windowMilliseconds": [
+          0,
+          5
+        ],
+        "rms": 0.112733,
+        "rmsRelativeToStrongestFrameDb": -6.814,
+        "crestFactor": 2.612,
+        "centroidHz": 2379.14,
+        "bandRelativeDb": {
+          "lowBody": -12.319,
+          "fundamental": -7.724,
+          "woodAndString": -4.693,
+          "secondPartial": -7.695,
+          "presence": -20.137,
+          "air": -34.641
+        }
+      },
+      {
+        "windowMilliseconds": [
+          5,
+          10
+        ],
+        "rms": 0.172154,
+        "rmsRelativeToStrongestFrameDb": -3.137,
+        "crestFactor": 2.171,
+        "centroidHz": 1837.94,
+        "bandRelativeDb": {
+          "lowBody": -15.304,
+          "fundamental": -3.976,
+          "woodAndString": -12.634,
+          "secondPartial": -11.343,
+          "presence": -26.996,
+          "air": -45.194
+        }
+      },
+      {
+        "windowMilliseconds": [
+          10,
+          20
+        ],
+        "rms": 0.247043,
+        "rmsRelativeToStrongestFrameDb": 0,
+        "crestFactor": 1.885,
+        "centroidHz": 1787.69,
+        "bandRelativeDb": {
+          "lowBody": -20.408,
+          "fundamental": -0.696,
+          "woodAndString": -31.832,
+          "secondPartial": -17.389,
+          "presence": -30.96,
+          "air": -54.116
+        }
+      },
+      {
+        "windowMilliseconds": [
+          20,
+          40
+        ],
+        "rms": 0.238317,
+        "rmsRelativeToStrongestFrameDb": -0.312,
+        "crestFactor": 1.87,
+        "centroidHz": 1768.19,
+        "bandRelativeDb": {
+          "lowBody": -21.07,
+          "fundamental": -0.112,
+          "woodAndString": -34.344,
+          "secondPartial": -22.914,
+          "presence": -36.397,
+          "air": -54.477
+        }
+      },
+      {
+        "windowMilliseconds": [
+          40,
+          80
+        ],
+        "rms": 0.126858,
+        "rmsRelativeToStrongestFrameDb": -5.789,
+        "crestFactor": 2.294,
+        "centroidHz": 1770.9,
+        "bandRelativeDb": {
+          "lowBody": -23.151,
+          "fundamental": -0.041,
+          "woodAndString": -36.979,
+          "secondPartial": -27.105,
+          "presence": -34.04,
+          "air": -51.202
+        }
+      }
+    ],
+    "rmsTrajectory": [
+      {
+        "startSeconds": 0.02,
+        "windowSeconds": 0.05,
+        "relativeDb": 0
+      },
+      {
+        "startSeconds": 0.05,
+        "windowSeconds": 0.05,
+        "relativeDb": -6.541
+      },
+      {
+        "startSeconds": 0.1,
+        "windowSeconds": 0.05,
+        "relativeDb": -18.22
+      },
+      {
+        "startSeconds": 0.15,
+        "windowSeconds": 0.05,
+        "relativeDb": -12.504
+      },
+      {
+        "startSeconds": 0.25,
+        "windowSeconds": 0.05,
+        "relativeDb": -22.924
+      },
+      {
+        "startSeconds": 0.4,
+        "windowSeconds": 0.05,
+        "relativeDb": -19.768
+      },
+      {
+        "startSeconds": 0.7,
+        "windowSeconds": 0.05,
+        "relativeDb": -27.372
+      },
+      {
+        "startSeconds": 1,
+        "windowSeconds": 0.05,
+        "relativeDb": -38.636
+      },
+      {
+        "startSeconds": 1.5,
+        "windowSeconds": 0.05,
+        "relativeDb": -46.831
+      },
+      {
+        "startSeconds": 2,
+        "windowSeconds": 0.05,
+        "relativeDb": -49.512
+      },
+      {
+        "startSeconds": 3,
+        "windowSeconds": 0.05,
+        "relativeDb": -55.943
+      }
+    ],
+    "unisonCluster": {
+      "analysisStartSeconds": 0.0922,
+      "analysisWindowSeconds": 1.5,
+      "fftSize": 262144,
+      "rawSpanHz": 5.7295,
+      "retunedSpanHz": 5.6899,
+      "peaks": [
+        {
+          "rawFrequencyHz": 1769.5111,
+          "sfzRetunedFrequencyHz": 1757.2882,
+          "relativeDb": -7.199
+        },
+        {
+          "rawFrequencyHz": 1771.0945,
+          "sfzRetunedFrequencyHz": 1758.8607,
+          "relativeDb": 0
+        },
+        {
+          "rawFrequencyHz": 1773.9474,
+          "sfzRetunedFrequencyHz": 1761.6939,
+          "relativeDb": -1.642
+        },
+        {
+          "rawFrequencyHz": 1775.2406,
+          "sfzRetunedFrequencyHz": 1762.9781,
+          "relativeDb": -1.63
+        }
+      ]
+    }
+  },
+  "derivedTargets": {
+    "globalAttackToPeakMedianSeconds": 0.0227,
+    "allHarderLayersAreBrighter": true,
+    "focusA6v16": {
+      "file": "A6v16.wav",
+      "sfzVelocityRange": [
+        121,
+        127
+      ],
+      "normalizedVelocityMidpoint": 0.976378,
+      "sfzTuneCents": -12,
+      "causalAttack": {
+        "onsetSeconds": 0.0122,
+        "onsetToPeakSeconds": 0.021202,
+        "peakEnvelope": 0.292775
+      },
+      "transientFrames": [
+        {
+          "windowMilliseconds": [
+            0,
+            5
+          ],
+          "rms": 0.112733,
+          "rmsRelativeToStrongestFrameDb": -6.814,
+          "crestFactor": 2.612,
+          "centroidHz": 2379.14,
+          "bandRelativeDb": {
+            "lowBody": -12.319,
+            "fundamental": -7.724,
+            "woodAndString": -4.693,
+            "secondPartial": -7.695,
+            "presence": -20.137,
+            "air": -34.641
+          }
+        },
+        {
+          "windowMilliseconds": [
+            5,
+            10
+          ],
+          "rms": 0.172154,
+          "rmsRelativeToStrongestFrameDb": -3.137,
+          "crestFactor": 2.171,
+          "centroidHz": 1837.94,
+          "bandRelativeDb": {
+            "lowBody": -15.304,
+            "fundamental": -3.976,
+            "woodAndString": -12.634,
+            "secondPartial": -11.343,
+            "presence": -26.996,
+            "air": -45.194
+          }
+        },
+        {
+          "windowMilliseconds": [
+            10,
+            20
+          ],
+          "rms": 0.247043,
+          "rmsRelativeToStrongestFrameDb": 0,
+          "crestFactor": 1.885,
+          "centroidHz": 1787.69,
+          "bandRelativeDb": {
+            "lowBody": -20.408,
+            "fundamental": -0.696,
+            "woodAndString": -31.832,
+            "secondPartial": -17.389,
+            "presence": -30.96,
+            "air": -54.116
+          }
+        },
+        {
+          "windowMilliseconds": [
+            20,
+            40
+          ],
+          "rms": 0.238317,
+          "rmsRelativeToStrongestFrameDb": -0.312,
+          "crestFactor": 1.87,
+          "centroidHz": 1768.19,
+          "bandRelativeDb": {
+            "lowBody": -21.07,
+            "fundamental": -0.112,
+            "woodAndString": -34.344,
+            "secondPartial": -22.914,
+            "presence": -36.397,
+            "air": -54.477
+          }
+        },
+        {
+          "windowMilliseconds": [
+            40,
+            80
+          ],
+          "rms": 0.126858,
+          "rmsRelativeToStrongestFrameDb": -5.789,
+          "crestFactor": 2.294,
+          "centroidHz": 1770.9,
+          "bandRelativeDb": {
+            "lowBody": -23.151,
+            "fundamental": -0.041,
+            "woodAndString": -36.979,
+            "secondPartial": -27.105,
+            "presence": -34.04,
+            "air": -51.202
+          }
+        }
+      ],
+      "rmsTrajectory": [
+        {
+          "startSeconds": 0.02,
+          "windowSeconds": 0.05,
+          "relativeDb": 0
+        },
+        {
+          "startSeconds": 0.05,
+          "windowSeconds": 0.05,
+          "relativeDb": -6.541
+        },
+        {
+          "startSeconds": 0.1,
+          "windowSeconds": 0.05,
+          "relativeDb": -18.22
+        },
+        {
+          "startSeconds": 0.15,
+          "windowSeconds": 0.05,
+          "relativeDb": -12.504
+        },
+        {
+          "startSeconds": 0.25,
+          "windowSeconds": 0.05,
+          "relativeDb": -22.924
+        },
+        {
+          "startSeconds": 0.4,
+          "windowSeconds": 0.05,
+          "relativeDb": -19.768
+        },
+        {
+          "startSeconds": 0.7,
+          "windowSeconds": 0.05,
+          "relativeDb": -27.372
+        },
+        {
+          "startSeconds": 1,
+          "windowSeconds": 0.05,
+          "relativeDb": -38.636
+        },
+        {
+          "startSeconds": 1.5,
+          "windowSeconds": 0.05,
+          "relativeDb": -46.831
+        },
+        {
+          "startSeconds": 2,
+          "windowSeconds": 0.05,
+          "relativeDb": -49.512
+        },
+        {
+          "startSeconds": 3,
+          "windowSeconds": 0.05,
+          "relativeDb": -55.943
+        }
+      ],
+      "unisonCluster": {
+        "analysisStartSeconds": 0.0922,
+        "analysisWindowSeconds": 1.5,
+        "fftSize": 262144,
+        "rawSpanHz": 5.7295,
+        "retunedSpanHz": 5.6899,
+        "peaks": [
+          {
+            "rawFrequencyHz": 1769.5111,
+            "sfzRetunedFrequencyHz": 1757.2882,
+            "relativeDb": -7.199
+          },
+          {
+            "rawFrequencyHz": 1771.0945,
+            "sfzRetunedFrequencyHz": 1758.8607,
+            "relativeDb": 0
+          },
+          {
+            "rawFrequencyHz": 1773.9474,
+            "sfzRetunedFrequencyHz": 1761.6939,
+            "relativeDb": -1.642
+          },
+          {
+            "rawFrequencyHz": 1775.2406,
+            "sfzRetunedFrequencyHz": 1762.9781,
+            "relativeDb": -1.63
+          }
+        ]
+      }
+    },
+    "registers": {
+      "A0": {
+        "softLayer": 4,
+        "hardLayer": 16,
+        "attackToPeakRangeSeconds": [
+          0.0142,
+          0.0245
+        ],
+        "softCentroidHz": 164.34,
+        "hardCentroidHz": 274.68,
+        "brightnessRatio": 1.671,
+        "peakVelocityRatio": 3.474,
+        "medianInharmonicityB": 0.00025946,
+        "medianFundamentalT60Seconds": 73.141
+      },
+      "A2": {
+        "softLayer": 4,
+        "hardLayer": 16,
+        "attackToPeakRangeSeconds": [
+          0.0236,
+          0.0271
+        ],
+        "softCentroidHz": 216.11,
+        "hardCentroidHz": 355.09,
+        "brightnessRatio": 1.643,
+        "peakVelocityRatio": 3.386,
+        "medianInharmonicityB": 0.00016973,
+        "medianFundamentalT60Seconds": 16.179
+      },
+      "C4": {
+        "softLayer": 4,
+        "hardLayer": 16,
+        "attackToPeakRangeSeconds": [
+          0.0285,
+          0.0288
+        ],
+        "softCentroidHz": 423.68,
+        "hardCentroidHz": 481.83,
+        "brightnessRatio": 1.137,
+        "peakVelocityRatio": 3.513,
+        "medianInharmonicityB": 0.00031589,
+        "medianFundamentalT60Seconds": 12.416
+      },
+      "A4": {
+        "softLayer": 4,
+        "hardLayer": 16,
+        "attackToPeakRangeSeconds": [
+          0.014,
+          0.0151
+        ],
+        "softCentroidHz": 482.12,
+        "hardCentroidHz": 534.05,
+        "brightnessRatio": 1.108,
+        "peakVelocityRatio": 4.543,
+        "medianInharmonicityB": 0.00061946,
+        "medianFundamentalT60Seconds": 7.492
+      },
+      "A6": {
+        "softLayer": 4,
+        "hardLayer": 16,
+        "attackToPeakRangeSeconds": [
+          0.0212,
+          0.0213
+        ],
+        "softCentroidHz": 1767.75,
+        "hardCentroidHz": 1834.43,
+        "brightnessRatio": 1.038,
+        "peakVelocityRatio": 6.39,
+        "medianInharmonicityB": 0.00515449,
+        "medianFundamentalT60Seconds": 4.082
+      }
+    }
+  }
+}

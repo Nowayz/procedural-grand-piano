@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-08-31T19:42:24.475Z",
+  "title": "J. S. Bach — Prelude in C major, BWV 846",
+  "proceduralAudioOnly": true,
+  "source": {
+    "composer": "Johann Sebastian Bach (1685–1750)",
+    "work": "Prelude in C major, BWV 846, from The Well-Tempered Clavier, Book I",
+    "edition": "Mutopia 2011/09/12 public-domain LilyPond edition, hosted by Wikisource",
+    "scoreUrl": "https://wikisource.org/wiki/Prelude_in_C_major,_BWV_846",
+    "sourceUrl": "https://wikisource.org/w/index.php?title=Prelude_in_C_major,_BWV_846&action=raw",
+    "license": "Public domain (PD-old; typesetting marked Public Domain)"
+  },
+  "rendering": {
+    "sampleRate": 44100,
+    "channels": 2,
+    "bitsPerSample": 16,
+    "frames": 6926648,
+    "durationSeconds": 157.06684807256235,
+    "noteEvents": 549,
+    "measures": 35,
+    "peak": 0.920013427734375,
+    "peakDbfs": -0.7241166802978761,
+    "rms": 0.112950294943251,
+    "rmsDbfs": -18.942252613675524,
+    "sha256": "77c84f55f19af29db369da472c61114bcaf850c1a870d0b9b9c9fadf4df77b41"
+  },
+  "checks": [
+    {
+      "name": "score completeness",
+      "passed": true,
+      "details": "35 measures, 549 note events"
+    },
+    {
+      "name": "WAV format",
+      "passed": true,
+      "details": "PCM16, 2 channels"
+    },
+    {
+      "name": "sample rate",
+      "passed": true,
+      "details": "44100 Hz"
+    },
+    {
+      "name": "sample count",
+      "passed": true,
+      "details": "6926648 frames (expected 6926648)"
+    },
+    {
+      "name": "finite PCM",
+      "passed": true,
+      "details": "left=true, right=true"
+    },
+    {
+      "name": "master peak",
+      "passed": true,
+      "details": "-0.72 dBFS"
+    },
+    {
+      "name": "program RMS",
+      "passed": true,
+      "details": "-18.94 dBFS"
+    },
+    {
+      "name": "DC control",
+      "passed": true,
+      "details": "left=-1.52e-6, right=-1.35e-6"
+    },
+    {
+      "name": "silent lead-in",
+      "passed": true,
+      "details": "first 400 ms is silent"
+    },
+    {
+      "name": "click-free boundaries",
+      "passed": true,
+      "details": "first=0/0, last=0/0"
+    },
+    {
+      "name": "complete-track duration",
+      "passed": true,
+      "details": "157.067 s"
+    }
+  ],
+  "passed": true
+}
