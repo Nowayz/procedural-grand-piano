@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { gzipSync } from 'node:zlib';
 import {
   MAX_DURATION_SECONDS,
   MAX_NOTE_HZ,
@@ -198,4 +199,11 @@ test('runtime implementation has no sample-loading or playback path', async () =
   assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest|atob)\s*\(/);
   assert.doesNotMatch(source, /\.(?:wav|mp3|flac|ogg)\b/i);
   assert.doesNotMatch(source, /AudioBufferSourceNode|decodeAudioData|base64/i);
+});
+
+test('runtime implementation stays within its compact source budgets', async () => {
+  const source = await readFile(new URL('../src/grand-piano.js', import.meta.url));
+  assert.ok(source.length <= 32_000, `raw module is ${source.length} bytes`);
+  const gzipBytes = gzipSync(source, { level: 9 }).length;
+  assert.ok(gzipBytes <= 8_800, `gzip module is ${gzipBytes} bytes`);
 });

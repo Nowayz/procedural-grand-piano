@@ -60,6 +60,21 @@ source.connect(context.destination);
 source.start();
 ```
 
+## Compact runtime
+
+The readable runtime module is **31,052 bytes** (**8,553 bytes gzip**), down
+from 44,172 / 12,226 bytes without changing its generated PCM. Static filter
+coefficients are baked once at module initialization; calibration curves share
+one interpolator; and string, plate, and biquad recurrences use compact numeric
+state layouts. Note-, partial-, and filter-invariant work is computed only once
+at the narrowest useful scope. The core remains dependency-free and does not
+require a build step or minified artifact.
+
+The test suite enforces budgets of 32,000 raw bytes and 8,800 gzip bytes. A
+12-case refactor audit spanning A0–C8, soft/hard velocities, durations, clamps,
+and silence compared 329,427 output samples with the pre-compaction model and
+found them sample-for-sample identical.
+
 ## Acoustic/DSP model
 
 The implementation is a compact causal struck-string/soundboard model rather
@@ -186,7 +201,7 @@ Run everything with:
 npm run validate
 ```
 
-This runs fourteen API/runtime/score tests, the focused 100-point synthesis
+This runs seventeen API/runtime/tooling tests, the focused 100-point synthesis
 analysis, reference re-analysis, both 480-pair comparison suites, and complete
 public-domain-track validation. The strict suite is report-only within this
 umbrella command: its remaining stretch-gate failures are printed and retained
@@ -206,6 +221,14 @@ npm run demos             # deterministically regenerates demos/*.wav
 npm run track             # renders the complete BWV 846 Prelude
 npm run validate:track    # validates the generated full-track WAV
 ```
+
+The two 480-cell comparison tools use a deterministic Node worker pool,
+automatically capped at eight workers to bound FFT memory. Append
+`-- --jobs=1` to an npm command for the serial path, or choose any positive
+worker count. Results retain original SFZ order regardless of completion order.
+One- and four-worker runs produced byte-identical reports; four workers reduced
+the strict quick pass from 21.3 to 7.3 seconds and the wide-grid pass from about
+53 to 16 seconds on the development machine.
 
 The focused behavior score requires at least 90/100 and currently earns:
 

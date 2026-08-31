@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isMainThread, workerData } from 'node:worker_threads';
 import { SAMPLE_RATE, synthesizeGrandPiano } from '../src/grand-piano.js';
 import {
   attackMetrics,
@@ -17,6 +18,11 @@ import {
   spectralCentroid,
   spectrum,
 } from './audio-analysis.mjs';
+import {
+  comparisonWorkerCount,
+  parallelMap,
+  serveParallelMap,
+} from './parallel-map.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const referenceRoot = path.join(root, 'SalamanderGrandPianoV3_44.1khz16bit');
@@ -57,6 +63,7 @@ const AUDITORY_BAND_EDGES_HZ = Object.freeze([
   2_500, 4_000, 6_300, 10_000, 16_000,
 ]);
 const DB_FLOOR = -72;
+const SYNTHESIS_WORKER_TASK = 'strict-reference-synthesis';
 
 function clamp(value, minimum, maximum) {
   return Math.min(maximum, Math.max(minimum, value));
@@ -1043,6 +1050,27 @@ function serializePair(pair) {
   };
 }
 
+function extractSynthesizedFeatures(region) {
+  const nominalHz = midiToFrequency(region.midi);
+  const velocity = (region.velocityLow + region.velocityHigh) / (2 * 127);
+  const samples = synthesizeGrandPiano(nominalHz, velocity, RENDER_SECONDS);
+  return {
+    ...extractFeatures([samples], SAMPLE_RATE, nominalHz),
+    expectedHz: nominalHz,
+  };
+}
+
+function progressReporter(label, total, workerCount, interval) {
+  let lastReported = 0;
+  return (completed) => {
+    if (completed !== total && completed - lastReported < interval) return;
+    lastReported = completed;
+    process.stdout.write(
+      `\r${label} ${completed}/${total} (${workerCount} ${workerCount === 1 ? 'job' : 'jobs'})`,
+    );
+  };
+}
+
 async function main() {
   try {
     await access(sfzPath);
@@ -1072,17 +1100,27 @@ async function main() {
   const signature = await cacheSignature(regions, sfzText, retunedText);
   const referenceCache = await loadOrBuildReferenceCache(regions, tuneByFile, signature);
   const referenceByFile = new Map(referenceCache.entries.map((entry) => [entry.file, entry.features]));
+  const workerCount = comparisonWorkerCount(process.argv.slice(2), analysisRegions.length);
+  const synthesizedFeatures = await parallelMap({
+    items: analysisRegions,
+    moduleUrl: new URL(import.meta.url),
+    task: SYNTHESIS_WORKER_TASK,
+    workerCount,
+    localMapper: extractSynthesizedFeatures,
+    onProgress: progressReporter(
+      'extracted strict synth features',
+      analysisRegions.length,
+      workerCount,
+      16,
+    ),
+  });
+  process.stdout.write('\n');
   const pairs = [];
-  let completed = 0;
-
-  for (const region of analysisRegions) {
+  for (let index = 0; index < analysisRegions.length; index += 1) {
+    const region = analysisRegions[index];
     const nominalHz = midiToFrequency(region.midi);
     const velocity = (region.velocityLow + region.velocityHigh) / (2 * 127);
-    const samples = synthesizeGrandPiano(nominalHz, velocity, RENDER_SECONDS);
-    const synthesized = {
-      ...extractFeatures([samples], SAMPLE_RATE, nominalHz),
-      expectedHz: nominalHz,
-    };
+    const synthesized = synthesizedFeatures[index];
     const reference = referenceByFile.get(region.file);
     const comparison = compareFeatures(reference, synthesized);
     pairs.push({
@@ -1095,12 +1133,7 @@ async function main() {
       synthesizedCentroidHz: mean(synthesized.centroidsHz.slice(0, 3)),
       ...comparison,
     });
-    completed += 1;
-    if (completed % 16 === 0 || completed === analysisRegions.length) {
-      process.stdout.write(`\rcompared strict features ${completed}/${analysisRegions.length}`);
-    }
   }
-  process.stdout.write('\n');
 
   // One robust calibration offset is allowed for microphone/output gain. No
   // per-note, per-register, or per-velocity level normalization is permitted.
@@ -1336,6 +1369,11 @@ async function main() {
   if (!noFail && !report.passed) process.exitCode = 1;
 }
 
-if (path.resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)) {
+if (!isMainThread && workerData?.task === SYNTHESIS_WORKER_TASK) {
+  await serveParallelMap(workerData.jobs, extractSynthesizedFeatures);
+} else if (
+  isMainThread &&
+  path.resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)
+) {
   await main();
 }

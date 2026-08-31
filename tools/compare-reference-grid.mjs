@@ -3,6 +3,7 @@
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isMainThread, workerData } from 'node:worker_threads';
 import { SAMPLE_RATE, synthesizeGrandPiano } from '../src/grand-piano.js';
 import {
   attackMetrics,
@@ -15,6 +16,11 @@ import {
   spectralCentroid,
   spectrum,
 } from './audio-analysis.mjs';
+import {
+  comparisonWorkerCount,
+  parallelMap,
+  serveParallelMap,
+} from './parallel-map.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const referenceRoot = path.join(root, 'SalamanderGrandPianoV3_44.1khz16bit');
@@ -29,6 +35,7 @@ const RENDER_SECONDS = 1.65;
 const MAX_REFERENCE_FRAMES = Math.round(1.65 * SAMPLE_RATE);
 const FRAME_WINDOWS_MS = [[0, 5], [5, 10], [10, 20], [20, 40], [40, 80]];
 const DECAY_STARTS_SECONDS = [0.02, 0.05, 0.1, 0.2, 0.4, 0.8, 1.4];
+const GRID_WORKER_TASK = 'full-reference-grid-pair';
 
 function round(value, digits = 4) {
   if (!Number.isFinite(value)) return null;
@@ -352,6 +359,22 @@ async function analyzePair(region, tuneCents) {
   };
 }
 
+async function analyzeGridJob({ region, tuneCents }) {
+  return analyzePair(region, tuneCents);
+}
+
+function gridProgressReporter(total, workerCount) {
+  let lastReported = 0;
+  return (completed) => {
+    if (completed !== total && completed - lastReported < 32) return;
+    lastReported = completed;
+    process.stdout.write(
+      `\rcompared ${completed}/${total} sustain recordings ` +
+      `(${workerCount} ${workerCount === 1 ? 'job' : 'jobs'})`,
+    );
+  };
+}
+
 function buildVelocitySummaries(pairs) {
   const groups = new Map();
   for (const pair of pairs) {
@@ -457,15 +480,19 @@ async function main() {
   const regions = parseSustainRegions(sfzText);
   const retunedRegions = parseSustainRegions(retunedText);
   const tuneByFile = new Map(retunedRegions.map((region) => [region.file, region.tuneCents]));
-  const pairs = [];
-  let completed = 0;
-  for (const region of regions) {
-    pairs.push(await analyzePair(region, tuneByFile.get(region.file) ?? 0));
-    completed += 1;
-    if (completed % 32 === 0 || completed === regions.length) {
-      process.stdout.write(`\rcompared ${completed}/${regions.length} sustain recordings`);
-    }
-  }
+  const jobs = regions.map((region) => ({
+    region,
+    tuneCents: tuneByFile.get(region.file) ?? 0,
+  }));
+  const workerCount = comparisonWorkerCount(process.argv.slice(2), jobs.length);
+  const pairs = await parallelMap({
+    items: jobs,
+    moduleUrl: new URL(import.meta.url),
+    task: GRID_WORKER_TASK,
+    workerCount,
+    localMapper: analyzeGridJob,
+    onProgress: gridProgressReporter(jobs.length, workerCount),
+  });
   process.stdout.write('\n');
 
   const notes = [...new Set(pairs.map((pair) => pair.note))];
@@ -744,4 +771,11 @@ async function main() {
   if (!noFail && !report.passed) process.exitCode = 1;
 }
 
-await main();
+if (!isMainThread && workerData?.task === GRID_WORKER_TASK) {
+  await serveParallelMap(workerData.jobs, analyzeGridJob);
+} else if (
+  isMainThread &&
+  path.resolve(process.argv[1] ?? '') === fileURLToPath(import.meta.url)
+) {
+  await main();
+}

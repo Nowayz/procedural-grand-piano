@@ -358,3 +358,53 @@ remain outside their stretch gates. In particular, upper-treble reference
 tails and some middle-register decay irregularities are still more complex
 than this compact independent-note model. That failure is retained as an
 honest target rather than relaxed after tuning.
+
+## Rejected experiment — passive bridge feedback
+
+A passive eight-delay string–bridge feedback network and exact normalized
+energy ledger were prototyped after iteration 8. The coupling was numerically
+stable and physically better founded than a feed-forward tail, but the measured
+benefit did not justify its production cost: strict fidelity moved only from
+**86.77 to 86.96**, the wide and focused scores did not change, C4 metrics were
+effectively unchanged, ordinary rendering became about **40% slower**, and the
+compressed runtime module grew about **35%**. The experiment was therefore
+removed from the public synthesizer rather than retaining complexity on the
+strength of a 0.19-point proxy gain.
+
+Only the independent comparison-performance work from that experiment was
+retained. Both 480-cell tools now use a bounded deterministic worker pool and
+write results back in SFZ order. Four workers reduced the strict quick pass
+from 21.3 to 7.3 seconds and the wide-grid pass from about 53 to 16 seconds;
+one- and four-worker JSON reports were byte-identical.
+
+## Iteration 9 — exact compact-runtime refactor
+
+The retained 86.77-point model was compacted under a stricter constraint than
+the acoustic score: representative output had to remain sample-for-sample
+identical. Calibration tables now live once at module scope and share one
+interpolator; repeated smooth transitions, bell curves, exponential losses,
+resonator recurrences, and biquads use common kernels. Static soundboard and
+noise-filter coefficients are baked at module initialization, while mutable
+state is cloned for each render. String and impact resonators use packed numeric
+state, and note/partial invariants are evaluated outside their inner loops.
+
+| Runtime module | Before | Compact | Change |
+|---|---:|---:|---:|
+| Source lines | 1,123 | **841** | −25.1% |
+| Raw bytes | 44,172 | **31,052** | −29.7% |
+| Gzip level-9 bytes | 12,226 | **8,553** | −30.0% |
+
+An independent audit loaded the committed and compact modules together and
+compared twelve bass-to-treble, soft-to-hard, ordinary, clamped, silent, and
+zero-duration cases. All **329,427 Float32 samples were exactly equal**. A new
+test keeps the readable source below 32,000 raw / 8,800 gzip bytes. The acoustic
+model, output contract, deterministic seed, reference targets, and generated
+sound are therefore unchanged; this iteration removes representation and
+allocation overhead rather than retuning the instrument.
+
+The packing also reduced allocation/property overhead. In ten alternating
+local runs of five 0.8-second notes spanning A0–A6, median render time moved
+from 188.9 ms to 132.1 ms (about **30% faster**). This small benchmark is a
+performance regression check, not a cross-engine guarantee. Final validation
+passed all **17/17 tests**, 100/100 focused analysis, 90/100 wide-grid analysis,
+the unchanged 86.77/100 strict report, and every full-track check.
