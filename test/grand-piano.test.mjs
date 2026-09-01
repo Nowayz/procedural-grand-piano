@@ -207,7 +207,7 @@ test('runtime implementation has no sample-loading or playback path', async () =
 
 test('runtime implementation stays within its compact source budgets', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url));
-  assert.ok(source.length <= 80_000, `raw module is ${source.length} bytes`);
+  assert.ok(source.length <= 92_000, `raw module is ${source.length} bytes`);
   const gzipBytes = gzipSync(source, { level: 9 }).length;
-  assert.ok(gzipBytes <= 40_000, `gzip module is ${gzipBytes} bytes`);
+  assert.ok(gzipBytes <= 44_000, `gzip module is ${gzipBytes} bytes`);
 });

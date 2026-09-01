@@ -84,13 +84,40 @@ Library](https://github.com/itsmusician/IR-Library). GarageBand's acoustic
 piano reverb varies by patch, so this targets its documented **Small Hall**
 master preset rather than claiming to copy an Apple impulse response.
 
+## Realtime keyboard API
+
+The realtime API keeps each note alive until a matching key-up event and uses an `AudioWorklet` as the audio clock. Wasm owns the fixed voice pool, note state, sustain state, and mono mix; JavaScript only forwards controls and copies the finished block into the browser-provided output channel. No objects, arrays, or views are created inside the worklet's `process()` callback.
+
+```js
+import { createRealtimeGrandPiano, REALTIME_SCHEDULING_LEAD_SECONDS } from 'procedural-grand-piano/realtime';
+import { createGarageBandStyleReverb } from 'procedural-grand-piano/reverb';
+
+const context = new AudioContext();
+const piano = await createRealtimeGrandPiano(context, { polyphony: 32 });
+const reverb = await createGarageBandStyleReverb(context);
+piano.connect(reverb.input);
+reverb.connect(context.destination);
+
+const id = 60;
+piano.noteOn(id, 261.625565, 0.75);
+piano.noteOff(id, 0.4, context.currentTime + 1);
+piano.sustain(true);
+piano.sustain(false, context.currentTime + 2);
+```
+
+`id` identifies the physical key press, so applications may use different IDs for overlapping strikes of the same pitch. `noteOn`, `noteOff`, and `sustain` accept absolute `AudioContext` times. An omitted time means “the next available render quantum,” which minimizes interactive latency but depends on main-thread and `MessagePort` scheduling. Sequencers should submit events at least `REALTIME_SCHEDULING_LEAD_SECONDS` (20 ms) ahead for stable sample placement. DOM events and `EventTarget` may be used by the interface, but they are deliberately absent from the DSP callback.
+
+All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices, supports up to 64, and deterministically steals a released voice before the oldest held voice when full. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
+
+Realtime coefficients and timing follow the actual `AudioContext.sampleRate`; rates from 32 to 96 kHz are supported. Sustained 32-voice rendering at 48 kHz measured 1.37 ms median and 1.62 ms p95 per 2.67 ms quantum on the development machine. Starting many voices is more expensive because each strike constructs its modal state: an artificial simultaneous 32-note onset took 5.75 ms, while ordinary one-to-ten-finger keyboard attacks stay within a quantum on that machine.
+
 ## Compact runtime
 
-The distributable runtime module is **79,562 bytes** (**38,397 bytes gzip level 9**) and remains dependency-free with no required build step. Its 56,282-byte embedded WebAssembly module owns the complete simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, envelopes, limiting, fades, and output. JavaScript only validates the API contract, manages the caller's output buffer, invokes Wasm, and copies the finished samples.
+The distributable runtime module is **89,675 bytes** (**42,674 bytes gzip level 9**) and remains dependency-free with no required build step. Its 61,599-byte embedded WebAssembly module owns the complete offline and realtime simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, envelopes, voice state, event scheduling, mixing, limiting, fades, and output. JavaScript only validates the API contract, manages caller-owned buffers, invokes Wasm, and copies finished samples.
 
-The 1,845-byte packed coefficient payload contains only quarter/half-dB physical mobility, loss, and modal-color measurements—not PCM, phase, waveform segments, or an impulse response. One fixed 6 MiB Wasm memory contains every structure-of-arrays bank, scratch value, calibration byte, and the maximum 30-second output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into a caller-provided buffer performs no allocation.
+The 1,845-byte packed coefficient payload contains only quarter/half-dB physical mobility, loss, and modal-color measurements—not PCM, phase, waveform segments, or an impulse response. Each independent engine has one fixed 12 MiB Wasm memory containing the 64-voice pool, 256-event queue, mix block, every scratch value, calibration byte, and the maximum 30-second offline output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into caller-provided buffers performs no allocation.
 
-The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 80,000 raw bytes and 40,000 gzip bytes; that includes the complete model, its fixed data, and the required standalone math routines.
+The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 92,000 raw bytes and 44,000 gzip bytes; that includes the complete model, realtime engine, fixed data, and required standalone math routines.
 
 ## Acoustic/DSP model
 

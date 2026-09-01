@@ -100,13 +100,13 @@ test('all 88 keys remain deterministic at soft, medium, and hard velocities', ()
 test('full-model Wasm memory is module-preallocated and reused', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url), 'utf8');
   const cSource = await readFile(new URL('../tools/grand-piano-wasm.c', import.meta.url), 'utf8');
-  const render = source.slice(source.indexOf('export function synthesizeGrandPiano'));
+  const render = source.slice(source.indexOf('export function synthesizeGrandPiano'), source.indexOf('export function synthesizeGrandPianoInto'));
   const wasmBytes = /const WASM_BYTES = Uint8Array\.from\(atob\('([^']+)'/.exec(source)?.[1];
   assert.ok(wasmBytes && WebAssembly.validate(Buffer.from(wasmBytes, 'base64')), 'embedded full-model Wasm is valid');
   const module = new WebAssembly.Module(Buffer.from(wasmBytes, 'base64'));
   assert.deepEqual(WebAssembly.Module.imports(module), []);
   const wasm = new WebAssembly.Instance(module).exports;
-  assert.equal(wasm.memory.buffer.byteLength, 6_291_456);
+  assert.equal(wasm.memory.buffer.byteLength, 12_582_912);
   assert.throws(() => wasm.memory.grow(1), RangeError);
   assert.ok(wasm.calibration_ptr() + 1_845 <= wasm.output_ptr());
   assert.ok(wasm.output_ptr() + MAX_DURATION_SECONDS * SAMPLE_RATE * 4 <= wasm.memory.buffer.byteLength);
@@ -118,6 +118,9 @@ test('full-model Wasm memory is module-preallocated and reused', async () => {
   assert.doesNotMatch(source, /function (?:filterSoundboard|createStringModes)|Math\.(?:sin|tanh)\(/);
   assert.doesNotMatch(cSource, /\b(?:malloc|calloc|realloc|free)\s*\(/);
   assert.match(cSource, /static float output\[MAX_SAMPLES\]/);
+  assert.match(cSource, /static Voice offline_voice, voices\[MAX_VOICES\]/);
+  assert.match(cSource, /static Event events\[EVENT_COUNT\]/);
+  assert.match(cSource, /static double realtime_mix\[BLOCK_SIZE\]/);
 });
 
 test('caller-provided output enables an allocation-free render path', () => {

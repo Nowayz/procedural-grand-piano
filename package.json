@@ -6,6 +6,7 @@
   "main": "./src/grand-piano.js",
   "exports": {
     ".": "./src/grand-piano.js",
+    "./realtime": "./src/realtime.js",
     "./reverb": "./src/reverb.js",
     "./small-hall-ir": "./src/impulse-responses/small-hall-tail.wav"
   },
@@ -15,7 +16,9 @@
     "tools/grand-piano-wasm.c",
     "tools/build-wasm.mjs"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./src/grand-piano-worklet.js"
+  ],
   "scripts": {
     "test": "node --test",
     "wasm:build": "node tools/build-wasm.mjs",
