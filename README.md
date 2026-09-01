@@ -111,6 +111,8 @@ All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not cr
 
 Realtime coefficients and timing follow the actual `AudioContext.sampleRate`; rates from 32 to 96 kHz are supported. Sustained 32-voice rendering at 48 kHz measured 1.37 ms median and 1.62 ms p95 per 2.67 ms quantum on the development machine. Starting many voices is more expensive because each strike constructs its modal state: an artificial simultaneous 32-note onset took 5.75 ms, while ordinary one-to-ten-finger keyboard attacks stay within a quantum on that machine.
 
+Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and sustain-pedal controls; the output receives the bundled Small Hall convolution reverb.
+
 ## Compact runtime
 
 The distributable runtime module is **89,675 bytes** (**42,674 bytes gzip level 9**) and remains dependency-free with no required build step. Its 61,599-byte embedded WebAssembly module owns the complete offline and realtime simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, envelopes, voice state, event scheduling, mixing, limiting, fades, and output. JavaScript only validates the API contract, manages caller-owned buffers, invokes Wasm, and copies finished samples.
