@@ -49,11 +49,7 @@ function automaticProcessorCount() {
  * process. This saturates execution resources without the SMT contention that
  * makes these FFT workloads slower. An explicit job count remains available.
  */
-export function comparisonWorkerCount(
-  argumentsList,
-  itemCount,
-  maximumWorkers = Number.POSITIVE_INFINITY,
-) {
+export function comparisonWorkerCount(argumentsList, itemCount, maximumWorkers = Number.POSITIVE_INFINITY) {
   let requested;
   for (let index = 0; index < argumentsList.length; index += 1) {
     const argument = argumentsList[index];
@@ -94,14 +90,7 @@ function partitionJobs(items, workerCount) {
  * Deterministic indexed map. Worker completion order is intentionally ignored:
  * every result is placed back at its original input index.
  */
-export async function parallelMap({
-  items,
-  moduleUrl,
-  task,
-  workerCount,
-  localMapper,
-  onProgress = () => {},
-}) {
+export async function parallelMap({ items, moduleUrl, task, workerCount, localMapper, onProgress = () => {} }) {
   if (items.length === 0) return [];
   if (workerCount === 1) {
     const results = new Array(items.length);

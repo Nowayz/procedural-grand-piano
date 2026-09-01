@@ -251,13 +251,7 @@ function activeProfileMae(reference, synthesized, thresholdDb = -58) {
   return count > 0 ? total / count : 0;
 }
 
-function matrixProfileMae(
-  reference,
-  synthesized,
-  thresholdDb = -58,
-  activeFrames,
-  maximumColumns = Number.POSITIVE_INFINITY,
-) {
+function matrixProfileMae(reference, synthesized, thresholdDb = -58, activeFrames, maximumColumns = Number.POSITIVE_INFINITY) {
   const values = [];
   const length = Math.min(reference.length, synthesized.length);
   for (let index = 0; index < length; index += 1) {
@@ -514,12 +508,7 @@ function averageModulation(channels, sampleRate, onsetSeconds, frequencyHz) {
   };
 }
 
-export function extractFeatures(
-  channels,
-  sampleRate,
-  expectedHz,
-  { estimateNoiseFloor = false } = {},
-) {
+export function extractFeatures(channels, sampleRate, expectedHz, { estimateNoiseFloor = false } = {}) {
   const mono = channels.length === 1
     ? channels[0]
     : (() => {
@@ -633,12 +622,7 @@ export function extractFeatures(
   };
 }
 
-function decayMatrixMae(
-  referencePowers,
-  synthesizedPowers,
-  activeThresholdDb = -50,
-  maximumColumns = Number.POSITIVE_INFINITY,
-) {
+function decayMatrixMae(referencePowers, synthesizedPowers, activeThresholdDb = -50, maximumColumns = Number.POSITIVE_INFINITY) {
   const anchorIndex = 1;
   const referenceAnchor = referencePowers[anchorIndex];
   const synthesizedAnchor = synthesizedPowers[anchorIndex];

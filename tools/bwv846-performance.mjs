@@ -1,4 +1,4 @@
-import { SAMPLE_RATE, synthesizeGrandPiano } from '../src/grand-piano.js';
+import { SAMPLE_RATE, synthesizeGrandPianoInto } from '../src/grand-piano.js';
 
 export const TRACK_TITLE = 'J. S. Bach — Prelude in C major, BWV 846';
 
@@ -312,31 +312,37 @@ function masterTrack(left, right) {
 }
 
 /** Render the complete score to stereo normalized PCM at 44.1 kHz. */
-export function renderBwv846Track({ onProgress } = {}) {
+export function renderBwv846Track({ onProgress, proceduralRoom = true } = {}) {
   const performance = buildBwv846Performance();
   const frameCount = Math.round(performance.durationSeconds * SAMPLE_RATE);
   const left = new Float32Array(frameCount);
   const right = new Float32Array(frameCount);
+  let noteCapacity = 0;
+  for (const event of performance.events) {
+    noteCapacity = Math.max(noteCapacity, Math.round(event.duration * SAMPLE_RATE));
+  }
+  const noteBuffer = new Float32Array(noteCapacity);
 
   for (let eventIndex = 0; eventIndex < performance.events.length; eventIndex += 1) {
     const event = performance.events[eventIndex];
-    const rendered = synthesizeGrandPiano(event.frequency, event.velocity, event.duration);
+    const renderedSamples = Math.round(event.duration * SAMPLE_RATE);
+    synthesizeGrandPianoInto(noteBuffer, event.frequency, event.velocity, event.duration);
     const start = Math.round(event.start * SAMPLE_RATE);
     const keyboardPan = clamp((event.midi - 60) / 30, -1, 1) * 0.34;
     const panAngle = (keyboardPan + 1) * Math.PI / 4;
     const leftGain = Math.cos(panAngle) * event.gain;
     const rightGain = Math.sin(panAngle) * event.gain;
-    const available = Math.min(rendered.length, frameCount - start);
+    const available = Math.min(renderedSamples, frameCount - start);
     for (let sample = 0; sample < available; sample += 1) {
-      left[start + sample] += rendered[sample] * leftGain;
-      right[start + sample] += rendered[sample] * rightGain;
+      left[start + sample] += noteBuffer[sample] * leftGain;
+      right[start + sample] += noteBuffer[sample] * rightGain;
     }
     if (onProgress && ((eventIndex + 1) % 64 === 0 || eventIndex + 1 === performance.events.length)) {
       onProgress(eventIndex + 1, performance.events.length);
     }
   }
 
-  applyProceduralRoom(left, right);
+  if (proceduralRoom) applyProceduralRoom(left, right);
   const masteringGain = masterTrack(left, right);
   return { left, right, performance, masteringGain, sampleRate: SAMPLE_RATE };
 }

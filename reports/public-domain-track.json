@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T09:34:56.798Z",
+  "generatedAt": "2026-09-01T14:52:44.575Z",
   "title": "J. S. Bach — Prelude in C major, BWV 846",
   "proceduralAudioOnly": true,
   "source": {
@@ -20,9 +20,9 @@
     "measures": 35,
     "peak": 0.91998291015625,
     "peakDbfs": -0.7244048029535365,
-    "rms": 0.11508142733483487,
-    "rmsDbfs": -18.77989520539467,
-    "sha256": "c10d7f73d8ac223ea1e04297a31087613f91d00064d24e68c1ac4d08195b9970"
+    "rms": 0.10465636752520696,
+    "rmsDbfs": -19.6046868616644,
+    "sha256": "620294fbd8dfae936ca7bcfe02f6f3a73ec11d433c654fc211428329cba802d1"
   },
   "checks": [
     {
@@ -58,12 +58,12 @@
     {
       "name": "program RMS",
       "passed": true,
-      "details": "-18.78 dBFS"
+      "details": "-19.60 dBFS"
     },
     {
       "name": "DC control",
       "passed": true,
-      "details": "left=-1.52e-6, right=-1.38e-6"
+      "details": "left=-1.27e-6, right=-1.21e-6"
     },
     {
       "name": "silent lead-in",

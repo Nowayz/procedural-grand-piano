@@ -60,6 +60,26 @@ source.connect(context.destination);
 source.start();
 ```
 
+For a GarageBand-style **Small Hall** master reverb, use the optional Web Audio
+helper. It loads and decodes the bundled stereo IR once during setup; the
+instrument's render path remains sample-free and allocation-free when a caller
+supplies its output buffer.
+
+```js
+import { createGarageBandStyleReverb } from './src/reverb.js';
+
+const context = new AudioContext();
+const reverb = await createGarageBandStyleReverb(context);
+source.connect(reverb.input);
+reverb.connect(context.destination);
+```
+
+The default wet send is 18%; call `reverb.setWet(0..1)` to change it. The
+1.359-second stereo response is derived from the MIT-licensed [Conner IR
+Library](https://github.com/itsmusician/IR-Library). GarageBand's acoustic
+piano reverb varies by patch, so this targets its documented **Small Hall**
+master preset rather than claiming to copy an Apple impulse response.
+
 ## Compact runtime
 
 The readable runtime module is **40,639 bytes** (**12,305 bytes gzip level 9**).

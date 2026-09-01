@@ -50,11 +50,7 @@ function fft(real, imaginary) {
   }
 }
 
-export function spectrum(
-  samples,
-  sampleRate,
-  { start = 0, length = samples.length - start, fftSize = nextPowerOfTwo(length) } = {},
-) {
+export function spectrum(samples, sampleRate, { start = 0, length = samples.length - start, fftSize = nextPowerOfTwo(length) } = {}) {
   const safeStart = Math.max(0, Math.floor(start));
   const available = Math.max(0, Math.min(Math.floor(length), samples.length - safeStart));
   if (fftSize < available || (fftSize & (fftSize - 1)) !== 0) {
@@ -188,11 +184,7 @@ export function rmsBetween(samples, start, end) {
  * looks ahead across the beginning of a buffer, so a render that starts at
  * sample zero cannot be assigned a fictitious negative-time onset.
  */
-export function causalRmsEnvelope(
-  samples,
-  sampleRate,
-  { windowSeconds = 0.003, limitSeconds = samples.length / sampleRate } = {},
-) {
+export function causalRmsEnvelope(samples, sampleRate, { windowSeconds = 0.003, limitSeconds = samples.length / sampleRate } = {}) {
   const limit = Math.max(
     0,
     Math.min(samples.length, Math.round(limitSeconds * sampleRate)),
@@ -248,13 +240,7 @@ export const TRANSIENT_BANDS = Object.freeze({
 });
 
 /** Analyze short onset-aligned frames with one consistent FFT method. */
-export function transientFrameMetrics(
-  samples,
-  sampleRate,
-  onsetSeconds,
-  windowsMilliseconds = [[0, 5], [5, 10], [10, 20], [20, 40], [40, 80]],
-  bands = TRANSIENT_BANDS,
-) {
+export function transientFrameMetrics(samples, sampleRate, onsetSeconds, windowsMilliseconds = [[0, 5], [5, 10], [10, 20], [20, 40], [40, 80]], bands = TRANSIENT_BANDS) {
   const results = [];
   for (const [startMs, endMs] of windowsMilliseconds) {
     const start = Math.max(0, Math.round((onsetSeconds + startMs / 1_000) * sampleRate));
@@ -300,13 +286,7 @@ export function transientFrameMetrics(
  * decay trajectory and for exposing unison-beat rebounds that one T60 fit
  * hides.
  */
-export function onsetRmsTrajectory(
-  samples,
-  sampleRate,
-  onsetSeconds,
-  startsSeconds = [0.02, 0.05, 0.1, 0.15, 0.25, 0.4, 0.7, 1, 1.5, 2, 3],
-  windowSeconds = 0.05,
-) {
+export function onsetRmsTrajectory(samples, sampleRate, onsetSeconds, startsSeconds = [0.02, 0.05, 0.1, 0.15, 0.25, 0.4, 0.7, 1, 1.5, 2, 3], windowSeconds = 0.05) {
   const values = startsSeconds
     .filter((startSeconds) => onsetSeconds + startSeconds < samples.length / sampleRate)
     .map((startSeconds) => ({
@@ -331,15 +311,7 @@ export function onsetRmsTrajectory(
  * below the default threshold, so the returned span represents multiple
  * string/polarization resonances rather than the FFT main lobe.
  */
-export function spectralPeakCluster(
-  spectralData,
-  centerHz,
-  {
-    searchCents = 16,
-    relativeThresholdDb = -14,
-    minimumSeparationHz = 0.8,
-  } = {},
-) {
+export function spectralPeakCluster(spectralData, centerHz, { searchCents = 16, relativeThresholdDb = -14, minimumSeparationHz = 0.8 } = {}) {
   const { powers, binHz } = spectralData;
   const ratio = 2 ** (searchCents / 1_200);
   const lower = Math.max(1, Math.ceil(centerHz / ratio / binHz));
@@ -449,13 +421,7 @@ export function linearSlope(points) {
   return denominator > 0 ? numerator / denominator : Number.NaN;
 }
 
-export function partialDecay(
-  samples,
-  sampleRate,
-  fundamentalHz,
-  partial,
-  timesSeconds = [0.1, 0.3, 0.6, 1.0, 1.4],
-) {
+export function partialDecay(samples, sampleRate, fundamentalHz, partial, timesSeconds = [0.1, 0.3, 0.6, 1.0, 1.4]) {
   const nominal = fundamentalHz * partial;
   const points = [];
   for (const time of timesSeconds) {
@@ -483,10 +449,7 @@ function readAscii(buffer, offset, length) {
   return buffer.toString('ascii', offset, offset + length);
 }
 
-export async function readWav(
-  path,
-  { preserveChannels = false, maximumFrames = Number.POSITIVE_INFINITY } = {},
-) {
+export async function readWav(path, { preserveChannels = false, maximumFrames = Number.POSITIVE_INFINITY } = {}) {
   const buffer = await readFile(path);
   if (readAscii(buffer, 0, 4) !== 'RIFF' || readAscii(buffer, 8, 4) !== 'WAVE') {
     throw new Error(`${path} is not a RIFF/WAVE file`);
