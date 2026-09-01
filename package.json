@@ -35,6 +35,7 @@
     "ascii:align": "node tools/align-ascii-boxes.mjs",
     "demos": "node tools/generate-demos.mjs",
     "track": "node tools/generate-track.mjs",
+    "track:realtime": "node tools/generate-track-realtime.mjs",
     "track:bumblebee": "node tools/generate-bumblebee.mjs",
     "validate:track": "node tools/validate-track.mjs",
     "validate": "npm run test && npm run analyze:references && npm run analyze && npm run analyze:grid && npm run analyze:chromatic && npm run analyze:fidelity:report && npm run analyze:fidelity:chromatic:report && npm run validate:track"
