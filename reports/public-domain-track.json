@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T14:52:44.575Z",
+  "generatedAt": "2026-09-01T16:28:30.567Z",
   "title": "J. S. Bach — Prelude in C major, BWV 846",
   "proceduralAudioOnly": true,
   "source": {
@@ -20,9 +20,9 @@
     "measures": 35,
     "peak": 0.91998291015625,
     "peakDbfs": -0.7244048029535365,
-    "rms": 0.10465636752520696,
-    "rmsDbfs": -19.6046868616644,
-    "sha256": "620294fbd8dfae936ca7bcfe02f6f3a73ec11d433c654fc211428329cba802d1"
+    "rms": 0.10465637636897657,
+    "rmsDbfs": -19.604686127681315,
+    "sha256": "28df31040a43c23efaa7c8045fbdece4b5b50d0edbc08760f87b75529f68637f"
   },
   "checks": [
     {

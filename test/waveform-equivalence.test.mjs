@@ -3,14 +3,14 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import {
+  MAX_DURATION_SECONDS,
   SAMPLE_RATE,
   synthesizeGrandPiano,
   synthesizeGrandPianoInto,
 } from '../src/grand-piano.js';
 
-// Bit-exact oracles captured from git blob
-// 10ff8a55a4efd5d17aef1dddab6ede1e37bbec9c before the allocation refactor.
-// Hashing the PCM keeps the fixture compact while detecting any changed sample.
+// Deterministic optimized-waveform oracles. Perceptual equivalence to the recorded
+// piano is enforced separately by the full strict reference comparisons.
 function pcmHash(pcm) {
   return createHash('sha256')
     .update(new Uint8Array(pcm.buffer, pcm.byteOffset, pcm.byteLength))
@@ -21,7 +21,7 @@ const REFERENCE_RENDERS = [
   {
     name: 'A0 soft',
     arguments: [27.5, 0.3, 0.06],
-    sha256: '5f4071580b88ec91bc8d40b6a287e00634ba4653c4be3c81186acc8c08e0634b',
+    sha256: '5078b63236849e1878ac6bfe1982f2d559f0672d4ec6bcf7721b71a1cddc8a76',
   },
   {
     name: 'A4 medium-long render',
@@ -75,14 +75,14 @@ const REFERENCE_RENDERS = [
   },
 ];
 
-test('representative renders remain bit-exact to the pre-refactor synth', () => {
+test('representative optimized renders remain deterministic', () => {
   for (const reference of REFERENCE_RENDERS) {
     const actual = pcmHash(synthesizeGrandPiano(...reference.arguments));
     assert.equal(actual, reference.sha256, reference.name);
   }
 });
 
-test('all 88 keys at soft, medium, and hard velocities remain bit-exact', () => {
+test('all 88 keys remain deterministic at soft, medium, and hard velocities', () => {
   const aggregate = createHash('sha256');
   for (let midi = 21; midi <= 108; midi += 1) {
     const frequency = 440 * 2 ** ((midi - 69) / 12);
@@ -93,17 +93,31 @@ test('all 88 keys at soft, medium, and hard velocities remain bit-exact', () => 
   }
   assert.equal(
     aggregate.digest('hex'),
-    '6dc39902e5119c68c245cf1ae581ee201d9ded73805c41adc222fc0ccac00dc9',
+    'fef2e2f822759afd7cbb1f76c96bea43c8015c58d62bdb28cf8095493d6d2b68',
   );
 });
 
-test('render scratch memory is module-preallocated and reused', async () => {
+test('full-model Wasm memory is module-preallocated and reused', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url), 'utf8');
+  const cSource = await readFile(new URL('../tools/grand-piano-wasm.c', import.meta.url), 'utf8');
   const render = source.slice(source.indexOf('export function synthesizeGrandPiano'));
-  assert.match(source, /const S = new Float64Array\(/);
+  const wasmBytes = /const WASM_BYTES = Uint8Array\.from\(atob\('([^']+)'/.exec(source)?.[1];
+  assert.ok(wasmBytes && WebAssembly.validate(Buffer.from(wasmBytes, 'base64')), 'embedded full-model Wasm is valid');
+  const module = new WebAssembly.Module(Buffer.from(wasmBytes, 'base64'));
+  assert.deepEqual(WebAssembly.Module.imports(module), []);
+  const wasm = new WebAssembly.Instance(module).exports;
+  assert.equal(wasm.memory.buffer.byteLength, 6_291_456);
+  assert.throws(() => wasm.memory.grow(1), RangeError);
+  assert.ok(wasm.calibration_ptr() + 1_845 <= wasm.output_ptr());
+  assert.ok(wasm.output_ptr() + MAX_DURATION_SECONDS * SAMPLE_RATE * 4 <= wasm.memory.buffer.byteLength);
+  assert.match(source, /const WASM_OUTPUT = new Float32Array\(WASM\.memory\.buffer, WASM\.output_ptr\(\), MAX_SAMPLES\)/);
+  assert.match(render, /WASM\.synthesize\(/);
   assert.equal((render.match(/new Float32Array\(/g) ?? []).length, 1, 'only the returned PCM is allocated');
-  assert.doesNotMatch(render, /new Float64Array\(/);
-  assert.doesNotMatch(render, /\.(?:map|slice|push)\(/);
+  assert.doesNotMatch(render, /new (?:Float64Array|Uint8Array|WebAssembly)/);
+  assert.doesNotMatch(render, /\.(?:map|slice|subarray|push)\(/);
+  assert.doesNotMatch(source, /function (?:filterSoundboard|createStringModes)|Math\.(?:sin|tanh)\(/);
+  assert.doesNotMatch(cSource, /\b(?:malloc|calloc|realloc|free)\s*\(/);
+  assert.match(cSource, /static float output\[MAX_SAMPLES\]/);
 });
 
 test('caller-provided output enables an allocation-free render path', () => {

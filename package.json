@@ -11,11 +11,15 @@
   },
   "files": [
     "src",
-    "README.md"
+    "README.md",
+    "tools/grand-piano-wasm.c",
+    "tools/build-wasm.mjs"
   ],
   "sideEffects": false,
   "scripts": {
     "test": "node --test",
+    "wasm:build": "node tools/build-wasm.mjs",
+    "wasm:check": "node tools/build-wasm.mjs --check",
     "analyze": "node tools/score-synth.mjs --write-report",
     "analyze:references": "node tools/analyze-references.mjs --write-report",
     "analyze:grid": "node tools/compare-reference-grid.mjs --write-report",

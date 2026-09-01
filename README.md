@@ -17,6 +17,7 @@ to a sampled concert grand.
 ```js
 import synthesizeGrandPiano, {
   synthesizeGrandPiano as piano,
+  synthesizeGrandPianoInto,
   SAMPLE_RATE,
 } from './src/grand-piano.js';
 
@@ -24,6 +25,9 @@ const pcm = piano(440, 0.8, 2.5);
 // pcm instanceof Float32Array === true
 // pcm.length === Math.round(2.5 * SAMPLE_RATE)
 // SAMPLE_RATE === 44100
+
+const reusable = new Float32Array(SAMPLE_RATE);
+synthesizeGrandPianoInto(reusable, 440, 0.8, 1);
 ```
 
 The default and named exports are the same function. It returns a new mono
@@ -45,8 +49,8 @@ Input handling is deliberate:
 - `duration_seconds` is clamped to `0..30` seconds. The upper limit prevents an
   accidental unbounded allocation.
 
-The package is ESM and works in Node 18+ and modern browsers. For browser
-playback, place the returned channel into an `AudioBuffer`; the synthesizer
+The package is ESM and works in Node 18+ and modern browsers with WebAssembly
+SIMD. For browser playback, place the returned channel into an `AudioBuffer`; the synthesizer
 itself intentionally does not own playback:
 
 ```js
@@ -82,18 +86,11 @@ master preset rather than claiming to copy an Apple impulse response.
 
 ## Compact runtime
 
-The readable runtime module is **40,639 bytes** (**12,305 bytes gzip level 9**).
-It remains dependency-free and needs no build step or minified artifact. The
-1,845-byte packed coefficient payload contains only quarter/half-dB physical
-mobility, loss, and modal-color measurements—not PCM, phase, waveform segments,
-or an impulse response. All six surfaces share one interpolator; resonators and
-biquads retain compact numeric state; and invariant work is computed once at
-the narrowest useful scope.
+The distributable runtime module is **79,562 bytes** (**38,397 bytes gzip level 9**) and remains dependency-free with no required build step. Its 56,282-byte embedded WebAssembly module owns the complete simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, envelopes, limiting, fades, and output. JavaScript only validates the API contract, manages the caller's output buffer, invokes Wasm, and copies the finished samples.
 
-The test suite enforces budgets of 41,000 raw bytes and 12,500 gzip bytes. The
-earlier exact compaction was 31,052 / 8,553 bytes; the measured-physics pass
-spends about 3.6 KiB compressed to move the all-key strict score from 82.71 to
-95.06 while retaining a small, readable single-file instrument.
+The 1,845-byte packed coefficient payload contains only quarter/half-dB physical mobility, loss, and modal-color measurements—not PCM, phase, waveform segments, or an impulse response. One fixed 6 MiB Wasm memory contains every structure-of-arrays bank, scratch value, calibration byte, and the maximum 30-second output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into a caller-provided buffer performs no allocation.
+
+The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 80,000 raw bytes and 40,000 gzip bytes; that includes the complete model, its fixed data, and the required standalone math routines.
 
 ## Acoustic/DSP model
 
