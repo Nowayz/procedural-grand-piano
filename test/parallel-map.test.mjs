@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import * as os from 'node:os';
 import test from 'node:test';
 import {
   comparisonWorkerCount,
@@ -13,7 +14,11 @@ test('comparison worker count accepts both argument forms and clamps to work', (
   assert.throws(() => comparisonWorkerCount(['--jobs=nope'], 480), RangeError);
   assert.throws(() => comparisonWorkerCount(['--jobs'], 480), RangeError);
   const automatic = comparisonWorkerCount([], 480);
-  assert.ok(automatic >= 1 && automatic <= 8);
+  const available = typeof os.availableParallelism === 'function'
+    ? os.availableParallelism()
+    : os.cpus().length;
+  assert.ok(automatic >= 1 && automatic <= Math.min(480, available));
+  assert.equal(comparisonWorkerCount([], 480, 3), Math.min(3, automatic));
 });
 
 test('single-job parallel map preserves deterministic input order', async () => {

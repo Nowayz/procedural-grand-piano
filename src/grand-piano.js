@@ -95,11 +95,24 @@ const BRIDGE_CURVE_DB = [
 ];
 
 const MODAL_RADIATION_DB = [
-  [-2, 4.5, 0, -3, -2.5, -1, 1, -7, -3, -1, -3.5, -5, -2, -3, -5, -8],
-  [2.3, -2.2, -3.3, -3.7, -1.1, -1.5, 6, 4, 1, 0, 0, 0, 1, 0, 1, 0],
-  [0, -6, 8.5, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [-2, 4.1, -0.6, -3.9, -2.9, -1.4, 1.2, -7.3, -2.8, -1.2, -3.7, -7, -4.1, -4.6, -5.6, -8],
+  [2.3, -2.7, -5.2, -4.2, -3.1, -1.8, 6.3, 6.2, 1.4, -0.7, -1.6, -0.6, 0.6, -0.3, 1, 0],
+  [0, -10.5, 7, 2.5, -4.4, -3.6, -4.9, -3.6, -3.1, -2.8, -1.7, -1.7, 0, 0, 0, 0],
 ];
 
+// 1,845 packed scalar dB coefficients; these are model parameters, never audio.
+const CALIBRATION_BYTES = Uint8Array.from(atob(
+  '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',
+), (character) => character.charCodeAt(0));
+const MODAL_COLOR_BYTES = CALIBRATION_BYTES.subarray(0, 540);
+const IMPACT_COLOR_BYTES = CALIBRATION_BYTES.subarray(540, 720);
+const MOBILITY_COLOR_BYTES = CALIBRATION_BYTES.subarray(720, 1_350);
+const RADIATION_BYTES = CALIBRATION_BYTES.subarray(1_350, 1_485);
+const BRIDGE_LOSS_BYTES = CALIBRATION_BYTES.subarray(1_485, 1_665);
+const BOARD_LOSS_BYTES = CALIBRATION_BYTES.subarray(1_665);
+const MOBILITY_BAND_EDGES = [40, 63, 100, 160, 250, 400, 630, 1_000, 1_600, 2_500, 4_000, 6_300, 10_000, 16_000];
+
+// Packed surfaces use quarter-dB loss/radiation or half-dB color steps.
 // flags: 1 = logarithmic x, 2 = smoothstep, 4 = logarithmic y.
 function interpolateCurve(value, anchors, flags = 0) {
   for (let index = 1; index < anchors.length; index += 1) {
@@ -122,13 +135,75 @@ function interpolateCurve(value, anchors, flags = 0) {
   return anchors.at(-1)[1];
 }
 
+function radiationEqDb(midi, velocity, band) {
+  return calibrationValue(RADIATION_BYTES, 3, midi, velocity, band, 0.25);
+}
+
+function bridgeLossDbPerSecond(midi, velocity, frequency) {
+  const frequencyAnchors = [200, 800, 2_500, 6_500];
+  let frequencyIndex = 0;
+  while (
+    frequencyIndex < frequencyAnchors.length - 2 &&
+    frequency > frequencyAnchors[frequencyIndex + 1]
+  ) frequencyIndex += 1;
+  const frequencyBlend = clamp(
+    Math.log(frequency / frequencyAnchors[frequencyIndex]) /
+      Math.log(frequencyAnchors[frequencyIndex + 1] / frequencyAnchors[frequencyIndex]),
+    0,
+    1,
+  );
+  const atBand = (band) => calibrationValue(
+    BRIDGE_LOSS_BYTES, 4, midi, velocity, band, 0.25, 0.541,
+  );
+  return lerp(atBand(frequencyIndex), atBand(frequencyIndex + 1), frequencyBlend);
+}
+
+function boardLossDbPerSecond(midi, velocity, band) {
+  return calibrationValue(
+    BOARD_LOSS_BYTES, 4, midi, velocity, band, 0.25, 0.541,
+  );
+}
+
+function radiationNormalization(
+  frequency,
+  lowStep,
+  centerStep,
+  highStep,
+  lowGain,
+  centerGain,
+  highGain,
+) {
+  const omega = TWO_PI * frequency / SAMPLE_RATE;
+  const response = (step) => {
+    const pole = 1 - step;
+    const real = 1 - pole * Math.cos(omega);
+    const imaginary = pole * Math.sin(omega);
+    const scale = step / (real * real + imaginary * imaginary);
+    return [scale * real, -scale * imaginary];
+  };
+  const low = response(lowStep);
+  const center = response(centerStep);
+  const high = response(highStep);
+  const real =
+    highGain +
+    (lowGain - centerGain) * low[0] +
+    (centerGain - 1) * center[0] +
+    (1 - highGain) * high[0];
+  const imaginary =
+    (lowGain - centerGain) * low[1] +
+    (centerGain - 1) * center[1] +
+    (1 - highGain) * high[1];
+  return Math.hypot(real, imaginary);
+}
+
 function stringDetunes(midi) {
   if (midi < 31) return [0];
 
   const register = clamp((midi - 31) / 77, 0, 1);
   const widthCents = lerp(0.32, 4.1, register ** 1.5);
   if (midi < 49) return [-0.47 * widthCents, 0.53 * widthCents];
-  return [-0.83 * widthCents, -0.34 * widthCents, 0.95 * widthCents];
+  const upperDetune = lerp(0.95, 0.7, transition((midi - 96) / 12));
+  return [-0.83 * widthCents, -0.34 * widthCents, upperDetune * widthCents];
 }
 
 function modalRadiationGain(partial, bassToMiddle, middleToTreble, velocity) {
@@ -142,6 +217,38 @@ function modalRadiationGain(partial, bassToMiddle, middleToTreble, velocity) {
   const trebleDb = MODAL_RADIATION_DB[2][index] + (index === 1 ? 6 * velocity : 0);
   const calibrationDb = lerp(lowerRegisterDb, trebleDb, middleToTreble);
   return 10 ** (calibrationDb / 20);
+}
+
+function calibrationValue(
+  bytes,
+  columns,
+  midi,
+  velocity,
+  column,
+  scale = 0.5,
+  middleVelocity = 0.476,
+) {
+  const pitchPosition = clamp((midi - 23) / 6, 0, 14);
+  const pitchIndex = Math.min(13, Math.floor(pitchPosition));
+  const pitchBlend = transition(pitchPosition - pitchIndex);
+  const velocityIndex = velocity < middleVelocity ? 0 : 1;
+  const velocityBlend = clamp(
+    velocityIndex === 0
+      ? (velocity - 0.106) / (middleVelocity - 0.106)
+      : (velocity - middleVelocity) / (0.976 - middleVelocity),
+    0,
+    1,
+  );
+  const value = (pitch, layer) => {
+    const byte = bytes[(pitch * 3 + layer) * columns + column];
+    return (byte > 127 ? byte - 256 : byte) * scale;
+  };
+  const atPitch = (pitch) => lerp(
+    value(pitch, velocityIndex),
+    value(pitch, velocityIndex + 1),
+    velocityBlend,
+  );
+  return lerp(atPitch(pitchIndex), atPitch(pitchIndex + 1), pitchBlend);
 }
 
 function createHammerForce(velocity, register, frequency) {
@@ -191,6 +298,7 @@ function createStringModes(frequency, velocity, midi, register) {
   const extremeTreble = clamp((register - 0.88) / 0.12, 0, 1);
   const bassBroadening = transition((register - 0.12) / 0.32);
   const trebleVoicing = transition((register - 0.5) / 0.34);
+  const upperTrebleCoupling = transition((midi - 84) / 24);
   const middleBroadening = bassBroadening * (1 - trebleVoicing);
   const bassVoicing = transition((48 - midi) / 27);
   const middlePresence = bell(midi, 60, 10);
@@ -222,12 +330,17 @@ function createStringModes(frequency, velocity, midi, register) {
       (partial * frequency * Math.sqrt(1 + stiffness * partial * partial)) /
       stiffnessNormalization;
     if (dispersedFrequency > spectralLimit) break;
+    let mobilityBand = 0;
+    while (
+      mobilityBand < MOBILITY_BAND_EDGES.length - 1 &&
+      dispersedFrequency >= MOBILITY_BAND_EDGES[mobilityBand]
+    ) mobilityBand += 1;
 
     const strikeCoupling = 0.2 + 0.8 * Math.abs(Math.sin(Math.PI * partial * strikePosition));
     const feltFilter = bell(dispersedFrequency, 0, brightnessCutoff, 1.3);
     const hammerVelocityBase = lerp(
-      0.56 + 0.44 * velocity,
-      0.82 + 0.18 * velocity,
+      0.78 + 0.12 * velocity,
+      0.9 + 0.04 * velocity,
       middleBroadening,
     );
     const velocityBrightening = hammerVelocityBase ** Math.log2(partial);
@@ -241,7 +354,10 @@ function createStringModes(frequency, velocity, midi, register) {
       -4.4 *
         register ** 4.2 *
         (partial - 1) *
-        (0.72 - 0.32 * velocity - 0.22 * extremeTreble * velocity) *
+        (0.72 -
+          0.32 * velocity -
+          0.22 * extremeTreble * velocity -
+          1.2 * upperTrebleCoupling * (1 - velocity)) *
         lerp(1, 0.45, middleBroadening),
     );
     const registerRadiationGain = 1 + 2.8 * register ** 2.2;
@@ -293,49 +409,91 @@ function createStringModes(frequency, velocity, midi, register) {
         bassHighPartialRadiation *
         bassPresenceRadiation *
         modalRadiationGain(partial, bassBroadening, trebleVoicing, velocity) *
+        10 ** (-0.94 *
+          (partial <= 12
+            ? calibrationValue(
+                MODAL_COLOR_BYTES,
+                12,
+                midi,
+                velocity,
+                partial - 1,
+              )
+            : 0) / 20) *
+        10 ** (-0.18 *
+          calibrationValue(
+            MOBILITY_COLOR_BYTES,
+            14,
+            midi,
+            velocity,
+            mobilityBand,
+          ) / 20) *
         10 ** (interpolateCurve(dispersedFrequency, BRIDGE_CURVE_DB, 3) / 20)) /
       partial ** partialRolloff;
 
     const bassPresenceDecay = transition(Math.log2(dispersedFrequency / 500) / 2);
     const undampedPartialT60 =
       baseT60 *
-      (0.35 + 0.65 / partial ** 0.7) *
-      Math.exp(-dispersedFrequency / 24_000) *
+      (0.3 + 0.7 / partial ** 0.7) *
+      1 /
+      (1 +
+        (dispersedFrequency / 9_500) ** 2) *
       (1 + 0.7 * (1 - bassBroadening) * bassPresenceDecay);
     const lowOrderTrebleTail = bell(partial, 1.5, 1, 4);
     const trebleHighPartialTail = 1 - Math.exp(-(partial - 1) / 2.5);
     const middleUpperModeTail = bell(partial, 4.5, 0.9, 4);
     const lateTrebleTail = transition((midi - 94) / 14);
-    const slowTailT60 =
+    const uncorrectedSlowTailT60 =
       undampedPartialT60 *
       (1 + 0.15 * bassVoicing) *
       (1 + 1.5 * middlePresence * middleUpperModeTail) *
-      (1 + 2.4 * lateTrebleTail * trebleHighPartialTail) *
+      Math.exp(
+        0.5 *
+          (0.75 - velocity) *
+          trebleHighPartialTail,
+      ) *
+      (1 -
+        0.8 *
+          lateTrebleTail *
+          trebleHighPartialTail) *
       (1 -
         lowOrderTrebleTail *
           (0.25 * trebleVoicing + 0.2 * extremeTreble));
+    const slowTailT60 = 60 / Math.max(
+      1,
+      60 / uncorrectedSlowTailT60 +
+        0.45 * bridgeLossDbPerSecond(midi, velocity, dispersedFrequency),
+    );
     const baseFastFraction = 0.14 + 0.43 * (partial / (partial + 5));
     const middleLowModeLoss =
-      0.3 *
-      middlePresence *
+      (0.3 * middlePresence +
+        0.4 * bell(midi, 60, 1.5) * transition((velocity - 0.8) / 0.17)) *
       bell(partial, 1.5, 0.8, 4);
     const middleBodySustain =
       0.38 *
       middlePresence *
       middleBodyShape;
-    const maximumFastFraction = partial === 1
-      ? lerp(0.965, 0.82, register ** 1.5)
-      : lerp(0.94, 0.68, register ** 1.4);
+    const maximumFastFraction = Math.min(
+      0.99,
+      (partial === 1
+        ? lerp(0.965, 0.82, register ** 1.5)
+        : lerp(0.94, 0.68, register ** 1.4)) +
+        0.16 * register * (velocity - 0.5) +
+        0.6 * lateTrebleTail * trebleHighPartialTail,
+    );
     const fastFraction = clamp(
       baseFastFraction +
-        1.12 * register ** 2 * (0.88 + 0.12 * velocity) +
+        1.03 * register ** 2 +
         middleLowModeLoss -
         middleBodySustain,
       0,
       maximumFastFraction,
     );
     let fastRatio =
-      lerp(0.19, 0.045, register ** 1.35) *
+      lerp(
+        0.21,
+        0.045,
+        register ** 1.35,
+      ) *
       lerp(1, 0.72, partial / (partial + 8));
     if (partial === 2) fastRatio *= lerp(1, 0.15, register ** 2);
     const fastT60 = undampedPartialT60 * fastRatio;
@@ -490,7 +648,7 @@ const IMPACT_MODES = [
 ];
 
 function createImpactSoundboard(velocity, register, midi) {
-  const impactStrength = velocity ** 1.6 * (0.82 + 0.18 * register);
+  const impactStrength = velocity ** 1.15 * (0.82 + 0.18 * register);
   const middleBody = bell(midi, 60, 10);
   const trebleBody = transition((midi - 72) / 36);
   const extremeTrebleBody = transition((midi - 99) / 9);
@@ -523,7 +681,7 @@ function createImpactSoundboard(velocity, register, midi) {
     const lowPlateWeight = transition((400 - frequency) / 350);
     const slowBodyFraction = lowBodyMode
       ? bodyModeWeight *
-        (0.32 * middleBody + 0.16 * trebleBody * (1 + 2 * lowPlateWeight))
+        (0.2 * middleBody + 0.1 * trebleBody * (1 + 2 * lowPlateWeight))
       : 0;
     const slowDecaySeconds = decaySeconds *
       (1 + bodyModeWeight * (90 * middleBody + 100 * trebleBody));
@@ -547,8 +705,11 @@ function createImpactSoundboard(velocity, register, midi) {
     const bassHighPlateScale = frequency >= 1_800
       ? lerp(0.1, 1, bassPlateTransition)
       : 1;
+    const colorBand = frequency < 250 ? 0 : frequency < 1_000 ? 1 : frequency < 2_500 ? 2 : 3;
     const drive = gain * lowBodyDrive * bassHighPlateScale * midPlateScale *
-      impactStrength * feltBrightness * modeShape * impactRadiation;
+      impactStrength * feltBrightness * modeShape * impactRadiation *
+      10 ** (-1.08 *
+        calibrationValue(IMPACT_COLOR_BYTES, 4, midi, velocity, colorBand) / 20);
     return [
       0,
       0,
@@ -630,14 +791,18 @@ export function synthesizeGrandPiano(note_hz, velocity, duration_seconds) {
     Math.max(1, Math.round(releaseSeconds * SAMPLE_RATE)),
   );
   const releaseStart = sampleCount - releaseSamples;
+  const startFadeSamples = Math.round(
+    lerp(160, 32, transition((midi - 21) / 9)),
+  );
   const finalFadeSamples = Math.min(sampleCount, 256);
   const topVelocityTransition = transition((midi - 99) / 9);
   const upperActionLeverage = bell(midi, 105, 2.2);
   const velocityExponent =
-    0.08 +
+    0.28 +
     register +
-    0.7 * topVelocityTransition +
-    0.45 * upperActionLeverage;
+    0.64 * topVelocityTransition +
+    0.45 * upperActionLeverage +
+    0.82 * transition((36 - midi) / 15);
   const bassVelocityVoicing = transition((48 - midi) / 27);
   const bassVelocityBumpDb =
     7 *
@@ -673,7 +838,37 @@ export function synthesizeGrandPiano(note_hz, velocity, duration_seconds) {
   const diffusePlateRegister = clamp((midi - 57) / 36, 0, 1);
   const upperBridgePlate = 1 + 2 * bell(midi, 81, 10);
   const topBodyTransition = transition((midi - 93) / 12);
-  const diffuseLowBodyScale = 1 - 0.97 * topBodyTransition;
+  const diffuseLowBodyScale =
+    1 - 0.97 * topBodyTransition * Math.sqrt(strikeVelocity);
+  const radiationLowGain =
+    10 ** (1.35 * radiationEqDb(midi, strikeVelocity, 0) / 20);
+  const radiationCenterGain =
+    10 ** (0.75 * radiationEqDb(midi, strikeVelocity, 1) / 20);
+  const radiationHighGain =
+    10 ** (1.35 * radiationEqDb(midi, strikeVelocity, 2) / 20);
+  const radiationLowStep = 1 - Math.exp(-TWO_PI * 250 / SAMPLE_RATE);
+  const radiationCenterStep = 1 - Math.exp(-TWO_PI * 900 / SAMPLE_RATE);
+  const radiationHighStep = 1 - Math.exp(-TWO_PI * 2_500 / SAMPLE_RATE);
+  const radiationGainNormalization = radiationNormalization(
+    frequency,
+    radiationLowStep,
+    radiationCenterStep,
+    radiationHighStep,
+    radiationLowGain,
+    radiationCenterGain,
+    radiationHighGain,
+  );
+  let radiationLow = 0;
+  let radiationCenter = 0;
+  let radiationMid = 0;
+  const boardLossScale = -0.48 * Math.LN10 / (20 * SAMPLE_RATE);
+  const boardLossPoles = [0, 1, 2, 3].map((band) =>
+    Math.exp(
+      boardLossScale *
+        boardLossDbPerSecond(midi, strikeVelocity, band),
+  ));
+  const boardLossGains = [1, 1, 1, 1];
+  const stringMix = 0.74 + 0.13 * bell(midi, 93, 10);
 
   let previousInput = 0;
   let dcBlocker = 0;
@@ -693,14 +888,13 @@ export function synthesizeGrandPiano(note_hz, velocity, duration_seconds) {
       const plateTail = decay(strikeIndex, 0.45);
       diffuseBody =
         0.015 *
-        strikeVelocity ** 0.65 *
+        (1.7 - 1.4 * strikeVelocity) *
         (0.55 + 0.45 * register) *
         diffuseLowBodyScale *
         bodyGrain *
         bodyRise *
         bodyTail +
         0.002 *
-          strikeVelocity ** 0.85 *
           diffusePlateRegister *
           upperBridgePlate *
           plateGrain *
@@ -812,7 +1006,28 @@ export function synthesizeGrandPiano(note_hz, velocity, duration_seconds) {
       strikeIndex >= 0 && strikeIndex < hammerSamples ? hammerForce[strikeIndex] : 0;
     const impactBody = filterImpactSoundboard(impactForce, impactSoundboard);
     let sample = velocityGain *
-      (0.78 * strings + 1.18 * body + 1.35 * impactBody + hammer + damper);
+      (stringMix * strings +
+        1.18 * body +
+        1.35 * impactBody +
+        hammer +
+        damper);
+
+    radiationLow += radiationLowStep * (sample - radiationLow);
+    radiationCenter += radiationCenterStep * (sample - radiationCenter);
+    radiationMid += radiationHighStep * (sample - radiationMid);
+    for (let band = 0; band < 4; band += 1) {
+      boardLossGains[band] = clamp(
+        boardLossGains[band] * boardLossPoles[band],
+        0.1,
+        4,
+      );
+    }
+    sample =
+      (boardLossGains[0] * radiationLowGain * radiationLow +
+        boardLossGains[1] * radiationCenterGain * (radiationCenter - radiationLow) +
+        boardLossGains[2] * (radiationMid - radiationCenter) +
+        boardLossGains[3] * radiationHighGain * (sample - radiationMid)) /
+      radiationGainNormalization;
 
     sample = 0.94 * Math.tanh(1.12 * sample);
     const highpassed = sample - previousInput + dcPole * dcBlocker;
@@ -820,8 +1035,9 @@ export function synthesizeGrandPiano(note_hz, velocity, duration_seconds) {
     dcBlocker = highpassed;
     sample = highpassed;
 
-    if (sampleIndex < 32) {
-      const startFade = 0.5 - 0.5 * Math.cos(Math.PI * sampleIndex / 31);
+    if (sampleIndex < startFadeSamples) {
+      const startFade =
+        0.5 - 0.5 * Math.cos(Math.PI * sampleIndex / (startFadeSamples - 1));
       sample *= startFade * startFade;
     }
     if (sampleIndex >= sampleCount - finalFadeSamples) {

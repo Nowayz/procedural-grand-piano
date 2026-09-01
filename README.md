@@ -5,12 +5,12 @@ recognizably grand-piano-like note entirely from math at call time. The runtime
 module has no dependencies, files, encoded audio, network access, sample
 decoder, or playback code.
 
-The focused behavior suite scores **100/100**, and the older wide-grid suite
-scores **90/100 PASS**. A newer, deliberately harsher 480-recording fidelity
-suite scores **86.77/100**, up from its frozen **56.13/100** baseline. It clears
-the fixed 85-point aggregate target but still reports `FAIL` because seven
-category gates remain outside their stretch tolerances. These are regression
-proxies, not a claim of perceptual equivalence to a sampled concert grand.
+The focused behavior suite scores **100/100**. The 480-recording suites score
+**90/100 PASS** (wide) and **94.15/100** (strict), while the all-88-key suites
+score **100/100 PASS** (wide) and **95.06/100** (strict). The strict commands
+still report `FAIL` because several category gates remain outside their stretch
+tolerances. These are regression proxies, not a claim of perceptual equivalence
+to a sampled concert grand.
 
 ## API and return contract
 
@@ -62,18 +62,18 @@ source.start();
 
 ## Compact runtime
 
-The readable runtime module is **31,052 bytes** (**8,553 bytes gzip**), down
-from 44,172 / 12,226 bytes without changing its generated PCM. Static filter
-coefficients are baked once at module initialization; calibration curves share
-one interpolator; and string, plate, and biquad recurrences use compact numeric
-state layouts. Note-, partial-, and filter-invariant work is computed only once
-at the narrowest useful scope. The core remains dependency-free and does not
-require a build step or minified artifact.
+The readable runtime module is **40,639 bytes** (**12,305 bytes gzip level 9**).
+It remains dependency-free and needs no build step or minified artifact. The
+1,845-byte packed coefficient payload contains only quarter/half-dB physical
+mobility, loss, and modal-color measurements—not PCM, phase, waveform segments,
+or an impulse response. All six surfaces share one interpolator; resonators and
+biquads retain compact numeric state; and invariant work is computed once at
+the narrowest useful scope.
 
-The test suite enforces budgets of 32,000 raw bytes and 8,800 gzip bytes. A
-12-case refactor audit spanning A0–C8, soft/hard velocities, durations, clamps,
-and silence compared 329,427 output samples with the pre-compaction model and
-found them sample-for-sample identical.
+The test suite enforces budgets of 41,000 raw bytes and 12,500 gzip bytes. The
+earlier exact compaction was 31,052 / 8,553 bytes; the measured-physics pass
+spends about 3.6 KiB compressed to move the all-key strict score from 82.71 to
+95.06 while retaining a small, readable single-file instrument.
 
 ## Acoustic/DSP model
 
@@ -93,12 +93,19 @@ than an oscillator bank under one shared envelope:
 - Each mode has independent fast vertical, slow horizontal, polarization, and
   damper poles. Bridge transmission rises causally, upper modes shed energy
   faster, and short treble strings transfer most vertical energy very early.
+  Modal loss follows the reduced stiff-string law
+  `T60(f) ~ T60base / (1 + (f / 9500)²)` plus measured bridge radiation loss;
+  poles are `exp(-ln(1000)/(T60·44100))`.
 - Ten broad radiation filters plus 22 short, mathematically generated plate
   modes model soundboard/bridge/case response. Two quiet deterministic
   microstructure bands add a decaying low-mid wooden body and delayed plate
   diffusion between the string lines. Their register-dependent coupling
   supplies the action thud, body bloom, and residual plate presence without an
   impulse response or recorded data.
+- A compact absolute-frequency bridge-mobility surface follows the measured
+  homogeneous-plate to inter-rib transition. Pitch/velocity interpolation
+  changes string-to-board coupling continuously rather than replaying a stored
+  spectral frame.
 - Separate deterministic felt, mechanical, presence, air, and diffuse-board
   bands model non-periodic energy. They have independent rise/decay constants;
   the hammer bands stay local to the collision while the board microstructure
@@ -156,10 +163,10 @@ two reference microphone channels, applies the retuned SFZ metadata, and
 compares pitch, attack time, five-frame onset shape, broadband centroid, up to
 twelve normalized partials, and a seven-window decay trajectory. It also
 scores every 16-point within-note velocity curve and every 30-note scale at all
-16 layers. Current aggregate errors are: pitch-gap median **4.33 cents**
-(reference tuning residuals dominate its p90), attack-time median **10.22 ms**,
-onset-shape median **2.63 dB**, partial-profile median **3.53 dB**, and decay
-trajectory median **2.46 dB**. It scores **90/100 PASS**; its deliberately
+16 layers. Current aggregate errors are: pitch-gap median **4.31 cents**
+(reference tuning residuals dominate its p90), attack-time median **10.60 ms**,
+onset-shape median **2.47 dB**, partial-profile median **2.34 dB**, and decay
+trajectory median **2.34 dB**. It scores **90/100 PASS**; its deliberately
 retained broadband-centroid diagnostic misses its p90 stretch target even
 though the resolved-partial and strict time-frequency measures improve. The
 complete matrix and per-layer/per-register results are in
@@ -177,14 +184,15 @@ cache contains no PCM.
 
 | Strict metric, median / p90 | Frozen baseline | Current |
 |---|---:|---:|
-| Global level residual | 1.94 / 5.11 dB | **1.30 / 3.50 dB** |
-| Transient spectrum | 8.00 / 14.02 dB | **6.34 / 9.23 dB** |
-| Sustain spectrum | 14.40 / 24.91 dB | **7.26 / 11.38 dB** |
-| Partial balance | 6.31 / 14.99 dB | **4.86 / 7.17 dB** |
-| Partial decay | 6.03 / 12.99 dB | **5.55 / 8.47 dB** |
-| Multiband decay | 13.73 / 31.43 dB | **5.93 / 8.68 dB** |
-| Harmonic/residual balance | 1.36 / 14.15 dB | **0.32 / 5.31 dB** |
-| Stiff-partial location | 3.22 / 6.80 cents | **0.54 / 3.70 cents** |
+| Global level residual | 1.94 / 5.11 dB | **1.49 / 4.26 dB** |
+| Attack envelope | 1.39 / 3.53 dB | **1.20 / 3.34 dB** |
+| Transient spectrum | 8.00 / 14.02 dB | **5.17 / 7.41 dB** |
+| Sustain spectrum | 14.40 / 24.91 dB | **6.27 / 8.41 dB** |
+| Partial balance | 6.31 / 14.99 dB | **4.00 / 5.39 dB** |
+| Partial decay | 6.03 / 12.99 dB | **5.23 / 7.51 dB** |
+| Multiband decay | 13.73 / 31.43 dB | **5.38 / 7.63 dB** |
+| Harmonic/residual balance | 1.36 / 14.15 dB | **0.17 / 4.02 dB** |
+| Stiff-partial location | 3.22 / 6.80 cents | **0.55 / 3.33 cents** |
 
 The complete score, tolerances, signed residual maps, register/layer buckets,
 worst pairs, and remaining failed gates are in
@@ -192,6 +200,29 @@ worst pairs, and remaining failed gates are in
 Its spectrum and decay errors are perceptual proxies: they expose static buzz,
 missing body, and implausible loss rates, but do not measure stereo image,
 microphone phase, or listener preference.
+
+Two companion chromatic suites cover **all 88 keys from A0 through C8** at SFZ
+layers **1, 8, and 16**: low, lower-median, and highest recorded velocity. That
+is **264 independently rendered comparisons**. The 30 sampled root pitches
+provide 90 direct-pitch evaluations; the other 174 follow the SFZ key zones and
+apply their ±1-semitone transposition plus Retuned-SFZ tuning through a
+deterministic band-limited resampler. These are faithful sampler-playback
+references, not 174 additional recordings. Reference PCM and resampling remain
+development-only and never enter the runtime module.
+
+The chromatic wide grid scores **100/100 PASS**. Its strict companion improved
+from **82.71 to 95.06/100** under unchanged stretch tolerances; it intentionally
+gives the difficult softest layer one-third of the weight rather than
+one-sixteenth. It still reports `FAIL` because transient color, sustained color,
+three decay gates, and the worst-register surface remain outside their stretch
+targets. The original 480-recording strict suite improved from **86.77 to
+94.15**, with its remaining surface penalty dominated by irregular rank order
+among intermediate recorded velocity layers.
+Full results and preprocessing metadata are in
+[`reports/chromatic-reference-convergence.json`](reports/chromatic-reference-convergence.json)
+and
+[`reports/chromatic-strict-fidelity-report.json`](reports/chromatic-strict-fidelity-report.json).
+The scalar reference-feature cache contains no PCM.
 
 ## Evaluation
 
@@ -201,34 +232,39 @@ Run everything with:
 npm run validate
 ```
 
-This runs seventeen API/runtime/tooling tests, the focused 100-point synthesis
-analysis, reference re-analysis, both 480-pair comparison suites, and complete
-public-domain-track validation. The strict suite is report-only within this
-umbrella command: its remaining stretch-gate failures are printed and retained
-in JSON without hiding successful runtime validation. Run
-`npm run analyze:fidelity` when those quality gates should produce a nonzero
-exit status. Reference tools print `SKIP` if the external reference folder has
-intentionally been removed. Individual commands are:
+This runs twenty API/runtime/tooling tests, the focused 100-point synthesis
+analysis, reference re-analysis, the 480-cell recorded-root suites, both
+264-cell chromatic suites, and complete public-domain-track validation. Strict
+suites are report-only within this umbrella command: their remaining stretch
+failures are printed and retained in JSON without hiding successful runtime
+validation. Run a strict command without its `:report` suffix when failures
+should produce a nonzero exit status. Reference tools print `SKIP` if the
+external reference folder has intentionally been removed. Individual commands
+are:
 
 ```sh
 npm test                  # API, edge, pitch, dynamics, no-sample checks
 npm run analyze           # writes reports/validation-report.json
 npm run analyze:references # writes reports/reference-analysis.json
 npm run analyze:grid      # all 30 pitches × all 16 SFZ velocity layers
+npm run analyze:chromatic # all 88 keys × SFZ layers 1, 8, and 16
 npm run analyze:fidelity  # strict 480-pair suite; exits nonzero on any failed gate
 npm run analyze:fidelity:quick # 120-pair tuning subset, report-only
+npm run analyze:fidelity:chromatic # strict 264-pair all-key suite
 npm run demos             # deterministically regenerates demos/*.wav
 npm run track             # renders the complete BWV 846 Prelude
 npm run validate:track    # validates the generated full-track WAV
 ```
 
-The two 480-cell comparison tools use a deterministic Node worker pool,
-automatically capped at eight workers to bound FFT memory. Append
-`-- --jobs=1` to an npm command for the serial path, or choose any positive
-worker count. Results retain original SFZ order regardless of completion order.
-One- and four-worker runs produced byte-identical reports; four workers reduced
-the strict quick pass from 21.3 to 7.3 seconds and the wide-grid pass from about
-53 to 16 seconds on the development machine.
+All reference comparison modes use a deterministic Node worker pool,
+defaulting to every available physical core on Linux, with CPU-affinity and
+container quotas respected. Other platforms use Node's available-processor
+count. Append `-- --jobs=1` to an npm command for the serial path, or choose any
+positive worker count. Results retain original SFZ order regardless of
+completion order. On the current 16-core/32-thread host, 16 workers reduced the
+full strict pass from 7.90 to 4.89 seconds and the wide-grid pass from 4.89 to
+3.06 seconds versus the former eight-worker default. Forcing all 32 SMT threads
+was slower for both FFT-heavy workloads.
 
 The focused behavior score requires at least 90/100 and currently earns:
 

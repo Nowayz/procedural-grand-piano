@@ -27,15 +27,26 @@ const referenceRoot = path.join(root, 'SalamanderGrandPianoV3_44.1khz16bit');
 const sampleRoot = path.join(referenceRoot, '44.1khz16bit');
 const sfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3.sfz');
 const retunedSfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3Retuned.sfz');
-const outputPath = path.join(root, 'reports', 'reference-grid-convergence.json');
+const chromaticMode = process.argv.includes('--chromatic');
+const outputPath = path.join(
+  root,
+  'reports',
+  chromaticMode
+    ? 'chromatic-reference-convergence.json'
+    : 'reference-grid-convergence.json',
+);
 const shouldWrite = process.argv.includes('--write-report');
 const noFail = process.argv.includes('--no-fail');
 const PASS_THRESHOLD = 90;
 const RENDER_SECONDS = 1.65;
 const MAX_REFERENCE_FRAMES = Math.round(1.65 * SAMPLE_RATE);
+export const CHROMATIC_VELOCITY_LAYERS = Object.freeze([1, 8, 16]);
+const PIANO_MIDI_RANGE = Object.freeze([21, 108]);
 const FRAME_WINDOWS_MS = [[0, 5], [5, 10], [10, 20], [20, 40], [40, 80]];
 const DECAY_STARTS_SECONDS = [0.02, 0.05, 0.1, 0.2, 0.4, 0.8, 1.4];
 const GRID_WORKER_TASK = 'full-reference-grid-pair';
+const RESAMPLE_RADIUS = 6;
+const RESAMPLE_PHASES = 1_024;
 
 function round(value, digits = 4) {
   if (!Number.isFinite(value)) return null;
@@ -79,18 +90,23 @@ function clippedDecibels(ratio, floor = -60) {
   return Math.max(floor, decibels(ratio));
 }
 
-function noteToMidi(note) {
+export function noteToMidi(note) {
   const match = /^([A-G])(#?)(-?\d+)$/.exec(note);
   if (!match) throw new Error(`Cannot parse note name: ${note}`);
   const semitones = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
   return (Number(match[3]) + 1) * 12 + semitones[match[1]] + (match[2] ? 1 : 0);
 }
 
-function midiToFrequency(midi) {
+export function midiToNote(midi) {
+  const names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  return `${names[midi % 12]}${Math.floor(midi / 12) - 1}`;
+}
+
+export function midiToFrequency(midi) {
   return 440 * 2 ** ((midi - 69) / 12);
 }
 
-function parseSustainRegions(sfzText) {
+export function parseSustainRegions(sfzText) {
   const regions = [];
   for (const line of sfzText.split(/\r?\n/)) {
     const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.wav/i.exec(line);
@@ -101,17 +117,131 @@ function parseSustainRegions(sfzText) {
     };
     const note = fileMatch[1].replace(/^./, (letter) => letter.toUpperCase());
     const layer = Number(fileMatch[2]);
+    const midi = attribute('pitch_keycenter', noteToMidi(note));
     regions.push({
       file: `${note}v${layer}.wav`,
       note,
       layer,
-      midi: attribute('pitch_keycenter', noteToMidi(note)),
+      midi,
+      keyLow: attribute('lokey', midi),
+      keyHigh: attribute('hikey', midi),
       velocityLow: attribute('lovel', 0),
       velocityHigh: attribute('hivel', 127),
       tuneCents: attribute('tune', 0),
     });
   }
   return regions.sort((a, b) => a.midi - b.midi || a.layer - b.layer);
+}
+
+/** Expand the SFZ key zones into all 88 keys at low, midpoint, and hard layers. */
+export function buildChromaticJobs(regions, tuneByFile) {
+  const jobs = [];
+  for (let midi = PIANO_MIDI_RANGE[0]; midi <= PIANO_MIDI_RANGE[1]; midi += 1) {
+    for (const layer of CHROMATIC_VELOCITY_LAYERS) {
+      const sources = regions.filter((region) =>
+        region.layer === layer && midi >= region.keyLow && midi <= region.keyHigh);
+      if (sources.length !== 1) {
+        throw new Error(
+          `SFZ has ${sources.length} layer ${layer} sustain mappings for MIDI ${midi}; expected one`,
+        );
+      }
+      const [source] = sources;
+      jobs.push({
+        region: {
+          ...source,
+          sourceNote: source.note,
+          sourceMidi: source.midi,
+          note: midiToNote(midi),
+          midi,
+          transpositionSemitones: midi - source.midi,
+          referenceResampled: true,
+        },
+        tuneCents: tuneByFile.get(source.file) ?? 0,
+      });
+    }
+  }
+  return jobs;
+}
+
+function sinc(value) {
+  if (Math.abs(value) < 1e-12) return 1;
+  const angle = Math.PI * value;
+  return Math.sin(angle) / angle;
+}
+
+function createResampleKernel(playbackRate) {
+  const taps = RESAMPLE_RADIUS * 2;
+  const cutoff = Math.min(1, 1 / playbackRate);
+  const coefficients = new Float64Array(RESAMPLE_PHASES * taps);
+  for (let phase = 0; phase < RESAMPLE_PHASES; phase += 1) {
+    const fraction = phase / RESAMPLE_PHASES;
+    let total = 0;
+    for (let tap = 0; tap < taps; tap += 1) {
+      const sampleOffset = tap - RESAMPLE_RADIUS + 1;
+      const distance = sampleOffset - fraction;
+      const coefficient = Math.abs(distance) < RESAMPLE_RADIUS
+        ? cutoff * sinc(cutoff * distance) * sinc(distance / RESAMPLE_RADIUS)
+        : 0;
+      coefficients[phase * taps + tap] = coefficient;
+      total += coefficient;
+    }
+    for (let tap = 0; tap < taps; tap += 1) {
+      coefficients[phase * taps + tap] /= total;
+    }
+  }
+  return coefficients;
+}
+
+/** Deterministic sampler playback: output[n] = input[sourceOffset + n * rate]. */
+export function resampleChannel(samples, playbackRate, outputLength, sourceOffset = 0) {
+  if (!Number.isFinite(playbackRate) || playbackRate <= 0) {
+    throw new RangeError('playbackRate must be a positive finite number');
+  }
+  if (!Number.isInteger(outputLength) || outputLength < 0) {
+    throw new RangeError('outputLength must be a non-negative integer');
+  }
+  if (!Number.isFinite(sourceOffset) || sourceOffset < 0) {
+    throw new RangeError('sourceOffset must be a non-negative finite number');
+  }
+  if (playbackRate === 1 && Number.isInteger(sourceOffset)) {
+    const output = new Float32Array(outputLength);
+    output.set(samples.subarray(sourceOffset, sourceOffset + outputLength));
+    return output;
+  }
+
+  const taps = RESAMPLE_RADIUS * 2;
+  const coefficients = createResampleKernel(playbackRate);
+  const output = new Float32Array(outputLength);
+  for (let index = 0; index < output.length; index += 1) {
+    const position = sourceOffset + index * playbackRate;
+    let center = Math.floor(position);
+    let phase = Math.round((position - center) * RESAMPLE_PHASES);
+    if (phase === RESAMPLE_PHASES) {
+      center += 1;
+      phase = 0;
+    }
+    const sourceStart = center - RESAMPLE_RADIUS + 1;
+    const coefficientStart = phase * taps;
+    let value = 0;
+    for (let tap = 0; tap < taps; tap += 1) {
+      const sourceIndex = sourceStart + tap;
+      if (sourceIndex >= 0 && sourceIndex < samples.length) {
+        value += samples[sourceIndex] * coefficients[coefficientStart + tap];
+      }
+    }
+    output[index] = value;
+  }
+  return output;
+}
+
+function averageChannels(channels) {
+  const samples = new Float32Array(channels[0].length);
+  for (const channel of channels) {
+    for (let index = 0; index < samples.length; index += 1) {
+      samples[index] += channel[index] / channels.length;
+    }
+  }
+  return samples;
 }
 
 function averageSpectra(spectra) {
@@ -233,6 +363,15 @@ function serializePair(pair) {
     file: pair.file,
     note: pair.note,
     midi: pair.midi,
+    ...(pair.referenceResampled
+      ? {
+          sourceNote: pair.sourceNote,
+          sourceMidi: pair.sourceMidi,
+          transpositionSemitones: pair.transpositionSemitones,
+          referencePlaybackRate: round(pair.referencePlaybackRate, 8),
+          directSamplePitch: pair.transpositionSemitones === 0,
+        }
+      : {}),
     layer: pair.layer,
     velocity: round(pair.velocity, 6),
     sfzVelocityRange: pair.sfzVelocityRange,
@@ -259,9 +398,16 @@ function serializePair(pair) {
 }
 
 async function analyzePair(region, tuneCents) {
+  const transpositionSemitones = region.transpositionSemitones ?? 0;
+  const referencePlaybackRate = region.referenceResampled
+    ? 2 ** ((100 * transpositionSemitones + tuneCents) / 1_200)
+    : 1;
+  const maximumSourceFrames = region.referenceResampled
+    ? Math.ceil(MAX_REFERENCE_FRAMES * referencePlaybackRate) + 2 * RESAMPLE_RADIUS
+    : MAX_REFERENCE_FRAMES;
   const reference = await readWav(path.join(sampleRoot, region.file), {
     preserveChannels: true,
-    maximumFrames: MAX_REFERENCE_FRAMES,
+    maximumFrames: maximumSourceFrames,
   });
   if (reference.sampleRate !== SAMPLE_RATE) {
     throw new Error(`${region.file}: expected ${SAMPLE_RATE} Hz, got ${reference.sampleRate}`);
@@ -269,10 +415,19 @@ async function analyzePair(region, tuneCents) {
   const nominalHz = midiToFrequency(region.midi);
   const velocity = (region.velocityLow + region.velocityHigh) / (2 * 127);
   const synthesized = synthesizeGrandPiano(nominalHz, velocity, RENDER_SECONDS);
-  const referenceAttack = attackMetrics(reference.samples, reference.sampleRate);
+  const referenceChannels = region.referenceResampled
+    ? reference.channelSamples.map((channel) =>
+        resampleChannel(channel, referencePlaybackRate, MAX_REFERENCE_FRAMES))
+    : reference.channelSamples;
+  const referenceSamples = region.referenceResampled
+    ? averageChannels(referenceChannels)
+    : reference.samples;
+  const referenceAttack = attackMetrics(referenceSamples, reference.sampleRate);
   const synthesizedAttack = attackMetrics(synthesized, SAMPLE_RATE);
-  const rawExpectedHz = nominalHz / 2 ** (tuneCents / 1_200);
-  const referenceChannelSpectra = reference.channelSamples.map((channel) =>
+  const rawExpectedHz = region.referenceResampled
+    ? nominalHz
+    : nominalHz / 2 ** (tuneCents / 1_200);
+  const referenceChannelSpectra = referenceChannels.map((channel) =>
     analysisSpectrum(channel, reference.sampleRate, referenceAttack.onsetSeconds, rawExpectedHz));
   const referenceSpectrum = averageSpectra(referenceChannelSpectra);
   const synthesizedSpectrum = analysisSpectrum(
@@ -291,14 +446,15 @@ async function analyzePair(region, tuneCents) {
     nominalHz * 0.965,
     nominalHz * 1.035,
   );
-  const referenceRetunedHz = referencePeak.frequencyHz * 2 ** (tuneCents / 1_200);
+  const referenceRetunedHz = referencePeak.frequencyHz *
+    (region.referenceResampled ? 1 : 2 ** (tuneCents / 1_200));
   const referencePitchCents = centsDifference(referenceRetunedHz, nominalHz);
   const synthesizedPitchCents = centsDifference(synthesizedPeak.frequencyHz, nominalHz);
   const referenceCentroid = spectralCentroid(referenceSpectrum, 20, 16_000) *
-    2 ** (tuneCents / 1_200);
+    (region.referenceResampled ? 1 : 2 ** (tuneCents / 1_200));
   const synthesizedCentroid = spectralCentroid(synthesizedSpectrum, 20, 16_000);
   const referenceFrameShape = onsetFrameShape(
-    reference.samples,
+    referenceSamples,
     reference.sampleRate,
     referenceAttack.onsetSeconds,
   );
@@ -308,7 +464,7 @@ async function analyzePair(region, tuneCents) {
     synthesizedAttack.onsetSeconds,
   );
   const referenceDecay = decayShape(
-    reference.samples,
+    referenceSamples,
     reference.sampleRate,
     referenceAttack.onsetSeconds,
   );
@@ -320,7 +476,7 @@ async function analyzePair(region, tuneCents) {
   const referenceProfile = profileFromPartials(referenceSpectrum, referencePeak.frequencyHz);
   const synthesizedProfile = profileFromPartials(synthesizedSpectrum, synthesizedPeak.frequencyHz);
   const referenceEarlyRms = rmsBetween(
-    reference.samples,
+    referenceSamples,
     (referenceAttack.onsetSeconds + 0.02) * reference.sampleRate,
     (referenceAttack.onsetSeconds + 0.22) * reference.sampleRate,
   );
@@ -333,6 +489,7 @@ async function analyzePair(region, tuneCents) {
   return {
     ...region,
     tuneCents,
+    referencePlaybackRate,
     velocity,
     sfzVelocityRange: [region.velocityLow, region.velocityHigh],
     formatValid:
@@ -480,10 +637,12 @@ async function main() {
   const regions = parseSustainRegions(sfzText);
   const retunedRegions = parseSustainRegions(retunedText);
   const tuneByFile = new Map(retunedRegions.map((region) => [region.file, region.tuneCents]));
-  const jobs = regions.map((region) => ({
-    region,
-    tuneCents: tuneByFile.get(region.file) ?? 0,
-  }));
+  const jobs = chromaticMode
+    ? buildChromaticJobs(regions, tuneByFile)
+    : regions.map((region) => ({
+        region,
+        tuneCents: tuneByFile.get(region.file) ?? 0,
+      }));
   const workerCount = comparisonWorkerCount(process.argv.slice(2), jobs.length);
   const pairs = await parallelMap({
     items: jobs,
@@ -526,6 +685,9 @@ async function main() {
   };
 
   const checks = [];
+  const expectedPairCount = chromaticMode ? 264 : 480;
+  const expectedPitchCount = chromaticMode ? 88 : 30;
+  const expectedLayerCount = chromaticMode ? 3 : 16;
   const addCheck = (category, name, weight, passed, actual, target, proxy) => {
     checks.push({
       category,
@@ -540,12 +702,20 @@ async function main() {
   };
   addCheck(
     'coverage',
-    'complete SFZ sustain grid is compared',
+    chromaticMode
+      ? 'all 88 SFZ-mapped keys are compared at low, midpoint, and hard velocity'
+      : 'complete SFZ sustain grid is compared',
     10,
-    pairs.length === 480 && notes.length === 30 && layers.length === 16 &&
+    pairs.length === expectedPairCount &&
+      notes.length === expectedPitchCount &&
+      layers.length === expectedLayerCount &&
       pairs.every((pair) => pair.formatValid),
-    { recordings: pairs.length, pitches: notes.length, layers: layers.length },
-    '480 recordings = 30 sampled pitches × 16 velocity layers; all stereo PCM16/44.1 kHz',
+    chromaticMode
+      ? { referenceEvaluations: pairs.length, pitches: notes.length, layers: layers.length }
+      : { recordings: pairs.length, pitches: notes.length, layers: layers.length },
+    chromaticMode
+      ? '264 evaluations = 88 keys × SFZ layers 1, 8, and 16; source WAVs stereo PCM16/44.1 kHz'
+      : '480 recordings = 30 sampled pitches × 16 velocity layers; all stereo PCM16/44.1 kHz',
     'Direct coverage/format criterion.',
   );
   addCheck(
@@ -670,10 +840,12 @@ async function main() {
   );
   addCheck(
     'scales',
-    'every velocity layer preserves convergence across the sampled scale',
+    chromaticMode
+      ? 'low, midpoint, and hard layers preserve convergence across all 88 keys'
+      : 'every velocity layer preserves convergence across the sampled scale',
     5,
-    scaleSummaries.length === 16 &&
-      scaleSummaries.every((item) => item.pitchCount === 30) &&
+    scaleSummaries.length === expectedLayerCount &&
+      scaleSummaries.every((item) => item.pitchCount === expectedPitchCount) &&
       minimumScaleCentroidCorrelation >= 0.9 &&
       minimumScaleDecayCorrelation >= 0.7 &&
       maximumScalePartialMedian <= 10 &&
@@ -686,15 +858,38 @@ async function main() {
       maximumPartialProfileMedianDb: round(maximumScalePartialMedian, 3),
       maximumOnsetShapeMedianDb: round(maximumScaleOnsetMedian, 3),
     },
-    '16/16 layers × 30 pitches; centroid rank >=0.9; 400 ms decay rank >=0.7; partial median <=10 dB; onset median <=5 dB',
+    `${expectedLayerCount}/${expectedLayerCount} layers × ${expectedPitchCount} pitches; centroid rank >=0.9; 400 ms decay rank >=0.7; partial median <=10 dB; onset median <=5 dB`,
     'Rank correlations test register-scale behavior without demanding sampled-key phase or room identity.',
   );
 
   const possible = checks.reduce((sum, check) => sum + check.weight, 0);
   const score = checks.reduce((sum, check) => sum + check.earned, 0);
   if (possible !== 100) throw new Error(`grid convergence weights total ${possible}`);
+  const coverage = chromaticMode
+    ? {
+        referenceEvaluations: pairs.length,
+        keyboardPitches: notes.length,
+        velocityLayers: layers.length,
+        noteNames: notes,
+        layers,
+        layerRoles: { low: 1, midpoint: 8, high: 16 },
+        uniqueSourceRecordings: new Set(pairs.map(({ file }) => file)).size,
+        directSampleEvaluations: pairs.filter(({ transpositionSemitones }) =>
+          transpositionSemitones === 0).length,
+        transposedSampleEvaluations: pairs.filter(({ transpositionSemitones }) =>
+          transpositionSemitones !== 0).length,
+        synthesizedRenders: pairs.length,
+      }
+    : {
+        recordings: pairs.length,
+        sampledPitches: notes.length,
+        velocityLayers: layers.length,
+        noteNames: notes,
+        layers,
+        synthesizedRenders: pairs.length,
+      };
   const report = {
-    schemaVersion: 2,
+    schemaVersion: chromaticMode ? 1 : 2,
     passThreshold: PASS_THRESHOLD,
     score,
     possible,
@@ -705,20 +900,24 @@ async function main() {
       referenceAudioUsage:
         'Development-time measurement only. No reference audio is loaded by src/grand-piano.js or copied into procedural output.',
     },
-    coverage: {
-      recordings: pairs.length,
-      sampledPitches: notes.length,
-      velocityLayers: layers.length,
-      noteNames: notes,
-      layers,
-      synthesizedRenders: pairs.length,
-    },
+    coverage,
     method: {
       renderSeconds: RENDER_SECONDS,
-      referenceDecodeLimitSeconds: MAX_REFERENCE_FRAMES / SAMPLE_RATE,
+      ...(chromaticMode
+        ? { referencePlaybackSeconds: MAX_REFERENCE_FRAMES / SAMPLE_RATE }
+        : { referenceDecodeLimitSeconds: MAX_REFERENCE_FRAMES / SAMPLE_RATE }),
+      ...(chromaticMode
+        ? {
+            referencePlayback:
+              'SFZ key-zone transposition and Retuned-SFZ tune cents are applied with a deterministic 12-tap, 1024-phase Lanczos resampler; source recordings are never used by runtime synthesis.',
+            velocitySampling:
+              'Layers 1, 8, and 16 use their SFZ range midpoints: low, lower-median, and highest recorded velocity.',
+          }
+        : {}),
       alignment: 'independent causal 3 ms RMS onset detection; comparisons use time relative to onset',
-      spectrum:
-        '25 ms post-onset Hann windows; reference L/R power averaged; adaptive 32768–131072 FFT; SFZ tune applied to reported reference frequencies/centroids',
+      spectrum: chromaticMode
+        ? '25 ms post-onset Hann windows after SFZ playback; reference L/R power averaged; adaptive 32768–131072 FFT'
+        : '25 ms post-onset Hann windows; reference L/R power averaged; adaptive 32768–131072 FFT; SFZ tune applied to reported reference frequencies/centroids',
       onsetShape: 'RMS in 0–5, 5–10, 10–20, 20–40, and 40–80 ms frames, normalized to each signal maximum',
       decay: '50 ms RMS windows starting 0.02, 0.05, 0.1, 0.2, 0.4, 0.8, and 1.4 seconds after onset, normalized at 0.02 seconds',
       partials: 'first up-to-12 locally resolved partial powers below 15.5 kHz, normalized and clipped at -60 dB',
@@ -752,8 +951,12 @@ async function main() {
     comparisons: pairs.map(serializePair),
   };
 
-  console.log(`Full reference-grid convergence: ${score}/100 ${report.passed ? 'PASS' : 'FAIL'}`);
-  console.log(`  coverage                 ${pairs.length} recordings, ${notes.length} pitches, ${layers.length} layers`);
+  const suiteName = chromaticMode ? 'Chromatic reference convergence' : 'Full reference-grid convergence';
+  console.log(`${suiteName}: ${score}/100 ${report.passed ? 'PASS' : 'FAIL'}`);
+  console.log(
+    `  coverage                 ${pairs.length} ${chromaticMode ? 'reference evaluations' : 'recordings'}, ` +
+    `${notes.length} pitches, ${layers.length} layers`,
+  );
   console.log(`  pitch gap                median ${overall.referenceToSynthPitchGapCents.median}c, p90 ${overall.referenceToSynthPitchGapCents.p90}c`);
   console.log(`  attack difference        median ${overall.attackDifferenceMs.median}ms, p90 ${overall.attackDifferenceMs.p90}ms`);
   console.log(`  onset-frame shape MAE    median ${overall.onsetFrameShapeMaeDb.median}dB, p90 ${overall.onsetFrameShapeMaeDb.p90}dB`);

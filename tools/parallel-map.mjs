@@ -1,17 +1,58 @@
-import { cpus } from 'node:os';
+import { readFileSync } from 'node:fs';
+import * as os from 'node:os';
 import { parentPort, Worker } from 'node:worker_threads';
 
-const DEFAULT_MAXIMUM_WORKERS = 8;
+function availableLogicalProcessorCount() {
+  // availableParallelism respects process affinity and container CPU quotas.
+  // Keep the fallback for Node releases predating that API.
+  return typeof os.availableParallelism === 'function'
+    ? os.availableParallelism()
+    : os.cpus().length;
+}
+
+function parseCpuList(list) {
+  return list.trim().split(',').flatMap((range) => {
+    const [first, last = first] = range.split('-').map(Number);
+    if (!Number.isInteger(first) || !Number.isInteger(last) || last < first) return [];
+    return Array.from({ length: last - first + 1 }, (_, index) => first + index);
+  });
+}
+
+function availablePhysicalProcessorCount() {
+  if (process.platform !== 'linux') return undefined;
+  try {
+    const status = readFileSync('/proc/self/status', 'utf8');
+    const allowedList = /^Cpus_allowed_list:\s*(.+)$/m.exec(status)?.[1];
+    if (!allowedList) return undefined;
+    const physicalCores = new Set();
+    for (const cpu of parseCpuList(allowedList)) {
+      const topology = `/sys/devices/system/cpu/cpu${cpu}/topology`;
+      const packageId = readFileSync(`${topology}/physical_package_id`, 'utf8').trim();
+      const coreId = readFileSync(`${topology}/core_id`, 'utf8').trim();
+      physicalCores.add(`${packageId}:${coreId}`);
+    }
+    return physicalCores.size || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function automaticProcessorCount() {
+  const logical = Math.max(1, availableLogicalProcessorCount());
+  const physical = availablePhysicalProcessorCount();
+  return physical === undefined ? logical : Math.max(1, Math.min(logical, physical));
+}
 
 /**
  * Resolve `--jobs=N` or `--jobs N`, clamped to the amount of work available.
- * The default deliberately caps the pool so FFT buffers do not multiply
- * without bound on high-core-count machines.
+ * By default CPU-heavy comparisons use every physical core available to this
+ * process. This saturates execution resources without the SMT contention that
+ * makes these FFT workloads slower. An explicit job count remains available.
  */
 export function comparisonWorkerCount(
   argumentsList,
   itemCount,
-  maximumWorkers = DEFAULT_MAXIMUM_WORKERS,
+  maximumWorkers = Number.POSITIVE_INFINITY,
 ) {
   let requested;
   for (let index = 0; index < argumentsList.length; index += 1) {
@@ -29,7 +70,10 @@ export function comparisonWorkerCount(
     }
   }
 
-  const automatic = Math.min(maximumWorkers, Math.max(1, cpus().length));
+  const automatic = Math.min(
+    maximumWorkers,
+    automaticProcessorCount(),
+  );
   const parsed = requested === undefined ? automatic : Number(requested);
   if (!Number.isInteger(parsed) || parsed < 1) {
     throw new RangeError('--jobs must be a positive integer');

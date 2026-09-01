@@ -17,13 +17,16 @@
     "analyze": "node tools/score-synth.mjs --write-report",
     "analyze:references": "node tools/analyze-references.mjs --write-report",
     "analyze:grid": "node tools/compare-reference-grid.mjs --write-report",
+    "analyze:chromatic": "node tools/compare-reference-grid.mjs --chromatic --write-report",
     "analyze:fidelity": "node tools/compare-reference-fidelity.mjs --write-report",
     "analyze:fidelity:report": "node tools/compare-reference-fidelity.mjs --write-report --no-fail",
     "analyze:fidelity:quick": "node tools/compare-reference-fidelity.mjs --quick --write-report --no-fail",
+    "analyze:fidelity:chromatic": "node tools/compare-reference-fidelity.mjs --chromatic --write-report",
+    "analyze:fidelity:chromatic:report": "node tools/compare-reference-fidelity.mjs --chromatic --write-report --no-fail",
     "demos": "node tools/generate-demos.mjs",
     "track": "node tools/generate-track.mjs",
     "validate:track": "node tools/validate-track.mjs",
-    "validate": "npm run test && npm run analyze:references && npm run analyze && npm run analyze:grid && npm run analyze:fidelity:report && npm run validate:track"
+    "validate": "npm run test && npm run analyze:references && npm run analyze && npm run analyze:grid && npm run analyze:chromatic && npm run analyze:fidelity:report && npm run analyze:fidelity:chromatic:report && npm run validate:track"
   },
   "keywords": [
     "audio",

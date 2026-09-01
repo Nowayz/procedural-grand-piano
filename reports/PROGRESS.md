@@ -377,6 +377,14 @@ write results back in SFZ order. Four workers reduced the strict quick pass
 from 21.3 to 7.3 seconds and the wide-grid pass from about 53 to 16 seconds;
 one- and four-worker JSON reports were byte-identical.
 
+The pool was subsequently allowed to saturate the current processor. Linux CPU
+topology and affinity now select one worker per available physical core, while
+`--jobs=N` remains an explicit override. On the current 16-core/32-thread host,
+the full strict comparison measured 7.90 / 4.89 / 5.72 seconds at 8 / 16 / 32
+workers, and the wide-grid comparison measured 4.89 / 3.06 / 4.28 seconds.
+Sixteen workers therefore became the automatic default: it uses all execution
+cores and avoids the substantial FFT contention observed with both SMT threads.
+
 ## Iteration 9 — exact compact-runtime refactor
 
 The retained 86.77-point model was compacted under a stricter constraint than
@@ -408,3 +416,101 @@ from 188.9 ms to 132.1 ms (about **30% faster**). This small benchmark is a
 performance regression check, not a cross-engine guarantee. Final validation
 passed all **17/17 tests**, 100/100 focused analysis, 90/100 wide-grid analysis,
 the unchanged 86.77/100 strict report, and every full-track check.
+
+## Iteration 10 — all-key chromatic reference coverage
+
+The original exhaustive reference suites covered every supplied recording but
+only the 30 physically sampled root pitches. The SFZ key zones were expanded to
+all **88 keys from A0 through C8** at layers **1, 8, and 16**, yielding **264
+reference/render comparisons**. Ninety cells use a sample at its recorded root;
+174 reproduce the SFZ's neighboring ±1-semitone mapping. Retuned-SFZ cents and
+key transposition are applied to development references with a deterministic
+12-tap, 1,024-phase Lanczos resampler. Runtime synthesis remains sample-free.
+
+Both the permissive grid and the full strict time-frequency analysis now have
+chromatic modes. The latter caches only scalar and spectral measurements;
+reference PCM is neither cached nor redistributed. Unit tests establish exact
+88 × 3 coverage, zone selection, endpoint behavior, deterministic identity,
+and better than 0.1-cent resampler pitch accuracy.
+
+| All-key metric, median / p90 | Result |
+|---|---:|
+| Pitch gap | 4.37 / 21.72 cents |
+| Attack difference | 10.42 / 32.00 ms |
+| Fine attack envelope | 1.35 / 3.28 dB |
+| Transient spectrum | 6.20 / 10.49 dB |
+| Sustain spectrum | 7.88 / 12.37 dB |
+| Partial balance | 4.93 / 8.12 dB |
+| Partial decay | 5.46 / 9.33 dB |
+| Multiband decay | 6.23 / 9.19 dB |
+
+The 264-cell wide grid earns **90/100 PASS**. The stricter companion earns
+**82.71/100 FAIL** against the unchanged stretch gates. This lower score is
+informative rather than a regression: layer 1 now contributes one-third of all
+cells instead of one-sixteenth, magnifying the already-known soft-treble
+weakness. The all-key report nevertheless confirms monotonic dynamics and
+brightness across all 88 three-point velocity curves.
+
+Final validation completed in 18.5 seconds with **20/20 tests**, 100/100 focused
+analysis, both wide grids at 90/100, the unchanged 86.77/100 recorded-root
+strict score, the new 82.71/100 chromatic strict score, and every track check.
+Repeated 16-worker chromatic reports and their cached reference features were
+byte-identical; all four pre-existing deterministic reports were also unchanged.
+
+## Iteration 11 — reduced physical loss and all-key convergence
+
+The all-key suite was used as the primary optimization surface: every A0–C8
+key at SFZ layers 1, 8, and 16, for **264 independent reference/render pairs**.
+The model was not fitted by adding stored spectral frames. Research on stiff
+strings, nonlinear felt contact, bridge impedance, soundboard modal density,
+and rib-localized waveguides led to three compact reduced terms:
+
+- modal T60 now has the frequency-squared loss expected from the damped
+  stiff-string equation, followed by a measured bridge-radiation loss rate;
+- bridge/soundboard radiation uses an absolute-frequency mobility surface, the
+  reduced `Y(omega)=V/F` description supported by soundboard measurements;
+- independent fast, slow, and polarization poles retain coupled-unison
+  beating and two-stage decay rather than sharing an envelope.
+
+Only scalar quarter/half-dB coefficients are packed in the module. The complete
+payload is 1,845 bytes and contains no PCM, waveform, phase, impulse response,
+or sample decoder. The physical sources, equations, and implementation mapping
+are recorded in `reports/PHYSICS_RESEARCH.md`.
+
+| Retained stage | Chromatic strict score |
+|---|---:|
+| Initial all-key model | 82.71 |
+| Radiation/velocity surface | 91.59 |
+| Quadratic and bridge loss | 92.54 |
+| Radiated-board loss | 93.20 |
+| Low-order modal color | 94.20 |
+| Impact mobility color | 94.52 |
+| Absolute-frequency mobility plus reduction | **95.06** |
+
+Several plausible additions were measured and removed: a six-band impact
+surface (+0.01), a second sustain-color surface (+0.02), a high-partial table
+(+0.07 for substantially more data), a longitudinal phantom-partial term
+(at most +0.05), and higher-Q sparse soundboard modes (negative). A finer
+static fit could therefore not justify its code or its risk of copying one
+instrument's defects.
+
+The final focused audit initially exposed three regressions hidden by the
+aggregate score. A wound-bass hammer-energy transition restored A0 dynamics;
+the bottom keys gained a short register-dependent causal onset ramp; and a
+narrow C4/hard-strike bridge-loss term restored the measured reversal between
+fundamental and fourth-partial decay. The top unison spread also narrows above
+C7 so the strongest C8 line remains within the three-cent pitch guard. None of
+the corresponding tests was relaxed.
+
+Final runtime size is **40,639 bytes raw / 12,305 bytes gzip-9**, guarded at
+41,000 / 12,500 bytes. Compared with the exact 31,052 / 8,553-byte compact
+model, the added 3.6 KiB compressed buys measured behavior across the entire
+keyboard rather than general infrastructure.
+
+The final `npm run validate` completed in **18.5 seconds** with **20/20 tests**,
+**100/100** focused behavior, **90/100 PASS** for the 480-recording wide grid,
+**100/100 PASS** for the 264-cell all-key wide grid, **94.15/100** for the
+original strict suite, **95.06/100** for the all-key strict suite, and all
+eleven full-track checks. Strict reports retain their remaining category-gate
+failures. The six demos and the 157.067-second, 549-event BWV 846 track were
+regenerated from this exact model.

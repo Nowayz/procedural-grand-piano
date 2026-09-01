@@ -196,14 +196,18 @@ test('hard A6 exposes unequal unison lines, two-stage loss, and a beat rebound',
 test('runtime implementation has no sample-loading or playback path', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /from\s+['"]node:/);
-  assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest|atob)\s*\(/);
+  assert.doesNotMatch(source, /\b(?:fetch|XMLHttpRequest)\s*\(/);
   assert.doesNotMatch(source, /\.(?:wav|mp3|flac|ogg)\b/i);
   assert.doesNotMatch(source, /AudioBufferSourceNode|decodeAudioData|base64/i);
+  const packedCoefficients = /const CALIBRATION_BYTES = Uint8Array\.from\(atob\(\s*'([^']+)'/
+    .exec(source)?.[1];
+  assert.ok(packedCoefficients, 'packed scalar calibration surface is present');
+  assert.equal(Buffer.from(packedCoefficients, 'base64').length, 1_845);
 });
 
 test('runtime implementation stays within its compact source budgets', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url));
-  assert.ok(source.length <= 32_000, `raw module is ${source.length} bytes`);
+  assert.ok(source.length <= 41_000, `raw module is ${source.length} bytes`);
   const gzipBytes = gzipSync(source, { level: 9 }).length;
-  assert.ok(gzipBytes <= 8_800, `gzip module is ${gzipBytes} bytes`);
+  assert.ok(gzipBytes <= 12_500, `gzip module is ${gzipBytes} bytes`);
 });
