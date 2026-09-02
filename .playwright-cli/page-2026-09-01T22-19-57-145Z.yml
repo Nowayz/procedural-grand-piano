@@ -1,0 +1,21 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - heading [level=2]
+      - paragraph
+      - heading "musescore.com" [level=1] [ref=e4]
+      - paragraph [ref=e5]: Verifying you are human. This may take a few seconds.
+      - main [ref=e6]
+  - contentinfo [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - text: "Ray ID:"
+          - code [ref=e11]: a347a8d0b8dbf149
+        - generic [ref=e12]:
+          - text: "Client IP:"
+          - code [ref=e13]: 170.203.114.218
+      - generic [ref=e14]:
+        - text: Performance & Security by
+        - link "Cloudflare" [ref=e15] [cursor=pointer]:
+          - /url: https://www.cloudflare.com?utm_source=challenge&utm_campaign=m

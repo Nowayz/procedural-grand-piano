@@ -35,8 +35,13 @@ The default and named exports are the same function. It returns a new mono
 finite and bounded to `[-0.94, +0.94]`. The fixed output transfer is not
 per-note peak normalization, so velocity dynamics remain intact.
 
-`duration_seconds` is the complete buffer duration, including the modeled
-note-off/damper tail. Sample count is
+`duration_seconds` is the exact output-buffer duration, not a literal key-down
+time. For damped notes the offline renderer uses the standard release speed
+(`64 / 127`) and starts key return early enough for the modeled mechanical
+travel and damping tail when they fit. It never lengthens the requested buffer:
+a buffer shorter than the physical release span is boundary-faded and therefore
+truncates that span. The damperless top 18 keys (MIDI 91–108, G6–C8) simply
+decay naturally. Sample count is
 `Math.round(clampedDuration * SAMPLE_RATE)`.
 
 Input handling is deliberate:
@@ -107,19 +112,32 @@ piano.sustain(false, context.currentTime + 2);
 
 `id` identifies the physical key press, so applications may use different IDs for overlapping strikes of the same pitch. `noteOn`, `noteOff`, and `sustain` accept absolute `AudioContext` times. An omitted time means “the next available render quantum,” which minimizes interactive latency but depends on main-thread and `MessagePort` scheduling. Sequencers should submit events at least `REALTIME_SCHEDULING_LEAD_SECONDS` (20 ms) ahead for stable sample placement. DOM events and `EventTarget` may be used by the interface, but they are deliberately absent from the DSP callback.
 
-All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices, supports up to 64, and deterministically steals a released voice before the oldest held voice when full. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
+`release_velocity` is a normalized key-return speed, clamped to `0..1`: `0`
+gives the slowest return, `1` the fastest, and omission uses `64 / 127`. It
+controls action travel, felt settling, modal attenuation, and release noise,
+independently of strike velocity. Key release does not mute a voice immediately:
+damper contact is scheduled 45–85 ms after key-up and cannot precede 50 ms after
+the strike. Consequently, even a 13 ms key gate produces a finite piano tone
+rather than a 13 ms sample cut.
+
+`sustain()` is a binary damper-pedal control. Pedal-down defers damper contact.
+Re-pedaling during key return or damping catches the string at its current
+energy: future attenuation stops, but energy already absorbed by the felt is
+not restored.
+
+All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices, supports up to 64, and deterministically steals the oldest released voice, then the oldest key-up/pedal-held voice, then the oldest held voice when full. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
 
 Realtime coefficients and timing follow the actual `AudioContext.sampleRate`; rates from 32 to 96 kHz are supported. Sustained 32-voice rendering at 48 kHz measured 1.37 ms median and 1.62 ms p95 per 2.67 ms quantum on the development machine. Starting many voices is more expensive because each strike constructs its modal state: an artificial simultaneous 32-note onset took 5.75 ms, while ordinary one-to-ten-finger keyboard attacks stay within a quantum on that machine.
 
-Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and sustain-pedal controls; the output receives the bundled Small Hall convolution reverb.
+Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and binary sustain; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 12). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the bundled Small Hall convolution reverb.
 
 ## Compact runtime
 
-The distributable runtime module is **89,675 bytes** (**42,674 bytes gzip level 9**) and remains dependency-free with no required build step. Its 61,599-byte embedded WebAssembly module owns the complete offline and realtime simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, envelopes, voice state, event scheduling, mixing, limiting, fades, and output. JavaScript only validates the API contract, manages caller-owned buffers, invokes Wasm, and copies finished samples.
+The distributable runtime module is **95,226 bytes** (**44,476 bytes gzip level 9**) and remains dependency-free with no required build step. Its 65,756-byte embedded WebAssembly module owns the complete offline and realtime simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, staged damper contact, envelopes, voice state, event scheduling, mixing, limiting, fades, and output. JavaScript only validates the API contract, manages caller-owned buffers, invokes Wasm, and copies finished samples.
 
 The 1,845-byte packed coefficient payload contains only quarter/half-dB physical mobility, loss, and modal-color measurements—not PCM, phase, waveform segments, or an impulse response. Each independent engine has one fixed 12 MiB Wasm memory containing the 64-voice pool, 256-event queue, mix block, every scratch value, calibration byte, and the maximum 30-second offline output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into caller-provided buffers performs no allocation.
 
-The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 92,000 raw bytes and 44,000 gzip bytes; that includes the complete model, realtime engine, fixed data, and required standalone math routines.
+The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 96,000 raw bytes and 45,000 gzip bytes; that includes the complete model, realtime engine, fixed data, and required standalone math routines.
 
 ## Acoustic/DSP model
 
@@ -156,13 +174,27 @@ than an oscillator bank under one shared envelope:
   bands model non-periodic energy. They have independent rise/decay constants;
   the hammer bands stay local to the collision while the board microstructure
   decays through the sustain.
-- A short filtered damper/key-release event begins near the end of the requested
-  duration. The undamped top register uses a longer release coefficient.
-- A low-cut DC blocker, squared 32-sample raised-cosine onset ramp, 256-sample
+- Key-up starts an action-return stage rather than multiplying the shared output
+  by a release envelope. Release speed sets 45–85 ms of travel and 4–30 ms of
+  felt-contact settling; contact never begins before 50 ms from the strike.
+- Damper loss is applied independently to every string mode. The first 100 ms
+  interpolates between regulated and free-return slopes; base attenuation rises
+  from 170 to 220 dB/s across the damped register, increases with partial number,
+  and includes a bass damper-position/node factor. Orthogonal polarization is
+  damped at 45% of the vertical rate, leaving a quieter residual phase. Long
+  coupled body modes are attenuated in their internal state at 100–180 dB/s,
+  while already-radiating broad soundboard modes decay naturally. Damper noise
+  starts at felt contact and follows release speed.
+- Keys G6–C8 have no dampers and ignore key release acoustically. Realtime
+  voices retire only after their peak-relative envelope remains below −80 dB
+  for 20 ms; there is no fixed note-off cutoff or forced release fade.
+- A low-cut DC blocker, register-dependent raised-cosine onset ramp, 256-sample
   final fade, and fixed soft saturation keep boundaries quiet and output
   bounded.
-- Hammer and damper noise use a note/velocity-derived PRNG seed. Repeated calls
-  are sample-exact, and changing only duration preserves the pre-release prefix.
+- Hammer, damper, and body noise use independent note/velocity-derived PRNG
+  states. Repeated event streams are sample-exact; changing only offline
+  duration preserves the common prefix until the shorter render begins its
+  scheduled release.
 
 ## Reference calibration
 
@@ -355,13 +387,16 @@ and SHA-256 are recorded in
 [`reports/public-domain-track.json`](reports/public-domain-track.json); the
 checked-in audio files are described in [`demos/README.md`](demos/README.md).
 
-This small model does not reproduce a specific concert grand. Its public note
-API is mono and has no pedal/state API, half-pedaling, una-corda model,
-duplex-scale state, true inter-note sympathetic coupling, room/microphone
-simulation, or mechanical repetition behavior. The separate full-track
-renderer supplies score-level overlap, keyboard-width panning, and synthetic
-delay-line ambience, but summed notes still do not exchange energy. Extreme
-bass and treble remain the hardest registers, and the modal spectrum is
+This small reduced model does not reproduce a specific concert grand. The
+offline single-note API is stateless and mono; the realtime engine adds key
+identity and binary sustain, but not continuous key displacement, half-pedaling,
+una-corda, duplex-scale state, true inter-note sympathetic coupling,
+room/microphone simulation, or mechanical repetition. Release velocity is a
+proxy for return kinematics, and the C1-derived damper footprint is blended
+across the bass rather than using measured geometry for every key. The separate
+full-track renderer supplies score-level overlap, keyboard-width panning, and
+synthetic delay-line ambience, but summed notes still do not exchange energy.
+Extreme bass and treble remain the hardest registers, and the modal spectrum is
 smoother than a real instrument's irregular coupled modes.
 
 See [`reports/PROGRESS.md`](reports/PROGRESS.md) for the measured iteration log.

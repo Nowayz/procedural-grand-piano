@@ -38,6 +38,7 @@
     "track:realtime": "node tools/generate-track-realtime.mjs",
     "track:midi": "node tools/render-midi-realtime.mjs",
     "track:bumblebee": "node tools/generate-bumblebee.mjs",
+    "tracks:lemmings": "node tools/generate-lemmings-classics.mjs",
     "validate:track": "node tools/validate-track.mjs",
     "validate": "npm run test && npm run analyze:references && npm run analyze && npm run analyze:grid && npm run analyze:chromatic && npm run analyze:fidelity:report && npm run analyze:fidelity:chromatic:report && npm run validate:track"
   },

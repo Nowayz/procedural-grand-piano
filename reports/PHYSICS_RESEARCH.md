@@ -58,6 +58,56 @@ impulse response, or resampled PCM is present in the runtime.
   The model remains causal and avoids solving a nonlinear collision at every
   output sample. [Physics-informed piano model](https://www.frontiersin.org/journals/signal-processing/articles/10.3389/frsip.2023.1276748/full)
 
+## Key return, damper contact, and acoustic note length
+
+A notation or MIDI gate is not the acoustic duration of a piano tone. KTH
+high-speed measurements of a forte C4 staccato show about 2 ms of hammer–string
+contact and the damper returning about 80 ms after impact; the resulting tone
+lasts about 100 ms even under deliberately short articulation.
+[KTH piano-action measurements](https://www.speech.kth.se/music/5_lectures/askenflt/measure.html)
+
+Taguti et al. report individual tones down to roughly 50 ms in extremely rapid
+passages, but not instantaneous silencing. Their measured C4–C5 fast-return
+attenuation is about 220–470 dB/s, and their reduced fast-return model uses
+200 dB/s. A slowly regulated return loses about 20 dB in 0.10–0.15 s and is
+approximated by about 100 dB/s for its first 0.1 s before the faster stage.
+[Taguti et al., 2002](https://www.jstage.jst.go.jp/article/ast/23/5/23_5_244/_pdf)
+
+Damper loss is mode-selective. Bank notes that low-order one-pole dampers work
+reasonably in the middle and high register but miss bass roughness and partials
+whose nodes lie beneath the felt. Lehtonen, Askenfelt, and Välimäki describe
+free vibration, damper interaction, and a quieter residual phase: the damper
+suppresses vertical motion more strongly than horizontal polarization. Their
+C1 measurement places the felt over normalized string positions 0.122–0.184.
+[Bank thesis](https://home.mit.bme.hu/~bank/thesis/pianomod.pdf),
+[Lehtonen et al.](https://aaltodoc.aalto.fi/bitstreams/b4811040-596e-4e1c-87f1-3e67f528eaa9/download)
+
+Acoustic grands leave the top register undamped; the retained model uses the
+upper 18 keys, G6–C8.
+[Kawai explanation](https://www.kawai-global.com/support/faq/why-do-the-upper-18-notes-of-my-kawai-digital-piano-sustain-without-using-the-damper-pedal/)
+
+The implementation therefore does not clamp short gates to an invented minimum
+duration. For normalized release speed `v`, key-return travel is
+
+```text
+t_travel = 0.085 - 0.040 v^0.65 seconds,
+```
+
+with first contact no earlier than 50 ms after strike and a 30-to-4 ms contact
+ramp. For damped keys, partial `n` starts from a 170-to-220 dB/s register slope
+multiplied by `1 + 0.035(n - 1)` and by a bass node-overlap factor derived from
+the C1 felt span. During the first 100 ms the target slope is
+`(0.5 + 0.5v)` of that free-return value; afterward it reaches the full value.
+Horizontal-polarization loss is 45% of vertical loss. Long coupled-body
+resonators are damped through their stored state at 100–180 dB/s, while the
+broad soundboard response decays from its existing energy. Release noise begins
+at contact, not at key-up.
+
+Pedal-down cancels pending contact or catches an already damped voice without
+restoring lost modal gain. MIDI 91–108 bypass damper attenuation and retire
+through natural modal loss. Other voices retire only after the expected −80 dB
+damping span and a peak-relative envelope below −80 dB for 20 ms.
+
 ## Runtime mapping
 
 The retained implementation has five interacting reduced subsystems:
@@ -116,3 +166,10 @@ irregular rib spacing, duplex-scale coupling, room/microphone coloration, and
 small action/calibration defects. Some residual is therefore recording- and
 instrument-specific, but the failed temporal criteria show that it is not
 honest to attribute the whole distance from 100 to real-world imperfections.
+
+The release model is an evidence-constrained reduction, not a finite-element
+action simulation. It does not solve nonlinear damper-felt/string contact,
+continuous key or pedal displacement, per-key damper geometry, half-pedaling,
+or inter-string energy exchange. Its release-velocity input is a compact proxy
+for action return speed; the literature ranges constrain its timing and
+attenuation rather than proving instrument-specific equivalence.

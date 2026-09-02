@@ -26,6 +26,18 @@ Audio's `ConvolverNode`. The symbolic edition comes from the
 [MuseTrainer public-domain MusicXML library](https://github.com/sevagh/musicxml-library/blob/master/scores/Flight_of_the_Bumblebee.mxl)
 and was checked against the [public-domain Bessel score at IMSLP](https://imslp.org/wiki/Flight_of_the_Bumble-Bee).
 
+Run `npm run tracks:lemmings` to render three public-domain classical works
+heard in versions of **Lemmings**: Offenbach's *Galop infernal (Can-Can)*,
+Mozart's *Rondo alla Turca*, and Tchaikovsky's *Dance of the Reed Flutes*.
+The command downloads symbolic score data, then creates three new stereo piano
+performances with this synthesizer and the bundled two-second **Genesis 6**
+treated recording-studio impulse response from the University of York's
+[OpenAIR](https://www.openairlib.net/) library (CC BY 4.0). No game
+audio, game arrangement, or recorded source performance is used.
+The performances use the documented Windows/PlayStation/J2ME tempos: 175 BPM
+for *Can-Can*, and 120 BPM for both *Rondo alla Turca* and *Dance of the Reed
+Flutes*.
+
 - `A1-soft.wav`: bass register, velocity 0.28
 - `C4-medium.wav`: middle register, velocity 0.62
 - `A6-hard.wav`: treble register, velocity 0.94

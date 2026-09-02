@@ -14,7 +14,7 @@ function requireFiniteNumber(name, value) {
 class RealtimeGrandPiano {
  constructor(context, node) { this.context = context; this.node = node; }
  noteOn(id, note_hz, velocity, when = this.context.currentTime) { requireFiniteNumber('id', id); requireFiniteNumber('note_hz', note_hz); requireFiniteNumber('velocity', velocity); requireFiniteNumber('when', when); this.node.port.postMessage({ type: 'noteOn', id, note_hz, velocity, when }); return this; }
- noteOff(id, release_velocity = 0, when = this.context.currentTime) { requireFiniteNumber('id', id); requireFiniteNumber('release_velocity', release_velocity); requireFiniteNumber('when', when); this.node.port.postMessage({ type: 'noteOff', id, release_velocity, when }); return this; }
+ noteOff(id, release_velocity = 64 / 127, when = this.context.currentTime) { requireFiniteNumber('id', id); requireFiniteNumber('release_velocity', release_velocity); requireFiniteNumber('when', when); this.node.port.postMessage({ type: 'noteOff', id, release_velocity, when }); return this; }
  sustain(down, when = this.context.currentTime) { requireFiniteNumber('when', when); this.node.port.postMessage({ type: 'sustain', down: Boolean(down), when }); return this; }
  reset() { this.node.port.postMessage({ type: 'reset' }); return this; }
  connect(destination, output = 0, input = 0) { return this.node.connect(destination, output, input); }
