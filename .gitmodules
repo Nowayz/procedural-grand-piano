@@ -1,0 +1,5 @@
+[submodule "SalamanderGrandPianoV3_44.1khz16bit"]
+	path = SalamanderGrandPianoV3_44.1khz16bit
+	url = https://github.com/sfzinstruments/SalamanderGrandPiano.git
+	branch = master
+	ignore = dirty

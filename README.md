@@ -207,6 +207,12 @@ release/resonance recordings. The final wide-grid analysis measures **all 480
 sustain recordings** (30 pitches × 16 velocity layers) against independently
 rendered procedural notes.
 
+That path is now a submodule pointing to the canonical Salamander Grand Piano
+repository. Upstream currently ships a newer 48 kHz/24-bit FLAC edition; the
+measurements in this repository were produced from the older 44.1 kHz/16-bit
+WAV edition and remain reproducible from its archived scalar reports, but the
+two sample editions are not byte-identical.
+
 The source is Alexander Holm's **Salamander Grand Piano V3**, a Yamaha C5
 recorded with two AKG C414 microphones in an AB arrangement. The source is
 [cataloged here](https://sfzinstruments.github.io/pianos/salamander/) as
