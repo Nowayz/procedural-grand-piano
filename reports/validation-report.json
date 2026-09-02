@@ -186,7 +186,7 @@
       "passed": true,
       "actual": {
         "minimum": 0.00109,
-        "maximum": 0.06146
+        "maximum": 0.06085
       },
       "target": "[0.0005, 0.32]",
       "proxy": "A coarse gain/crest-factor guard, not loudness matching."
@@ -210,7 +210,7 @@
       "actual": {
         "endpointsExact": true,
         "maximumStartDelta": 0.001309,
-        "maximumEndDelta": 0.000252
+        "maximumEndDelta": 0.000102
       },
       "target": "endpoints=0 and boundary delta <0.035",
       "proxy": "Boundary discontinuity is a strong click proxy; it cannot catch every audible artifact."
@@ -257,12 +257,12 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": 2.21,
-        "A1": 2.548,
-        "A2": 2.227,
-        "C4": 2.774,
-        "A4": 3.29,
-        "A5": 4.332,
+        "A0": 2.244,
+        "A1": 2.592,
+        "A2": 2.231,
+        "C4": 2.778,
+        "A4": 3.297,
+        "A5": 4.339,
         "A6": 5.207,
         "C8": 9.935
       },
@@ -278,19 +278,19 @@
       "actual": [
         {
           "velocity": 0.18,
-          "rms": 0.01692
+          "rms": 0.01635
         },
         {
           "velocity": 0.4,
-          "rms": 0.03631
+          "rms": 0.03541
         },
         {
           "velocity": 0.65,
-          "rms": 0.05936
+          "rms": 0.05805
         },
         {
           "velocity": 0.9,
-          "rms": 0.07498
+          "rms": 0.07408
         }
       ],
       "target": "strictly increasing RMS at v=.18,.40,.65,.90",
@@ -391,7 +391,7 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": -8.47,
+        "A0": -8.53,
         "A2": -9.1,
         "C4": -22.9,
         "A4": -17.36,
@@ -407,7 +407,7 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": -8.47,
+        "A0": -8.53,
         "C4": -22.9,
         "A6": -27.67
       },
@@ -436,10 +436,10 @@
       "earned": 5,
       "passed": true,
       "actual": {
-        "attackErrorMs": 0.975,
+        "attackErrorMs": 0.969,
         "frameRmsShapeMaeDb": 0.64,
-        "frameCrestFactorMae": 0.087,
-        "peakEnvelopeRatio": 0.833,
+        "frameCrestFactorMae": 0.089,
+        "peakEnvelopeRatio": 0.832,
         "frameRmsRelativeDb": [
           -9.02,
           -3.34,
@@ -458,9 +458,9 @@
       "earned": 6,
       "passed": true,
       "actual": {
-        "onsetFrameBandMaeDb": 1.452,
-        "maximumSingleBandErrorDb": 6.05,
-        "centroidMeanAbsolutePercent": 1.427,
+        "onsetFrameBandMaeDb": 1.376,
+        "maximumSingleBandErrorDb": 6.028,
+        "centroidMeanAbsolutePercent": 1.449,
         "secondPartial_5to10ms_to_40to80ms_Db": -17.692,
         "centroidsHz": [
           2285.4,
@@ -482,8 +482,8 @@
       "actual": {
         "peakCount": 3,
         "spanHz": 5.7014,
-        "referenceSpanHz": 5.6899,
-        "referenceToNearestPeakMaeHz": 0.3898,
+        "referenceSpanHz": 5.6838,
+        "referenceToNearestPeakMaeHz": 0.3857,
         "peaks": [
           {
             "frequencyHz": 1757.243,
@@ -617,7 +617,7 @@
     "focusedA6": {
       "velocity": 0.976378,
       "attackToPeakMs": 22.177,
-      "frameBandMaeDb": 1.452,
+      "frameBandMaeDb": 1.376,
       "trajectoryMaeDb": 2.42,
       "unisonSpanHz": 5.7014
     },
@@ -629,7 +629,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.12783,
-        "rms": 0.0196,
+        "rms": 0.01885,
         "dc": -0.0000565,
         "attackToPeakMs": 34.94,
         "fundamentalEstimateHz": 27.49812,
@@ -637,9 +637,9 @@
         "centroidHz": 245.09,
         "centroidToFundamental": 8.912,
         "inharmonicityB": 0.00029268,
-        "totalDecayDb_0_18s_to_1_45s": -6.04,
+        "totalDecayDb_0_18s_to_1_45s": -6.09,
         "startBoundaryDelta": 0,
-        "endBoundaryDelta": 0.000004,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -710,7 +710,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.11807,
-        "rms": 0.02412,
+        "rms": 0.02348,
         "dc": -1e-7,
         "attackToPeakMs": 20.45,
         "fundamentalEstimateHz": 55.00105,
@@ -718,9 +718,9 @@
         "centroidHz": 168.28,
         "centroidToFundamental": 3.06,
         "inharmonicityB": 0.00008184,
-        "totalDecayDb_0_18s_to_1_45s": -7.54,
+        "totalDecayDb_0_18s_to_1_45s": -7.55,
         "startBoundaryDelta": 0.000018,
-        "endBoundaryDelta": 0.000008,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -791,7 +791,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.09602,
-        "rms": 0.02189,
+        "rms": 0.0215,
         "dc": 0,
         "attackToPeakMs": 20.25,
         "fundamentalEstimateHz": 110.00054,
@@ -801,7 +801,7 @@
         "inharmonicityB": 0.00014133,
         "totalDecayDb_0_18s_to_1_45s": -8.4,
         "startBoundaryDelta": 0.000019,
-        "endBoundaryDelta": 0.000007,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -872,8 +872,8 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.1328,
-        "rms": 0.01969,
-        "dc": 7e-7,
+        "rms": 0.01963,
+        "dc": -1e-7,
         "attackToPeakMs": 16.71,
         "fundamentalEstimateHz": 261.61877,
         "pitchErrorCents": -0.045,
@@ -882,7 +882,7 @@
         "inharmonicityB": 0.00029389,
         "totalDecayDb_0_18s_to_1_45s": -16.88,
         "startBoundaryDelta": 0.00002,
-        "endBoundaryDelta": 0.000045,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -953,8 +953,8 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.10608,
-        "rms": 0.01315,
-        "dc": 1e-7,
+        "rms": 0.01311,
+        "dc": -1e-7,
         "attackToPeakMs": 17.62,
         "fundamentalEstimateHz": 439.8837,
         "pitchErrorCents": -0.458,
@@ -963,7 +963,7 @@
         "inharmonicityB": 0.00068121,
         "totalDecayDb_0_18s_to_1_45s": -14.6,
         "startBoundaryDelta": 0.000026,
-        "endBoundaryDelta": 0.000008,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -1034,7 +1034,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.0729,
-        "rms": 0.00684,
+        "rms": 0.00683,
         "dc": 0,
         "attackToPeakMs": 17.03,
         "fundamentalEstimateHz": 879.45479,
@@ -1044,7 +1044,7 @@
         "inharmonicityB": 0.00214318,
         "totalDecayDb_0_18s_to_1_45s": -16.62,
         "startBoundaryDelta": 0.000019,
-        "endBoundaryDelta": 0.000011,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -1125,7 +1125,7 @@
         "inharmonicityB": 0.00377987,
         "totalDecayDb_0_18s_to_1_45s": -22.49,
         "startBoundaryDelta": 0.000036,
-        "endBoundaryDelta": 0.000009,
+        "endBoundaryDelta": 0.000055,
         "partials": [
           {
             "number": 1,
@@ -1244,7 +1244,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.28762,
-        "rms": 0.04332,
+        "rms": 0.04229,
         "dc": -0.0001367,
         "attackToPeakMs": 31.47,
         "fundamentalEstimateHz": 27.49168,
@@ -1252,9 +1252,9 @@
         "centroidHz": 418.13,
         "centroidToFundamental": 15.205,
         "inharmonicityB": 0.000303,
-        "totalDecayDb_0_18s_to_1_45s": -8.47,
+        "totalDecayDb_0_18s_to_1_45s": -8.53,
         "startBoundaryDelta": 0,
-        "endBoundaryDelta": 0.000001,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -1325,7 +1325,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.58695,
-        "rms": 0.06146,
+        "rms": 0.06085,
         "dc": -0.0000025,
         "attackToPeakMs": 19.43,
         "fundamentalEstimateHz": 55.00286,
@@ -1333,9 +1333,9 @@
         "centroidHz": 729.74,
         "centroidToFundamental": 13.268,
         "inharmonicityB": 0.00007472,
-        "totalDecayDb_0_18s_to_1_45s": -11.55,
+        "totalDecayDb_0_18s_to_1_45s": -11.56,
         "startBoundaryDelta": 0.000607,
-        "endBoundaryDelta": 0.000003,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -1406,7 +1406,7 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.31656,
-        "rms": 0.04875,
+        "rms": 0.04797,
         "dc": -0.0000012,
         "attackToPeakMs": 19.91,
         "fundamentalEstimateHz": 110.00258,
@@ -1416,7 +1416,7 @@
         "inharmonicityB": 0.00014025,
         "totalDecayDb_0_18s_to_1_45s": -9.1,
         "startBoundaryDelta": 0.0009,
-        "endBoundaryDelta": 0.000004,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -1487,8 +1487,8 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.45287,
-        "rms": 0.05462,
-        "dc": 3e-7,
+        "rms": 0.05454,
+        "dc": -3e-7,
         "attackToPeakMs": 16.83,
         "fundamentalEstimateHz": 261.59953,
         "pitchErrorCents": -0.172,
@@ -1497,7 +1497,7 @@
         "inharmonicityB": 0.00029562,
         "totalDecayDb_0_18s_to_1_45s": -22.9,
         "startBoundaryDelta": 0.000676,
-        "endBoundaryDelta": 0.000252,
+        "endBoundaryDelta": 0.000001,
         "partials": [
           {
             "number": 1,
@@ -1568,8 +1568,8 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.42619,
-        "rms": 0.04328,
-        "dc": -2e-7,
+        "rms": 0.04321,
+        "dc": -5e-7,
         "attackToPeakMs": 18.14,
         "fundamentalEstimateHz": 439.89494,
         "pitchErrorCents": -0.413,
@@ -1578,7 +1578,7 @@
         "inharmonicityB": 0.00065762,
         "totalDecayDb_0_18s_to_1_45s": -17.36,
         "startBoundaryDelta": 0.001309,
-        "endBoundaryDelta": 0.000011,
+        "endBoundaryDelta": 0.000001,
         "partials": [
           {
             "number": 1,
@@ -1649,8 +1649,8 @@
         "durationSeconds": 2.2,
         "sampleCount": 97020,
         "peak": 0.38957,
-        "rms": 0.02965,
-        "dc": -6e-7,
+        "rms": 0.02963,
+        "dc": -7e-7,
         "attackToPeakMs": 17.19,
         "fundamentalEstimateHz": 879.37577,
         "pitchErrorCents": -1.228,
@@ -1659,7 +1659,7 @@
         "inharmonicityB": 0.00076605,
         "totalDecayDb_0_18s_to_1_45s": -19.98,
         "startBoundaryDelta": 0.001137,
-        "endBoundaryDelta": 0.000007,
+        "endBoundaryDelta": 0,
         "partials": [
           {
             "number": 1,
@@ -1731,7 +1731,7 @@
         "sampleCount": 97020,
         "peak": 0.38441,
         "rms": 0.03193,
-        "dc": 0.0000014,
+        "dc": 0.0000013,
         "attackToPeakMs": 22.18,
         "fundamentalEstimateHz": 1759.28458,
         "pitchErrorCents": -0.704,
@@ -1740,7 +1740,7 @@
         "inharmonicityB": 0.00149443,
         "totalDecayDb_0_18s_to_1_45s": -27.67,
         "startBoundaryDelta": 0.000607,
-        "endBoundaryDelta": 0.000018,
+        "endBoundaryDelta": 0.000102,
         "partials": [
           {
             "number": 1,

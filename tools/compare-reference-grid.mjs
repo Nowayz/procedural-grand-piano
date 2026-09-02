@@ -21,12 +21,11 @@ import {
   parallelMap,
   serveParallelMap,
 } from './parallel-map.mjs';
+import { loadSalamanderReference } from './salamander-reference.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const referenceRoot = path.join(root, 'SalamanderGrandPianoV3_44.1khz16bit');
-const sampleRoot = path.join(referenceRoot, '44.1khz16bit');
-const sfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3.sfz');
-const retunedSfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3Retuned.sfz');
+const reference = await loadSalamanderReference(root);
+const { referenceRoot, sampleRoot, sfzPath, retunedSfzPath } = reference;
 const chromaticMode = process.argv.includes('--chromatic');
 const outputPath = path.join(
   root,
@@ -109,7 +108,7 @@ export function midiToFrequency(midi) {
 export function parseSustainRegions(sfzText) {
   const regions = [];
   for (const line of sfzText.split(/\r?\n/)) {
-    const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.wav/i.exec(line);
+    const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.(wav|flac)/i.exec(line);
     if (!fileMatch) continue;
     const attribute = (name, fallback) => {
       const match = new RegExp(`(?:^|\\s)${name}=(-?\\d+)`).exec(line);
@@ -119,7 +118,7 @@ export function parseSustainRegions(sfzText) {
     const layer = Number(fileMatch[2]);
     const midi = attribute('pitch_keycenter', noteToMidi(note));
     regions.push({
-      file: `${note}v${layer}.wav`,
+      file: `${note}v${layer}.${fileMatch[3].toLowerCase()}`,
       note,
       layer,
       midi,
@@ -402,33 +401,30 @@ async function analyzePair(region, tuneCents) {
   const referencePlaybackRate = region.referenceResampled
     ? 2 ** ((100 * transpositionSemitones + tuneCents) / 1_200)
     : 1;
-  const maximumSourceFrames = region.referenceResampled
-    ? Math.ceil(MAX_REFERENCE_FRAMES * referencePlaybackRate) + 2 * RESAMPLE_RADIUS
-    : MAX_REFERENCE_FRAMES;
+  // The upstream submodule is 48 kHz; the legacy reference edition is 44.1 kHz.
+  // Decode enough for either, then resample onto the synthesizer's timebase.
+  const maximumSourceFrames = Math.ceil(
+    MAX_REFERENCE_FRAMES * referencePlaybackRate * (48_000 / SAMPLE_RATE),
+  ) + 2 * RESAMPLE_RADIUS;
   const reference = await readWav(path.join(sampleRoot, region.file), {
     preserveChannels: true,
     maximumFrames: maximumSourceFrames,
   });
-  if (reference.sampleRate !== SAMPLE_RATE) {
-    throw new Error(`${region.file}: expected ${SAMPLE_RATE} Hz, got ${reference.sampleRate}`);
-  }
+  if (reference.channels !== 2) throw new Error(`${region.file}: expected stereo reference audio`);
   const nominalHz = midiToFrequency(region.midi);
   const velocity = (region.velocityLow + region.velocityHigh) / (2 * 127);
   const synthesized = synthesizeGrandPiano(nominalHz, velocity, RENDER_SECONDS);
-  const referenceChannels = region.referenceResampled
-    ? reference.channelSamples.map((channel) =>
-        resampleChannel(channel, referencePlaybackRate, MAX_REFERENCE_FRAMES))
-    : reference.channelSamples;
-  const referenceSamples = region.referenceResampled
-    ? averageChannels(referenceChannels)
-    : reference.samples;
-  const referenceAttack = attackMetrics(referenceSamples, reference.sampleRate);
+  const effectivePlaybackRate = referencePlaybackRate * reference.sampleRate / SAMPLE_RATE;
+  const referenceChannels = reference.channelSamples.map((channel) =>
+    resampleChannel(channel, effectivePlaybackRate, MAX_REFERENCE_FRAMES));
+  const referenceSamples = averageChannels(referenceChannels);
+  const referenceAttack = attackMetrics(referenceSamples, SAMPLE_RATE);
   const synthesizedAttack = attackMetrics(synthesized, SAMPLE_RATE);
   const rawExpectedHz = region.referenceResampled
     ? nominalHz
     : nominalHz / 2 ** (tuneCents / 1_200);
   const referenceChannelSpectra = referenceChannels.map((channel) =>
-    analysisSpectrum(channel, reference.sampleRate, referenceAttack.onsetSeconds, rawExpectedHz));
+    analysisSpectrum(channel, SAMPLE_RATE, referenceAttack.onsetSeconds, rawExpectedHz));
   const referenceSpectrum = averageSpectra(referenceChannelSpectra);
   const synthesizedSpectrum = analysisSpectrum(
     synthesized,
@@ -455,7 +451,7 @@ async function analyzePair(region, tuneCents) {
   const synthesizedCentroid = spectralCentroid(synthesizedSpectrum, 20, 16_000);
   const referenceFrameShape = onsetFrameShape(
     referenceSamples,
-    reference.sampleRate,
+    SAMPLE_RATE,
     referenceAttack.onsetSeconds,
   );
   const synthesizedFrameShape = onsetFrameShape(
@@ -465,7 +461,7 @@ async function analyzePair(region, tuneCents) {
   );
   const referenceDecay = decayShape(
     referenceSamples,
-    reference.sampleRate,
+    SAMPLE_RATE,
     referenceAttack.onsetSeconds,
   );
   const synthesizedDecay = decayShape(
@@ -477,8 +473,8 @@ async function analyzePair(region, tuneCents) {
   const synthesizedProfile = profileFromPartials(synthesizedSpectrum, synthesizedPeak.frequencyHz);
   const referenceEarlyRms = rmsBetween(
     referenceSamples,
-    (referenceAttack.onsetSeconds + 0.02) * reference.sampleRate,
-    (referenceAttack.onsetSeconds + 0.22) * reference.sampleRate,
+    (referenceAttack.onsetSeconds + 0.02) * SAMPLE_RATE,
+    (referenceAttack.onsetSeconds + 0.22) * SAMPLE_RATE,
   );
   const synthesizedEarlyRms = rmsBetween(
     synthesized,
@@ -492,9 +488,7 @@ async function analyzePair(region, tuneCents) {
     referencePlaybackRate,
     velocity,
     sfzVelocityRange: [region.velocityLow, region.velocityHigh],
-    formatValid:
-      reference.sampleRate === SAMPLE_RATE && reference.channels === 2 &&
-      reference.bitsPerSample === 16,
+    formatValid: reference.channels === 2 && [16, 24].includes(reference.bitsPerSample),
     referencePitchCents,
     synthesizedPitchCents,
     pitchGapCents: Math.abs(referencePitchCents - synthesizedPitchCents),
@@ -630,10 +624,7 @@ async function main() {
     return;
   }
 
-  const [sfzText, retunedText] = await Promise.all([
-    readFile(sfzPath, 'utf8'),
-    readFile(retunedSfzPath, 'utf8'),
-  ]);
+  const { sfzText, retunedText } = reference;
   const regions = parseSustainRegions(sfzText);
   const retunedRegions = parseSustainRegions(retunedText);
   const tuneByFile = new Map(retunedRegions.map((region) => [region.file, region.tuneCents]));

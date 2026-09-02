@@ -27,12 +27,11 @@ import {
   buildChromaticJobs,
   resampleChannel,
 } from './compare-reference-grid.mjs';
+import { loadSalamanderReference } from './salamander-reference.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const referenceRoot = path.join(root, 'SalamanderGrandPianoV3_44.1khz16bit');
-const sampleRoot = path.join(referenceRoot, '44.1khz16bit');
-const sfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3.sfz');
-const retunedSfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3Retuned.sfz');
+const reference = await loadSalamanderReference(root);
+const { referenceRoot, sampleRoot, sfzPath, retunedSfzPath } = reference;
 const chromaticMode = process.argv.includes('--chromatic');
 const cachePath = path.join(
   root,
@@ -58,7 +57,7 @@ const shouldWrite = process.argv.includes('--write-report');
 const noFail = process.argv.includes('--no-fail');
 const rebuildCache = process.argv.includes('--rebuild-reference-cache');
 
-const CACHE_SCHEMA_VERSION = 4;
+const CACHE_SCHEMA_VERSION = 5;
 const REPORT_SCHEMA_VERSION = 1;
 const PASS_THRESHOLD = 85;
 const RENDER_SECONDS = 2.55;
@@ -152,7 +151,7 @@ function midiToFrequency(midi) {
 function parseSustainRegions(sfzText) {
   const regions = [];
   for (const line of sfzText.split(/\r?\n/)) {
-    const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.wav/i.exec(line);
+    const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.(wav|flac)/i.exec(line);
     if (!fileMatch) continue;
     const attribute = (name, fallback) => {
       const match = new RegExp(`(?:^|\\s)${name}=(-?\\d+)`).exec(line);
@@ -161,7 +160,7 @@ function parseSustainRegions(sfzText) {
     const note = fileMatch[1].replace(/^./, (letter) => letter.toUpperCase());
     const midi = attribute('pitch_keycenter', noteToMidi(note));
     regions.push({
-      file: `${note}v${Number(fileMatch[2])}.wav`,
+      file: `${note}v${Number(fileMatch[2])}.${fileMatch[3].toLowerCase()}`,
       note,
       layer: Number(fileMatch[2]),
       midi,
@@ -955,15 +954,21 @@ function chromaticPlaybackRate(region, tuneCents) {
   return 2 ** ((100 * region.transpositionSemitones + tuneCents) / 1_200);
 }
 
+function referenceChannelsAtSynthRate(wav) {
+  if (wav.sampleRate === SAMPLE_RATE) return wav.channelSamples;
+  const playbackRate = wav.sampleRate / SAMPLE_RATE;
+  const outputLength = Math.floor(wav.channelSamples[0].length / playbackRate);
+  return wav.channelSamples.map((channel) =>
+    resampleChannel(channel, playbackRate, outputLength));
+}
+
 async function extractChromaticReferenceFeatures({ region, tuneCents }) {
   const wav = await readWav(path.join(sampleRoot, region.file), {
     preserveChannels: true,
   });
-  if (wav.sampleRate !== SAMPLE_RATE || wav.channels !== 2 || wav.bitsPerSample !== 16) {
-    throw new Error(`${region.file}: expected stereo PCM16 at ${SAMPLE_RATE} Hz`);
-  }
-
-  const playbackRate = chromaticPlaybackRate(region, tuneCents);
+  if (wav.channels !== 2) throw new Error(`${region.file}: expected stereo reference audio`);
+  const sampleRateRatio = wav.sampleRate / SAMPLE_RATE;
+  const playbackRate = chromaticPlaybackRate(region, tuneCents) * sampleRateRatio;
   const tailLength = Math.round(REFERENCE_NOISE_TAIL_SECONDS * SAMPLE_RATE);
   const channels = wav.channelSamples.map((channel) => {
     const combined = new Float32Array(MAX_REFERENCE_FRAMES + tailLength);
@@ -1018,16 +1023,15 @@ async function buildReferenceCache(regions, tuneByFile, signature) {
     const wav = await readWav(path.join(sampleRoot, region.file), {
       preserveChannels: true,
     });
-    if (wav.sampleRate !== SAMPLE_RATE || wav.channels !== 2 || wav.bitsPerSample !== 16) {
-      throw new Error(`${region.file}: expected stereo PCM16 at ${SAMPLE_RATE} Hz`);
-    }
+    if (wav.channels !== 2) throw new Error(`${region.file}: expected stereo reference audio`);
     const nominalHz = midiToFrequency(region.midi);
     const tuneCents = tuneByFile.get(region.file) ?? 0;
     const rawExpectedHz = nominalHz / 2 ** (tuneCents / 1_200);
+    const channels = referenceChannelsAtSynthRate(wav);
     entries.push({
       file: region.file,
       features: {
-        ...extractFeatures(wav.channelSamples, wav.sampleRate, rawExpectedHz, {
+        ...extractFeatures(channels, SAMPLE_RATE, rawExpectedHz, {
           estimateNoiseFloor: true,
         }),
         expectedHz: rawExpectedHz,
@@ -1253,10 +1257,7 @@ async function main() {
     return;
   }
 
-  const [sfzText, retunedText] = await Promise.all([
-    readFile(sfzPath, 'utf8'),
-    readFile(retunedSfzPath, 'utf8'),
-  ]);
+  const { sfzText, retunedText } = reference;
   const regions = parseSustainRegions(sfzText);
   const retunedRegions = parseSustainRegions(retunedText);
   const tuneByFile = new Map(retunedRegions.map((region) => [
@@ -1498,7 +1499,7 @@ async function main() {
       referenceFeatureCache: path.relative(root, cachePath),
       cacheSignature: signature,
       audioPolicy:
-        'Reference WAVs are decoded only by this development tool. The cache contains scalar/time-frequency measurements, not PCM, and runtime synthesis reads neither.',
+        'Reference WAV/FLAC audio is decoded only by this development tool. The cache contains scalar/time-frequency measurements, not PCM, and runtime synthesis reads neither.',
     },
     method: {
       renderSeconds: RENDER_SECONDS,

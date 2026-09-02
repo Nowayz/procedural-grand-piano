@@ -27,6 +27,16 @@ test('SFZ sustain parsing retains key zones and open-ended hard velocity', () =>
   ]);
 });
 
+test('SFZ sustain parsing accepts the upstream FLAC sample mapping', () => {
+  const [region] = parseSustainRegions(
+    '<region> lovel=121 hivel=127 sample=A6v16.flac lokey=92 hikey=94 pitch_keycenter=93 tune=-12',
+  );
+  assert.deepEqual(region, {
+    file: 'A6v16.flac', note: 'A6', layer: 16, midi: 93,
+    keyLow: 92, keyHigh: 94, velocityLow: 121, velocityHigh: 127, tuneCents: -12,
+  });
+});
+
 test('chromatic expansion covers all 88 keys at layers 1, 8, and 16', () => {
   const regions = [];
   const tuneByFile = new Map();

@@ -1,4 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises';
+import { spawn } from 'node:child_process';
 
 export function nextPowerOfTwo(value) {
   let result = 1;
@@ -449,8 +450,59 @@ function readAscii(buffer, offset, length) {
   return buffer.toString('ascii', offset, offset + length);
 }
 
+async function readFlac(path, buffer, { preserveChannels, maximumFrames }) {
+  if (buffer.length < 42 || readAscii(buffer, 0, 4) !== 'fLaC' || (buffer[4] & 0x7f) !== 0) {
+    throw new Error(`${path} lacks a leading FLAC STREAMINFO block`);
+  }
+  const packed = buffer.readBigUInt64BE(18);
+  const sampleRate = Number((packed >> 44n) & 0xfffffn);
+  const channels = Number((packed >> 41n) & 0x7n) + 1;
+  const bitsPerSample = Number((packed >> 36n) & 0x1fn) + 1;
+  const sourceFrameCount = Number(packed & 0xfffffffffn);
+  const frameCount = Math.min(sourceFrameCount, Math.max(0, Math.floor(maximumFrames)));
+  const args = ['--decode', '--stdout', '--silent', '--force-raw-format', '--endian=little', '--sign=signed'];
+  if (frameCount < sourceFrameCount) args.push(`--until=${frameCount}`);
+  args.push(path);
+  const chunks = [];
+  await new Promise((resolve, reject) => {
+    const child = spawn('flac', args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    let error = '';
+    child.stdout.on('data', (chunk) => chunks.push(chunk));
+    child.stderr.on('data', (chunk) => { error += chunk; });
+    child.on('error', reject);
+    child.on('close', (code) => code === 0
+      ? resolve()
+      : reject(new Error(`${path}: flac decoder exited ${code}: ${error.trim()}`)));
+  });
+  const raw = Buffer.concat(chunks);
+  const bytesPerSample = bitsPerSample / 8;
+  if (!Number.isInteger(bytesPerSample) || ![16, 24, 32].includes(bitsPerSample)) {
+    throw new Error(`${path}: unsupported FLAC depth ${bitsPerSample}`);
+  }
+  const decodedFrames = Math.min(frameCount, Math.floor(raw.length / (bytesPerSample * channels)));
+  const samples = new Float32Array(decodedFrames);
+  const channelSamples = preserveChannels
+    ? Array.from({ length: channels }, () => new Float32Array(decodedFrames))
+    : undefined;
+  const scale = 2 ** (bitsPerSample - 1);
+  for (let frame = 0; frame < decodedFrames; frame += 1) {
+    let mono = 0;
+    for (let channel = 0; channel < channels; channel += 1) {
+      const position = (frame * channels + channel) * bytesPerSample;
+      const value = raw.readIntLE(position, bytesPerSample) / scale;
+      mono += value;
+      if (channelSamples) channelSamples[channel][frame] = value;
+    }
+    samples[frame] = mono / channels;
+  }
+  return { audioFormat: 'FLAC', channels, sampleRate, bitsPerSample, samples, channelSamples, sourceFrameCount };
+}
+
 export async function readWav(path, { preserveChannels = false, maximumFrames = Number.POSITIVE_INFINITY } = {}) {
   const buffer = await readFile(path);
+  if (readAscii(buffer, 0, 4) === 'fLaC') {
+    return readFlac(path, buffer, { preserveChannels, maximumFrames });
+  }
   if (readAscii(buffer, 0, 4) !== 'RIFF' || readAscii(buffer, 8, 4) !== 'WAVE') {
     throw new Error(`${path} is not a RIFF/WAVE file`);
   }

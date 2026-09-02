@@ -209,9 +209,10 @@ rendered procedural notes.
 
 That path is now a submodule pointing to the canonical Salamander Grand Piano
 repository. Upstream currently ships a newer 48 kHz/24-bit FLAC edition; the
-measurements in this repository were produced from the older 44.1 kHz/16-bit
-WAV edition and remain reproducible from its archived scalar reports, but the
-two sample editions are not byte-identical.
+original measurements were produced from the older 44.1 kHz/16-bit WAV
+edition, and the validation tools now discover and decode either layout. The
+two sample editions are not byte-identical, so rebuilding reports from the
+submodule also refreshes their source signature and scalar feature cache.
 
 The source is Alexander Holm's **Salamander Grand Piano V3**, a Yamaha C5
 recorded with two AKG C414 microphones in an AB arrangement. The source is
@@ -220,9 +221,12 @@ CC BY 3.0. The attached SFZ itself identifies Holm and `CC-by`; its hash and the
 full usage/preprocessing record are in
 [`reports/reference-analysis.json`](reports/reference-analysis.json).
 
-Reference PCM is decoded at its native 44.1 kHz/16-bit rate without resampling.
-Waveform statistics use an arithmetic stereo mid; spectra are measured per
-channel and power-averaged so AB phase cancellation does not erase treble
+Reference PCM is decoded at its native format and bit depth. Direct analysis
+keeps the source sample rate; comparisons resample the upstream 48 kHz FLAC
+edition onto the synthesizer's 44.1 kHz timebase with the same deterministic
+band-limited resampler used for chromatic zones. Waveform statistics use an
+arithmetic stereo mid; spectra are measured per channel and power-averaged so
+AB phase cancellation does not erase treble
 energy. Only scalar measurements are retained in reports. No recording or
 sample-derived waveform is present in the implementation or procedural demos.
 
@@ -294,13 +298,14 @@ deterministic band-limited resampler. These are faithful sampler-playback
 references, not 174 additional recordings. Reference PCM and resampling remain
 development-only and never enter the runtime module.
 
-The chromatic wide grid scores **100/100 PASS**. Its strict companion improved
-from **82.71 to 95.06/100** under unchanged stretch tolerances; it intentionally
+The chromatic wide grid scores **100/100 PASS**. Against the canonical FLAC
+submodule, its strict companion scores **94.30/100** under unchanged stretch
+tolerances; it intentionally
 gives the difficult softest layer one-third of the weight rather than
 one-sixteenth. It still reports `FAIL` because transient color, sustained color,
 three decay gates, and the worst-register surface remain outside their stretch
-targets. The original 480-recording strict suite improved from **86.77 to
-94.15**, with its remaining surface penalty dominated by irregular rank order
+targets. The 480-recording strict suite scores **93.25/100**, with its remaining
+surface penalty dominated by irregular rank order
 among intermediate recorded velocity layers.
 Full results and preprocessing metadata are in
 [`reports/chromatic-reference-convergence.json`](reports/chromatic-reference-convergence.json)

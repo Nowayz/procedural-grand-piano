@@ -18,12 +18,11 @@ import {
   spectrum,
   transientFrameMetrics,
 } from './audio-analysis.mjs';
+import { loadSalamanderReference } from './salamander-reference.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const referenceRoot = path.join(root, 'SalamanderGrandPianoV3_44.1khz16bit');
-const sampleRoot = path.join(referenceRoot, '44.1khz16bit');
-const sfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3.sfz');
-const retunedSfzPath = path.join(referenceRoot, 'SalamanderGrandPianoV3Retuned.sfz');
+const reference = await loadSalamanderReference(root);
+const { referenceRoot, sampleRoot, sfzPath, retunedSfzPath } = reference;
 const outputPath = path.join(root, 'reports', 'reference-analysis.json');
 const shouldWrite = process.argv.includes('--write-report');
 
@@ -56,7 +55,7 @@ function midiToFrequency(midi) {
 function parseNoteRegions(sfzText) {
   const regions = [];
   for (const line of sfzText.split(/\r?\n/)) {
-    const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.wav/i.exec(line);
+    const fileMatch = /sample=[^\s]*[\\/]?([A-G](?:#)?-?\d+)v(\d+)\.(wav|flac)/i.exec(line);
     if (!fileMatch) continue;
     const attribute = (name, fallback) => {
       const match = new RegExp(`(?:^|\\s)${name}=(-?\\d+)`).exec(line);
@@ -64,7 +63,7 @@ function parseNoteRegions(sfzText) {
     };
     const note = fileMatch[1].replace(/^./, (letter) => letter.toUpperCase());
     regions.push({
-      file: `${note}v${Number(fileMatch[2])}.wav`,
+      file: `${note}v${Number(fileMatch[2])}.${fileMatch[3].toLowerCase()}`,
       note,
       layer: Number(fileMatch[2]),
       midi: noteToMidi(note),
@@ -191,7 +190,7 @@ async function analyzeReleaseFile(file) {
 }
 
 async function analyzeA6Focus(tuneCents) {
-  const file = 'A6v16.wav';
+  const file = `A6v16.${reference.extension}`;
   const wav = await readWav(path.join(sampleRoot, file), { preserveChannels: true });
   const attack = attackMetrics(wav.samples, wav.sampleRate);
   const frames = transientFrameMetrics(
@@ -319,10 +318,7 @@ async function main() {
     return;
   }
 
-  const [sfzText, retunedText] = await Promise.all([
-    readFile(sfzPath, 'utf8'),
-    readFile(retunedSfzPath, 'utf8'),
-  ]);
+  const { sfzText, retunedText } = reference;
   const regions = parseNoteRegions(sfzText);
   const retunedRegions = parseNoteRegions(retunedText);
   const retuneByFile = new Map(retunedRegions.map((region) => [region.file, region.tuneCents]));
@@ -345,48 +341,49 @@ async function main() {
   }
 
   const releaseFiles = [
-    'rel1.wav',
-    'rel40.wav',
-    'rel73.wav',
-    'harmSA2.wav',
-    'harmLA2.wav',
-    'harmV3A2.wav',
+    `rel1.${reference.extension}`,
+    `rel40.${reference.extension}`,
+    `rel73.${reference.extension}`,
+    `harmSA2.${reference.extension}`,
+    `harmLA2.${reference.extension}`,
+    `harmV3A2.${reference.extension}`,
   ];
   const releaseAnalyses = [];
   for (const file of releaseFiles) {
     releaseAnalyses.push(await analyzeReleaseFile(file));
   }
-  const a6Focus = await analyzeA6Focus(retuneByFile.get('A6v16.wav') ?? 0);
+  const a6FocusFile = `A6v16.${reference.extension}`;
+  const a6Focus = await analyzeA6Focus(retuneByFile.get(a6FocusFile) ?? 0);
 
   const report = {
     schemaVersion: 2,
     source: {
       suppliedDirectory: path.relative(root, referenceRoot),
-      title: 'Salamander Grand Piano V3 (44.1 kHz / 16-bit WAV edition)',
+      title: `Salamander Grand Piano V3 (${reference.edition} edition)`,
       instrument: 'Yamaha C5 grand piano',
       author: 'Alexander Holm',
       license: 'Creative Commons Attribution 3.0 Unported (CC BY 3.0)',
       sourcePage: 'https://sfzinstruments.github.io/pianos/salamander/',
       licensePage: 'https://creativecommons.org/licenses/by/3.0/',
       recordingContext:
-        'Two AKG C414 microphones in AB position about 12 cm above the strings; original capture 48 kHz/24-bit; this attached edition is 44.1 kHz/16-bit.',
+        `Two AKG C414 microphones in AB position about 12 cm above the strings; analyzed edition is ${reference.edition}.`,
       localSfzHeader:
-        'The supplied SFZ header says Salamander Grand Piano V2, Author: Alexander Holm, License: CC-by; the directory and upstream catalog identify the V3 distribution.',
+        `The analyzed mapping is the ${reference.edition} Salamander Grand Piano V3 distribution from the canonical submodule.`,
       sfzSha256: await hashFile(sfzPath),
       mapping: {
         parsedSustainRegions: regions.length,
         sampledPitchSpacing: 'minor thirds from A0 through C8',
         velocityLayers: 16,
-        sustainGroup: 'amp_veltrack=73, ampeg_release=1 second',
+        sustainGroup: '16 mapped velocity layers with per-note offsets and dedicated undamped high-note release settings',
         additionalLayers:
           'chromatic release noises, three string-resonance release strengths, and two pedal-down/two pedal-up recordings',
       },
       redistribution:
-        'No reference WAV data is copied into source, reports, tests, demos, or runtime output. Only scalar measurements are retained.',
+        'Reference audio stays in the external submodule; only scalar measurements are retained in reports.',
     },
     preprocessing: {
       waveform:
-        'Decode attached PCM16 without resampling; divide signed values by 32768; arithmetic stereo mid is used for waveform peak/RMS/onset.',
+        'Decode the native reference format without resampling; normalize signed PCM by its bit depth; arithmetic stereo mid is used for waveform peak/RMS/onset.',
       spectral:
         'Analyze L/R separately with a Hann window, average power spectra to avoid AB-microphone phase cancellation, and ignore energy above 16 kHz for centroid.',
       onset:
