@@ -13,7 +13,7 @@ const optimizedPath = path.join(temporaryDirectory, 'piano-opt.wasm');
 const check = process.argv.includes('--check');
 
 try {
- execFileSync('emcc', [sourcePath, '-O3', '-msimd128', '-s', 'STANDALONE_WASM=1', '--no-entry', '-s', 'EXPORTED_FUNCTIONS=["_synthesize","_output_ptr","_calibration_ptr"]', '-s', 'INITIAL_MEMORY=12582912', '-s', 'ALLOW_MEMORY_GROWTH=0', '-o', unoptimizedPath], { stdio: 'inherit' });
+ execFileSync('emcc', [sourcePath, '-O3', '-msimd128', '-ffp-contract=fast', '-fno-math-errno', '-fno-trapping-math', '-s', 'STANDALONE_WASM=1', '--no-entry', '-s', 'EXPORTED_FUNCTIONS=["_synthesize","_output_ptr"]', '-s', 'INITIAL_MEMORY=33554432', '-s', 'ALLOW_MEMORY_GROWTH=0', '-o', unoptimizedPath], { stdio: 'inherit' });
  execFileSync('wasm-opt', ['-O4', '--enable-simd', '--enable-bulk-memory', '--enable-nontrapping-float-to-int', unoptimizedPath, '-o', optimizedPath], { stdio: 'inherit' });
  const encoded = readFileSync(optimizedPath).toString('base64');
  const runtime = readFileSync(runtimePath, 'utf8');

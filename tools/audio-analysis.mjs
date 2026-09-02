@@ -7,6 +7,75 @@ export function nextPowerOfTwo(value) {
   return result;
 }
 
+const SAMPLE_RATE_CONVERTER_RADIUS = 6;
+const SAMPLE_RATE_CONVERTER_PHASES = 1_024;
+
+function sinc(value) {
+  if (Math.abs(value) < 1e-12) return 1;
+  const angle = Math.PI * value;
+  return Math.sin(angle) / angle;
+}
+
+/**
+ * Convert sample rate while preserving the recording's physical pitch and
+ * duration. This API deliberately accepts rates, not an arbitrary playback
+ * ratio, so it cannot be used by reference tests to transpose a key zone.
+ */
+export function convertSampleRate(samples, sourceRate, targetRate, outputLength) {
+  if (!Number.isFinite(sourceRate) || sourceRate <= 0) {
+    throw new RangeError('sourceRate must be a positive finite number');
+  }
+  if (!Number.isFinite(targetRate) || targetRate <= 0) {
+    throw new RangeError('targetRate must be a positive finite number');
+  }
+  const naturalLength = Math.floor(samples.length * targetRate / sourceRate);
+  const length = outputLength ?? naturalLength;
+  if (!Number.isInteger(length) || length < 0 || length > naturalLength) {
+    throw new RangeError('outputLength must fit the rate-converted recording');
+  }
+  if (sourceRate === targetRate) return samples.slice(0, length);
+
+  const rate = sourceRate / targetRate;
+  const cutoff = Math.min(1, 1 / rate);
+  const taps = SAMPLE_RATE_CONVERTER_RADIUS * 2;
+  const kernels = new Float64Array(SAMPLE_RATE_CONVERTER_PHASES * taps);
+  for (let phase = 0; phase < SAMPLE_RATE_CONVERTER_PHASES; phase += 1) {
+    const fraction = phase / SAMPLE_RATE_CONVERTER_PHASES;
+    let total = 0;
+    for (let tap = 0; tap < taps; tap += 1) {
+      const offset = tap - SAMPLE_RATE_CONVERTER_RADIUS + 1;
+      const distance = offset - fraction;
+      const coefficient = Math.abs(distance) < SAMPLE_RATE_CONVERTER_RADIUS
+        ? cutoff * sinc(cutoff * distance) * sinc(distance / SAMPLE_RATE_CONVERTER_RADIUS)
+        : 0;
+      kernels[phase * taps + tap] = coefficient;
+      total += coefficient;
+    }
+    for (let tap = 0; tap < taps; tap += 1) kernels[phase * taps + tap] /= total;
+  }
+
+  const output = new Float32Array(length);
+  for (let index = 0; index < length; index += 1) {
+    const position = index * rate;
+    let center = Math.floor(position);
+    let phase = Math.round((position - center) * SAMPLE_RATE_CONVERTER_PHASES);
+    if (phase === SAMPLE_RATE_CONVERTER_PHASES) {
+      center += 1;
+      phase = 0;
+    }
+    const sourceStart = center - SAMPLE_RATE_CONVERTER_RADIUS + 1;
+    let value = 0;
+    for (let tap = 0; tap < taps; tap += 1) {
+      const sourceIndex = sourceStart + tap;
+      if (sourceIndex >= 0 && sourceIndex < samples.length) {
+        value += samples[sourceIndex] * kernels[phase * taps + tap];
+      }
+    }
+    output[index] = value;
+  }
+  return output;
+}
+
 /** In-place radix-2 Cooley-Tukey FFT. */
 function fft(real, imaginary) {
   const size = real.length;

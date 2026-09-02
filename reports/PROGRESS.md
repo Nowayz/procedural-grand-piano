@@ -127,10 +127,10 @@ requested duration, so a longer render preserves the same onset prefix.
 | 100→150 ms beat rebound | −2.47 dB | +5.72 dB | +3.16 dB |
 | 3 s RMS relative to 20 ms | −46.04 dB | −55.94 dB | −55.17 dB |
 
-The current three procedural lines are 1757.34, 1759.06, and 1762.86 Hz at
-approximately −9.1, −0.5, and 0 dB. They align with the principal SFZ-retuned
-reference cluster while leaving the recording's extra coupled side line
-unmodeled. The early frame still has less absolute energy than the recording,
+The procedural model produces three resolvable unison lines. Their spacing is
+checked against the raw recording's measured span, without moving the
+recording or fitting the model to frequency-shifted peak locations. The early
+frame still has less absolute energy than the recording,
 and the 0.25–2 s beating trajectory is only approximate; those remain useful
 limits rather than claims of waveform identity.
 
@@ -190,8 +190,8 @@ direction. Across all sixteen 30-pitch scales, centroid-rank correlation stays
 above the 0.90 gate and 400 ms decay-rank correlation stays above 0.70.
 
 Two diagnostics deliberately retain wider limits. The reference fundamental
-itself has a 25.81-cent p90 residual after SFZ retuning because several bass
-fundamentals are weaker than overtones and C8 remains about 61 cents sharp; the
+itself has a wide pitch residual because several bass fundamentals are weaker
+than overtones and C8 is naturally sharp; the
 procedural renders have 3.54-cent p95 and 4.44-cent maximum local-peak error.
 Reference onset peaks also vary irregularly between adjacent sampled keys, so
 the 32.56 ms attack-difference p90 is paired with the much tighter 7.48 dB p90
@@ -315,7 +315,7 @@ noise floors, and only reliably strong partials contribute to late decay.
 | Strict full-grid state | Score | Important change |
 |---|---:|---|
 | Frozen pre-rebuild baseline | **56.13** | Exposed large sustain, decay, and texture errors |
-| First broadly retuned model | **83.84** | Measured stiffness, modal radiation, bridge admittance, two-stage body |
+| First broadly refined model | **83.84** | Measured stiffness, modal radiation, bridge admittance, two-stage body |
 | Velocity/tail refinement | **84.24** | Cross-register level curve and removal of an ineffective residual path |
 | Current model | **86.77** | Low-mid body/plate diffusion, restored bass low orders, measured C4 upper tail |
 
@@ -417,100 +417,84 @@ performance regression check, not a cross-engine guarantee. Final validation
 passed all **17/17 tests**, 100/100 focused analysis, 90/100 wide-grid analysis,
 the unchanged 86.77/100 strict report, and every full-track check.
 
-## Iteration 10 — all-key chromatic reference coverage
+## Shifted-reference invalidation
 
-The original exhaustive reference suites covered every supplied recording but
-only the 30 physically sampled root pitches. The SFZ key zones were expanded to
-all **88 keys from A0 through C8** at layers **1, 8, and 16**, yielding **264
-reference/render comparisons**. Ninety cells use a sample at its recorded root;
-174 reproduce the SFZ's neighboring ±1-semitone mapping. Retuned-SFZ cents and
-key transposition are applied to development references with a deterministic
-12-tap, 1,024-phase Lanczos resampler. Runtime synthesis remains sample-free.
+The former missing-key evaluation and all coefficient stages optimized against
+it were removed. Validation now uses only the 30 physically recorded keys and
+all 16 of their recorded velocity layers. Reference decoding may convert sample
+rate while preserving physical pitch and duration, but it never applies SFZ
+tuning, key-zone transposition, or any other frequency shift. Generated reports
+and feature caches from the invalidated evaluation are not retained.
 
-Both the permissive grid and the full strict time-frequency analysis now have
-chromatic modes. The latter caches only scalar and spectral measurements;
-reference PCM is neither cached nor redistributed. Unit tests establish exact
-88 × 3 coverage, zone selection, endpoint behavior, deterministic identity,
-and better than 0.1-cent resampler pitch accuracy.
+## Analytic whole-compass equations
 
-| All-key metric, median / p90 | Result |
-|---|---:|
-| Pitch gap | 4.37 / 21.72 cents |
-| Attack difference | 10.42 / 32.00 ms |
-| Fine attack envelope | 1.35 / 3.28 dB |
-| Transient spectrum | 6.20 / 10.49 dB |
-| Sustain spectrum | 7.88 / 12.37 dB |
-| Partial balance | 4.93 / 8.12 dB |
-| Partial decay | 5.46 / 9.33 dB |
-| Multiband decay | 6.23 / 9.19 dB |
+The remaining stiffness, register-radiation, bridge-mobility, and partial-color
+lookup tables were audited against the piano-acoustics literature. String
+inharmonicity is now the sum of bass- and treble-bridge exponential asymptotes
+from Rigaud et al.; mean bridge mobility and radiation are finite Chebyshev
+functions of log-frequency or MIDI register. The partial-color residual surface
+was removed because it duplicated other physical subsystems without an
+independent state equation. These functions are continuously differentiable
+over A0-C8 and perform no neighboring-key interpolation.
 
-The 264-cell wide grid earns **90/100 PASS**. The stricter companion earns
-**82.71/100 FAIL** against the unchanged stretch gates. This lower score is
-informative rather than a regression: layer 1 now contributes one-third of all
-cells instead of one-sixteenth, magnifying the already-known soft-treble
-weakness. The all-key report nevertheless confirms monotonic dynamics and
-brightness across all 88 three-point velocity curves.
+The final direct-reference results are **90/100 PASS** on the broad 480-cell
+scan and **86.02/100 FAIL** on the strict scan. The prior strict score was
+88.13, so the cost of replacing fitted per-partial/key structure with the
+physical scale law and smooth reduced envelopes is 2.11 points. That regression
+is retained explicitly: the implementation is now more defensible as a
+continuous physical model, while the report still exposes the instrument-
+specific timbre and decay detail that the reduced equations do not explain.
 
-Final validation completed in 18.5 seconds with **20/20 tests**, 100/100 focused
-analysis, both wide grids at 90/100, the unchanged 86.77/100 recorded-root
-strict score, the new 82.71/100 chromatic strict score, and every track check.
-Repeated 16-worker chromatic reports and their cached reference features were
-byte-identical; all four pre-existing deterministic reports were also unchanged.
+## Continuous soundboard mobility baseline
 
-## Iteration 11 — reduced physical loss and all-key convergence
+The fixed ten-row soundboard specification and 22-row impact-mode table were
+replaced by compact continuous profiles. Broad soundboard sections are
+log-frequency quadrature points whose gain combines low-frequency radiation
+efficiency with smooth mean-mobility loss; Q rises toward local inter-rib
+motion. Impact frequencies use a power-warped retained modal density, decay is
+`tau(f)`, and bridge participation combines alternating modal sign with a
+smooth 2.35 kHz mobility lobe. Named felt, air, body, and plate noise bands
+remain phenomenological rather than being mislabeled as structural modes.
 
-The all-key suite was used as the primary optimization surface: every A0–C8
-key at SFZ layers 1, 8, and 16, for **264 independent reference/render pairs**.
-The model was not fitted by adding stored spectral frames. Research on stiff
-strings, nonlinear felt contact, bridge impedance, soundboard modal density,
-and rib-localized waveguides led to three compact reduced terms:
+Calibration retained the physical baseline and adjusted only bounded smooth
+surfaces. A held-out modal-drive fit selected a ±4.5 dB correction range, while
+a held-out loss fit applies at most ±3 dB/s before converting the resulting
+positive loss back to T60. On all 480 directly recorded sustain samples, the
+wide scan remains **90/100 PASS** and strict fidelity rises to **87.86/100**.
+The strict stretch gates still report failures in transient/sustain spectrum,
+decay, and cross-register surfaces; those residuals remain visible rather than
+being encoded as per-note lookup data.
 
-- modal T60 now has the frequency-squared loss expected from the damped
-  stiff-string equation, followed by a measured bridge-radiation loss rate;
-- bridge/soundboard radiation uses an absolute-frequency mobility surface, the
-  reduced `Y(omega)=V/F` description supported by soundboard measurements;
-- independent fast, slow, and polarization poles retain coupled-unison
-  beating and two-stage decay rather than sharing an envelope.
+## Lowest retained plate mode correction
 
-Only scalar quarter/half-dB coefficients are packed in the module. The complete
-payload is 1,845 bytes and contains no PCM, waveform, phase, impulse response,
-or sample decoder. The physical sources, equations, and implementation mapping
-are recorded in `reports/PHYSICS_RESEARCH.md`.
+Signed sustain residuals exposed excess energy below 100 Hz through the middle
+register, where it cannot be attributed to the played string partials. The
+source was the lowest retained impact-board mode: its generic bridge
+participation was too large after modal-density reduction. Scaling only that
+58 Hz mode's coupling to 0.45 raises the complete strict score from
+**87.86/100 to 88.19/100** and makes the global-level criterion pass. A sweep
+of 0.25, 0.45, and 0.55 rejected both stronger and weaker corrections.
 
-| Retained stage | Chromatic strict score |
-|---|---:|
-| Initial all-key model | 82.71 |
-| Radiation/velocity surface | 91.59 |
-| Quadratic and bridge loss | 92.54 |
-| Radiated-board loss | 93.20 |
-| Low-order modal color | 94.20 |
-| Impact mobility color | 94.52 |
-| Absolute-frequency mobility plus reduction | **95.06** |
+A separate smooth upper-treble boost around string partials 2–3 was rejected:
+it reduced the quick score from 87.14 to 86.99 and worsened C8 partial balance.
+The remaining A7/C8 error is therefore not explained by static missing-partial
+gain. The next credible model is dynamic termination/bridge-admittance coupling
+or an explicit duplex/aftersound path, validated against time-resolved signed
+residuals before it is admitted to the runtime.
 
-Several plausible additions were measured and removed: a six-band impact
-surface (+0.01), a second sustain-color surface (+0.02), a high-partial table
-(+0.07 for substantially more data), a longitudinal phantom-partial term
-(at most +0.05), and higher-Q sparse soundboard modes (negative). A finer
-static fit could therefore not justify its code or its risk of copying one
-instrument's defects.
+## String–bridge termination coupling
 
-The final focused audit initially exposed three regressions hidden by the
-aggregate score. A wound-bass hammer-energy transition restored A0 dynamics;
-the bottom keys gained a short register-dependent causal onset ramp; and a
-narrow C4/hard-strike bridge-loss term restored the measured reversal between
-fundamental and fourth-partial decay. The top unison spread also narrows above
-C7 so the strongest C8 line remains within the three-cent pitch guard. None of
-the corresponding tests was relaxed.
+The existing two-stage string bank represented different resistive losses but
+gave its fast and slow normal modes identical bridge participation. A bounded
+termination state now lets the weakly radiating slow upper-treble mode emerge
+over 700 ms. Participation is smooth in register, partial number, and strike
+velocity, and its observation gain remains between 0.1 and 1; it adds no
+feedback loop and cannot move or destabilize the modal poles.
 
-Final runtime size is **40,639 bytes raw / 12,305 bytes gzip-9**, guarded at
-41,000 / 12,500 bytes. Compared with the exact 31,052 / 8,553-byte compact
-model, the added 3.6 KiB compressed buys measured behavior across the entire
-keyboard rather than general infrastructure.
-
-The final `npm run validate` completed in **18.5 seconds** with **20/20 tests**,
-**100/100** focused behavior, **90/100 PASS** for the 480-recording wide grid,
-**100/100 PASS** for the 264-cell all-key wide grid, **94.15/100** for the
-original strict suite, **95.06/100** for the all-key strict suite, and all
-eleven full-track checks. Strict reports retain their remaining category-gate
-failures. The six demos and the 157.067-second, 549-event BWV 846 track were
-regenerated from this exact model.
+Reactive alternatives were rejected before retention. Frequency-splitting the
+slow mode by 1.5 cents lowered quick strict fidelity by 0.53 points, while a
+0.25-cent split lowered exhaustive fidelity by 0.27. The retained aftersound
+state moves the current exhaustive baseline from **88.24 to 88.25**, improves
+partial-timbre median from **5.0468 to 5.0326 dB**, and improves multiband-decay
+p90 from **8.6779 to 8.6663 dB**. The small result is reported without rounding
+it into a larger claim: C8 remains a dominant unresolved offender.

@@ -57,8 +57,7 @@ const FALLBACK_A6_TARGET = {
   ],
   trajectoryDb: [0, -6.541, -18.22, -12.504, -22.924, -19.768, -27.372,
     -38.636, -46.831, -49.512, -55.943],
-  unisonSpanHz: 5.6899,
-  unisonPeaksHz: [1_757.2882, 1_758.8607, 1_761.6939, 1_762.9781],
+  unisonSpanHz: 5.7295,
 };
 const A6_BAND_NAMES = [
   'lowBody',
@@ -221,10 +220,7 @@ function focusedTarget(referenceTargets) {
     frameBandsDb: target.transientFrames.map((frame) =>
       A6_BAND_NAMES.map((name) => frame.bandRelativeDb[name])),
     trajectoryDb: target.rmsTrajectory.map((point) => point.relativeDb),
-    unisonSpanHz: target.unisonCluster.retunedSpanHz,
-    unisonPeaksHz: target.unisonCluster.peaks.map(
-      (peak) => peak.sfzRetunedFrequencyHz,
-    ),
+    unisonSpanHz: target.unisonCluster.spanHz,
   };
 }
 
@@ -272,9 +268,6 @@ function analyzeFocusedA6(target) {
   const trajectoryMaeDb = mean(trajectory.map(
     (point, index) => Math.abs(point.relativeDb - target.trajectoryDb[index]),
   ));
-  const targetToNearestPeakErrorsHz = target.unisonPeaksHz.map((targetHz) =>
-    Math.min(...cluster.peaks.map((peak) => Math.abs(peak.frequencyHz - targetHz))));
-
   return {
     velocity,
     samples,
@@ -289,7 +282,6 @@ function analyzeFocusedA6(target) {
     bandMaeDb,
     maximumBandErrorDb: Math.max(...bandErrors),
     trajectoryMaeDb,
-    targetToNearestPeakMaeHz: mean(targetToNearestPeakErrorsHz),
     earlyBeatReboundDb: trajectory[3].relativeDb - trajectory[2].relativeDb,
   };
 }
@@ -614,20 +606,18 @@ async function main() {
     'A6 resolves a reference-scale unequal unison cluster',
     5,
     focusedA6.cluster.peakCount >= 3 &&
-      Math.abs(focusedA6.cluster.spanHz - a6Target.unisonSpanHz) <= 1.5 &&
-      focusedA6.targetToNearestPeakMaeHz <= 1.5,
+      Math.abs(focusedA6.cluster.spanHz - a6Target.unisonSpanHz) <= 1.5,
     {
       peakCount: focusedA6.cluster.peakCount,
       spanHz: round(focusedA6.cluster.spanHz, 4),
       referenceSpanHz: round(a6Target.unisonSpanHz, 4),
-      referenceToNearestPeakMaeHz: round(focusedA6.targetToNearestPeakMaeHz, 4),
       peaks: focusedA6.cluster.peaks.map((peak) => ({
         frequencyHz: round(peak.frequencyHz, 4),
         relativeDb: round(peak.relativeDb, 3),
       })),
     },
-    '>=3 lines, span within 1.5 Hz of 5.69 Hz, nearest-line MAE <=1.5 Hz',
-    'Resolved line spacing predicts unison beating; microphone phase and tuning drift make exact amplitudes inappropriate targets.',
+    '>=3 lines and span within 1.5 Hz of the directly recorded 5.73 Hz span',
+    'Resolved line spacing predicts unison beating without calibrating absolute oscillator frequencies to a retuned recording.',
   );
 
   const focusedTrajectoryAt100ms = focusedA6.trajectory[2].relativeDb;

@@ -10,6 +10,7 @@ import {
   attackMetrics,
   bandPower,
   centsDifference,
+  convertSampleRate,
   nextPowerOfTwo,
   partialPeaks,
   peakNear,
@@ -23,41 +24,29 @@ import {
   parallelMap,
   serveParallelMap,
 } from './parallel-map.mjs';
-import {
-  buildChromaticJobs,
-  resampleChannel,
-} from './compare-reference-grid.mjs';
 import { loadSalamanderReference } from './salamander-reference.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const reference = await loadSalamanderReference(root);
-const { referenceRoot, sampleRoot, sfzPath, retunedSfzPath } = reference;
-const chromaticMode = process.argv.includes('--chromatic');
-const cachePath = path.join(
-  root,
-  'reports',
-  chromaticMode
-    ? 'chromatic-reference-fidelity-features.json'
-    : 'reference-fidelity-features.json',
-);
+const { sampleRoot, sfzPath } = reference;
+const cachePath = path.join(root, 'reports', 'reference-fidelity-features.json');
 const quickMode = process.argv.includes('--quick');
 const baselineSnapshot = process.argv.includes('--baseline-snapshot');
 const reportPath = path.join(
   root,
   'reports',
-  chromaticMode
-    ? 'chromatic-strict-fidelity-report.json'
-    : baselineSnapshot
+  baselineSnapshot
     ? 'strict-fidelity-baseline.json'
     : quickMode
       ? 'strict-fidelity-quick.json'
       : 'strict-fidelity-report.json',
 );
 const shouldWrite = process.argv.includes('--write-report');
+const shouldWriteSynthFeatures = process.argv.includes('--write-synth-features');
 const noFail = process.argv.includes('--no-fail');
 const rebuildCache = process.argv.includes('--rebuild-reference-cache');
 
-const CACHE_SCHEMA_VERSION = 5;
+const CACHE_SCHEMA_VERSION = 6;
 const REPORT_SCHEMA_VERSION = 1;
 const PASS_THRESHOLD = 85;
 const RENDER_SECONDS = 2.55;
@@ -76,8 +65,6 @@ const AUDITORY_BAND_EDGES_HZ = Object.freeze([
 ]);
 const DB_FLOOR = -72;
 const SYNTHESIS_WORKER_TASK = 'strict-reference-synthesis';
-const CHROMATIC_REFERENCE_WORKER_TASK = 'strict-chromatic-reference';
-const REFERENCE_NOISE_TAIL_SECONDS = 1.5;
 
 function clamp(value, minimum, maximum) {
   return Math.min(maximum, Math.max(minimum, value));
@@ -158,17 +145,13 @@ function parseSustainRegions(sfzText) {
       return match ? Number(match[1]) : fallback;
     };
     const note = fileMatch[1].replace(/^./, (letter) => letter.toUpperCase());
-    const midi = attribute('pitch_keycenter', noteToMidi(note));
     regions.push({
       file: `${note}v${Number(fileMatch[2])}.${fileMatch[3].toLowerCase()}`,
       note,
       layer: Number(fileMatch[2]),
-      midi,
-      keyLow: attribute('lokey', midi),
-      keyHigh: attribute('hikey', midi),
+      midi: attribute('pitch_keycenter', noteToMidi(note)),
       velocityLow: attribute('lovel', 0),
       velocityHigh: attribute('hivel', 127),
-      tuneCents: attribute('tune', 0),
     });
   }
   return regions.sort((a, b) => a.midi - b.midi || a.layer - b.layer);
@@ -250,7 +233,13 @@ function activeProfileMae(reference, synthesized, thresholdDb = -58) {
   return count > 0 ? total / count : 0;
 }
 
-function matrixProfileMae(reference, synthesized, thresholdDb = -58, activeFrames, maximumColumns = Number.POSITIVE_INFINITY) {
+function matrixProfileMae(
+  reference,
+  synthesized,
+  thresholdDb = -58,
+  activeFrames,
+  maximumColumns = Number.POSITIVE_INFINITY,
+) {
   const values = [];
   const length = Math.min(reference.length, synthesized.length);
   for (let index = 0; index < length; index += 1) {
@@ -507,7 +496,12 @@ function averageModulation(channels, sampleRate, onsetSeconds, frequencyHz) {
   };
 }
 
-export function extractFeatures(channels, sampleRate, expectedHz, { estimateNoiseFloor = false } = {}) {
+export function extractFeatures(
+  channels,
+  sampleRate,
+  expectedHz,
+  { estimateNoiseFloor = false } = {},
+) {
   const mono = channels.length === 1
     ? channels[0]
     : (() => {
@@ -621,7 +615,12 @@ export function extractFeatures(channels, sampleRate, expectedHz, { estimateNois
   };
 }
 
-function decayMatrixMae(referencePowers, synthesizedPowers, activeThresholdDb = -50, maximumColumns = Number.POSITIVE_INFINITY) {
+function decayMatrixMae(
+  referencePowers,
+  synthesizedPowers,
+  activeThresholdDb = -50,
+  maximumColumns = Number.POSITIVE_INFINITY,
+) {
   const anchorIndex = 1;
   const referenceAnchor = referencePowers[anchorIndex];
   const synthesizedAnchor = synthesizedPowers[anchorIndex];
@@ -946,95 +945,35 @@ function lowerBoundQuality(value, fullCredit, zeroCredit) {
   return (value - zeroCredit) / (fullCredit - zeroCredit);
 }
 
-function chromaticReferenceKey(region) {
-  return `${region.midi}:${region.layer}`;
-}
-
-function chromaticPlaybackRate(region, tuneCents) {
-  return 2 ** ((100 * region.transpositionSemitones + tuneCents) / 1_200);
-}
-
-function referenceChannelsAtSynthRate(wav) {
-  if (wav.sampleRate === SAMPLE_RATE) return wav.channelSamples;
-  const playbackRate = wav.sampleRate / SAMPLE_RATE;
-  const outputLength = Math.floor(wav.channelSamples[0].length / playbackRate);
-  return wav.channelSamples.map((channel) =>
-    resampleChannel(channel, playbackRate, outputLength));
-}
-
-async function extractChromaticReferenceFeatures({ region, tuneCents }) {
-  const wav = await readWav(path.join(sampleRoot, region.file), {
-    preserveChannels: true,
-  });
-  if (wav.channels !== 2) throw new Error(`${region.file}: expected stereo reference audio`);
-  const sampleRateRatio = wav.sampleRate / SAMPLE_RATE;
-  const playbackRate = chromaticPlaybackRate(region, tuneCents) * sampleRateRatio;
-  const tailLength = Math.round(REFERENCE_NOISE_TAIL_SECONDS * SAMPLE_RATE);
-  const channels = wav.channelSamples.map((channel) => {
-    const combined = new Float32Array(MAX_REFERENCE_FRAMES + tailLength);
-    combined.set(resampleChannel(channel, playbackRate, MAX_REFERENCE_FRAMES));
-    const tailSourceOffset = Math.max(0, channel.length - tailLength * playbackRate);
-    combined.set(
-      resampleChannel(channel, playbackRate, tailLength, tailSourceOffset),
-      MAX_REFERENCE_FRAMES,
-    );
-    return combined;
-  });
-  const expectedHz = midiToFrequency(region.midi);
-  return {
-    key: chromaticReferenceKey(region),
-    file: region.file,
-    note: region.note,
-    midi: region.midi,
-    layer: region.layer,
-    sourceNote: region.sourceNote,
-    sourceMidi: region.sourceMidi,
-    transpositionSemitones: region.transpositionSemitones,
-    tuneCents,
-    playbackRate,
-    features: {
-      ...extractFeatures(channels, SAMPLE_RATE, expectedHz, {
-        estimateNoiseFloor: true,
-      }),
-      expectedHz,
-    },
-  };
-}
-
-async function cacheSignature(regions, sfzText, retunedText) {
+async function cacheSignature(regions, sfzText) {
   const first = await stat(path.join(sampleRoot, regions[0].file));
   const last = await stat(path.join(sampleRoot, regions.at(-1).file));
-  const hash = createHash('sha256')
-    .update(`${CACHE_SCHEMA_VERSION}\n${RENDER_SECONDS}\n${sfzText}\n${retunedText}\n`);
-  if (chromaticMode) {
-    hash.update(
-      `chromatic-v1:${REFERENCE_NOISE_TAIL_SECONDS}:lanczos-12x1024\n`,
-    );
-  }
-  return hash
+  return createHash('sha256')
+    .update(`${CACHE_SCHEMA_VERSION}\n${RENDER_SECONDS}\nraw-direct-recordings\n${sfzText}\n`)
     .update(`${first.size}:${first.mtimeMs}:${last.size}:${last.mtimeMs}`)
     .digest('hex');
 }
 
-async function buildReferenceCache(regions, tuneByFile, signature) {
+async function buildReferenceCache(regions, signature) {
   const entries = [];
   let completed = 0;
   for (const region of regions) {
     const wav = await readWav(path.join(sampleRoot, region.file), {
       preserveChannels: true,
     });
-    if (wav.channels !== 2) throw new Error(`${region.file}: expected stereo reference audio`);
+    if (wav.channels !== 2 || ![16, 24].includes(wav.bitsPerSample)) {
+      throw new Error(`${region.file}: expected stereo PCM16/24 reference audio`);
+    }
     const nominalHz = midiToFrequency(region.midi);
-    const tuneCents = tuneByFile.get(region.file) ?? 0;
-    const rawExpectedHz = nominalHz / 2 ** (tuneCents / 1_200);
-    const channels = referenceChannelsAtSynthRate(wav);
+    const channels = wav.channelSamples.map((channel) =>
+      convertSampleRate(channel, wav.sampleRate, SAMPLE_RATE));
     entries.push({
       file: region.file,
       features: {
-        ...extractFeatures(channels, SAMPLE_RATE, rawExpectedHz, {
+        ...extractFeatures(channels, SAMPLE_RATE, nominalHz, {
           estimateNoiseFloor: true,
         }),
-        expectedHz: rawExpectedHz,
+        expectedHz: nominalHz,
       },
     });
     completed += 1;
@@ -1048,6 +987,8 @@ async function buildReferenceCache(regions, tuneByFile, signature) {
     signature,
     method: {
       decodedSeconds: RENDER_SECONDS,
+      referencePitchPolicy:
+        'Direct recorded keys only; sample-rate conversion preserves pitch and duration; no SFZ tuning or key-zone transposition.',
       onsetEnvelope: '4 ms power-RMS windows at 2 ms hops through 120 ms',
       transientSpectrum: 'five onset-aligned windows from 0–110 ms in 14 auditory bands',
       sustainSpectrum: `${SUSTAIN_STARTS_SECONDS.length} adaptive windows at ${SUSTAIN_STARTS_SECONDS.join(', ')} seconds`,
@@ -1062,54 +1003,14 @@ async function buildReferenceCache(regions, tuneByFile, signature) {
   return cache;
 }
 
-async function buildChromaticReferenceCache(jobs, signature) {
-  const workerCount = comparisonWorkerCount(process.argv.slice(2), jobs.length);
-  const entries = await parallelMap({
-    items: jobs,
-    moduleUrl: new URL(import.meta.url),
-    task: CHROMATIC_REFERENCE_WORKER_TASK,
-    workerCount,
-    localMapper: extractChromaticReferenceFeatures,
-    onProgress: progressReporter(
-      'measured chromatic reference features',
-      jobs.length,
-      workerCount,
-      8,
-    ),
-  });
-  process.stdout.write('\n');
-  const cache = {
-    schemaVersion: CACHE_SCHEMA_VERSION,
-    signature,
-    method: {
-      decodedSeconds: RENDER_SECONDS,
-      referencePlayback:
-        'All 88 SFZ key mappings at layers 1, 8, and 16; Retuned-SFZ tune cents; deterministic 12-tap, 1024-phase Lanczos resampling.',
-      noiseFloor:
-        `${REFERENCE_NOISE_TAIL_SECONDS} seconds from each source tail are resampled separately for noise-floor estimation.`,
-      onsetEnvelope: '4 ms power-RMS windows at 2 ms hops through 120 ms',
-      transientSpectrum: 'five onset-aligned windows from 0–110 ms in 14 auditory bands',
-      sustainSpectrum: `${SUSTAIN_STARTS_SECONDS.length} adaptive windows at ${SUSTAIN_STARTS_SECONDS.join(', ')} seconds`,
-      partials: 'up to 16 locally resolved stiff-string partials, tracked through all sustain windows',
-      modulation: 'detrended narrowband fundamental envelope from 0.12–1.85 seconds',
-    },
-    entries,
-  };
-  await mkdir(path.dirname(cachePath), { recursive: true });
-  await writeFile(cachePath, `${JSON.stringify(cache)}\n`);
-  console.log(`wrote ${path.relative(root, cachePath)}`);
-  return cache;
-}
-
-async function loadOrBuildReferenceCache(regions, tuneByFile, signature, chromaticJobs) {
-  const expectedEntries = chromaticJobs?.length ?? regions.length;
+async function loadOrBuildReferenceCache(regions, signature) {
   if (!rebuildCache) {
     try {
       const cache = JSON.parse(await readFile(cachePath, 'utf8'));
       if (
         cache.schemaVersion === CACHE_SCHEMA_VERSION &&
         cache.signature === signature &&
-        cache.entries.length === expectedEntries
+        cache.entries.length === regions.length
       ) {
         console.log(`loaded ${path.relative(root, cachePath)}`);
         return cache;
@@ -1118,16 +1019,12 @@ async function loadOrBuildReferenceCache(regions, tuneByFile, signature, chromat
       // A missing, stale, or interrupted cache is safely rebuilt from source audio.
     }
   }
-  return chromaticJobs
-    ? buildChromaticReferenceCache(chromaticJobs, signature)
-    : buildReferenceCache(regions, tuneByFile, signature);
+  return buildReferenceCache(regions, signature);
 }
 
 function serializePair(pair) {
   const fields = [
     'velocity',
-    'referenceCentroidHz',
-    'synthesizedCentroidHz',
     'levelResidualDb',
     'attackPeakDifferenceMs',
     'attackEnvelopeMaeDb',
@@ -1146,80 +1043,12 @@ function serializePair(pair) {
     'referencePitchCents',
     'synthesizedPitchCents',
   ];
-  const spectralRows = [
-    ...pair.diagnosticSurfaces.transientSpectrumSignedDb,
-    ...pair.diagnosticSurfaces.sustainSpectrumSignedDb,
-  ];
-  const spectralZones = [[0, 5], [5, 8], [8, 10], [10, 14]].map(([start, end]) =>
-    median(spectralRows.flatMap((row) => row.slice(start, end))));
-  const subBassResidual =
-    median(spectralRows.flatMap((row) => row.slice(0, 2))) -
-    median(spectralRows.flatMap((row) => row.slice(2, 5)));
-  const airResidual =
-    median(spectralRows.flatMap((row) => row.slice(12, 14))) -
-    median(spectralRows.flatMap((row) => row.slice(10, 12)));
-  const sustainBandResidualDb = Array.from({ length: AUDITORY_BAND_EDGES_HZ.length - 1 },
-    (_, band) => median(
-      pair.diagnosticSurfaces.sustainSpectrumSignedDb.map((row) => row[band]),
-    ));
-  const transientBandResidualDb = Array.from({ length: AUDITORY_BAND_EDGES_HZ.length - 1 },
-    (_, band) => median(
-      pair.diagnosticSurfaces.transientSpectrumSignedDb.map((row) => row[band]),
-    ));
-  const partialTimbreResidualDb = Array.from({ length: 16 }, (_, partial) =>
-    median(pair.diagnosticSurfaces.partialTimbreSignedDb.map((row) => row[partial])));
-  const decaySlope = (surface, start, end) => {
-    let numerator = 0;
-    let denominator = 0;
-    for (let frame = 2; frame < surface.length; frame += 1) {
-      const elapsed = SUSTAIN_STARTS_SECONDS[frame] - SUSTAIN_STARTS_SECONDS[1];
-      const residual = median(surface[frame].slice(start, end));
-      if (!Number.isFinite(residual)) continue;
-      numerator += elapsed * residual;
-      denominator += elapsed * elapsed;
-    }
-    return denominator > 0 ? numerator / denominator : Number.NaN;
-  };
-  const decaySurface = pair.diagnosticSurfaces.multibandDecaySignedDb;
   return {
     file: pair.file,
     note: pair.note,
     midi: pair.midi,
-    ...(pair.referenceResampled
-      ? {
-          sourceNote: pair.sourceNote,
-          sourceMidi: pair.sourceMidi,
-          transpositionSemitones: pair.transpositionSemitones,
-          sfzTuneCents: pair.tuneCents,
-          referencePlaybackRate: round(pair.referencePlaybackRate, 8),
-          directSamplePitch: pair.transpositionSemitones === 0,
-        }
-      : {}),
     layer: pair.layer,
     register: pair.register,
-    spectralBalanceResidualDb: {
-      subBass: round(subBassResidual),
-      low: round(spectralZones[0] - spectralZones[1]),
-      center: round(spectralZones[1] - spectralZones[2]),
-      high: round(spectralZones[3] - spectralZones[2]),
-      air: round(airResidual),
-    },
-    sustainBandResidualDb: sustainBandResidualDb.map((value) => round(value)),
-    transientBandResidualDb: transientBandResidualDb.map((value) => round(value)),
-    partialTimbreResidualDb: partialTimbreResidualDb.map((value) => round(value)),
-    partialDecayResidualDb: pair.diagnosticSurfaces.partialDecaySignedDb.map(
-      (row) => row.map((value) => round(value)),
-    ),
-    decaySlopeResidualDbPerSecond: {
-      low: round(decaySlope(decaySurface, 0, 5)),
-      center: round(decaySlope(decaySurface, 5, 8)),
-      mid: round(decaySlope(decaySurface, 8, 10)),
-      high: round(decaySlope(decaySurface, 10, 14)),
-    },
-    decaySlopeResidualDbPerSecondBands: Array.from(
-      { length: AUDITORY_BAND_EDGES_HZ.length - 1 },
-      (_, band) => round(decaySlope(decaySurface, band, band + 1)),
-    ),
     ...Object.fromEntries(fields.map((field) => [field, round(pair[field])])),
   };
 }
@@ -1246,43 +1075,21 @@ function progressReporter(label, total, workerCount, interval) {
 }
 
 async function main() {
-  if (chromaticMode && quickMode) {
-    throw new Error('--chromatic already selects three layers; it cannot be combined with --quick');
-  }
   try {
     await access(sfzPath);
-    await access(retunedSfzPath);
   } catch {
     console.log('SKIP strict reference fidelity: supplied SFZ/reference folder is absent');
     return;
   }
 
-  const { sfzText, retunedText } = reference;
+  const { sfzText } = reference;
   const regions = parseSustainRegions(sfzText);
-  const retunedRegions = parseSustainRegions(retunedText);
-  const tuneByFile = new Map(retunedRegions.map((region) => [
-    region.file,
-    region.tuneCents,
-  ]));
-  const chromaticJobs = chromaticMode
-    ? buildChromaticJobs(regions, tuneByFile)
-    : undefined;
-  const analysisRegions = chromaticMode
-    ? chromaticJobs.map(({ region }) => region)
-    : quickMode
-      ? regions.filter(({ layer }) => [1, 6, 11, 16].includes(layer))
-      : regions;
-  const signature = await cacheSignature(regions, sfzText, retunedText);
-  const referenceCache = await loadOrBuildReferenceCache(
-    regions,
-    tuneByFile,
-    signature,
-    chromaticJobs,
-  );
-  const referenceByKey = new Map(referenceCache.entries.map((entry) => [
-    entry.key ?? entry.file,
-    entry,
-  ]));
+  const analysisRegions = quickMode
+    ? regions.filter(({ layer }) => [1, 6, 11, 16].includes(layer))
+    : regions;
+  const signature = await cacheSignature(regions, sfzText);
+  const referenceCache = await loadOrBuildReferenceCache(regions, signature);
+  const referenceByFile = new Map(referenceCache.entries.map((entry) => [entry.file, entry.features]));
   const workerCount = comparisonWorkerCount(process.argv.slice(2), analysisRegions.length);
   const synthesizedFeatures = await parallelMap({
     items: analysisRegions,
@@ -1298,21 +1105,29 @@ async function main() {
     ),
   });
   process.stdout.write('\n');
+  if (shouldWriteSynthFeatures) {
+    const synthFeaturePath = path.join(root, 'reports', 'synth-fidelity-features.json');
+    await writeFile(synthFeaturePath, `${JSON.stringify({
+      schemaVersion: CACHE_SCHEMA_VERSION,
+      entries: analysisRegions.map((region, index) => ({
+        file: region.file,
+        midi: region.midi,
+        layer: region.layer,
+        velocity: (region.velocityLow + region.velocityHigh) / (2 * 127),
+        features: synthesizedFeatures[index],
+      })),
+    })}\n`);
+    console.log(`wrote ${path.relative(root, synthFeaturePath)}`);
+  }
   const pairs = [];
   for (let index = 0; index < analysisRegions.length; index += 1) {
     const region = analysisRegions[index];
     const velocity = (region.velocityLow + region.velocityHigh) / (2 * 127);
     const synthesized = synthesizedFeatures[index];
-    const referenceEntry = referenceByKey.get(
-      chromaticMode ? chromaticReferenceKey(region) : region.file,
-    );
-    if (!referenceEntry) throw new Error(`Missing reference features for ${region.note} layer ${region.layer}`);
-    const reference = referenceEntry.features;
+    const reference = referenceByFile.get(region.file);
     const comparison = compareFeatures(reference, synthesized);
     pairs.push({
       ...region,
-      tuneCents: referenceEntry.tuneCents,
-      referencePlaybackRate: referenceEntry.playbackRate,
       velocity,
       register: registerName(region.midi),
       referenceEarlyRms: reference.earlyRms,
@@ -1368,22 +1183,12 @@ async function main() {
 
   checks.push({
     category: 'coverage',
-    name: chromaticMode
-      ? 'all 88 SFZ-mapped keys are independently analyzed at low, midpoint, and hard velocity'
-      : 'every supplied sustain recording is independently analyzed',
+    name: 'every supplied sustain recording is independently analyzed',
     weight: 5,
-    earned:
-      pairs.length === analysisRegions.length &&
-      referenceCache.entries.length === (chromaticMode ? 264 : 480)
-        ? 5
-        : 0,
-    passed:
-      pairs.length === analysisRegions.length &&
-      referenceCache.entries.length === (chromaticMode ? 264 : 480),
+    earned: pairs.length === analysisRegions.length && referenceCache.entries.length === 480 ? 5 : 0,
+    passed: pairs.length === analysisRegions.length && referenceCache.entries.length === 480,
     actual: { references: referenceCache.entries.length, synthesizedRenders: pairs.length },
-    target: chromaticMode
-      ? '264 SFZ-playback references and fresh renders = 88 pitches × layers 1, 8, and 16'
-      : quickMode
+    target: quickMode
       ? '120 representative renders (30 pitches × layers 1, 6, 11, 16) backed by the 480-reference cache'
       : '480 references and 480 new procedural renders',
     proxy: 'Direct coverage criterion.',
@@ -1490,29 +1295,19 @@ async function main() {
     possible,
     failedCriticalChecks,
     passed: score >= PASS_THRESHOLD && failedCriticalChecks === 0,
-    baselineIntent: chromaticMode
-      ? 'This companion strict suite exposes interpolation behavior on every key while sampling low, midpoint, and hard velocity; it uses the same stretch targets as the 480-recorded-root suite.'
-      : 'This score deliberately supersedes the permissive 100-point grid. It is expected to fail until time-varying timbre, decay, texture, and global level residuals are corrected.',
+    baselineIntent:
+      'This score deliberately supersedes the permissive 100-point grid. It is expected to fail until time-varying timbre, decay, texture, and global level residuals are corrected.',
     source: {
       sfz: path.relative(root, sfzPath),
-      retunedSfz: path.relative(root, retunedSfzPath),
       referenceFeatureCache: path.relative(root, cachePath),
       cacheSignature: signature,
       audioPolicy:
-        'Reference WAV/FLAC audio is decoded only by this development tool. The cache contains scalar/time-frequency measurements, not PCM, and runtime synthesis reads neither.',
+        'Reference WAV/FLAC files are decoded only by this development tool. Only directly recorded keys are measured; no pitch-shifted audio or features enter the cache.',
     },
     method: {
       renderSeconds: RENDER_SECONDS,
       alignment: 'independent causal 3 ms RMS onset detection; all temporal comparisons are onset-relative',
       gain: `one robust global synth/reference offset (${round(globalLevelOffsetDb)} dB); no per-note, per-register, or per-layer normalization for level`,
-      ...(chromaticMode
-        ? {
-            referencePlayback:
-              'All SFZ key-zone transpositions and Retuned-SFZ tune cents are applied with deterministic 12-tap, 1024-phase Lanczos resampling before feature extraction.',
-            velocitySampling:
-              'Layers 1, 8, and 16 are rendered at their SFZ range midpoints, representing low, lower-median, and highest recorded velocity.',
-          }
-        : {}),
       referenceStereo: 'left/right spectra and RMS energies are power-averaged; waveform phase is not scored',
       attackEnvelope: '4 ms power-RMS windows every 2 ms from 0–120 ms, locally peak-normalized',
       attackTiming: '10%, 50%, and 90% cumulative-energy times in the first 120 ms',
@@ -1524,28 +1319,13 @@ async function main() {
       limitations:
         'These are perceptual proxies, not a claim of waveform identity. They intentionally ignore source microphone phase/stereo image, and level permits one global output-gain calibration.',
     },
-    coverage: chromaticMode
-      ? {
-          references: referenceCache.entries.length,
-          synthesizedRenders: pairs.length,
-          pitches: new Set(pairs.map(({ midi }) => midi)).size,
-          velocityLayers: new Set(pairs.map(({ layer }) => layer)).size,
-          layers: [...new Set(pairs.map(({ layer }) => layer))],
-          uniqueSourceRecordings: new Set(pairs.map(({ file }) => file)).size,
-          directSampleEvaluations: pairs.filter(({ transpositionSemitones }) =>
-            transpositionSemitones === 0).length,
-          transposedSampleEvaluations: pairs.filter(({ transpositionSemitones }) =>
-            transpositionSemitones !== 0).length,
-          chromaticMode: true,
-          quickMode: false,
-        }
-      : {
-          references: referenceCache.entries.length,
-          synthesizedRenders: pairs.length,
-          pitches: new Set(pairs.map(({ midi }) => midi)).size,
-          velocityLayers: new Set(pairs.map(({ layer }) => layer)).size,
-          quickMode,
-        },
+    coverage: {
+      references: referenceCache.entries.length,
+      synthesizedRenders: pairs.length,
+      pitches: new Set(pairs.map(({ midi }) => midi)).size,
+      velocityLayers: new Set(pairs.map(({ layer }) => layer)).size,
+      quickMode,
+    },
     globalLevelOffsetDb: round(globalLevelOffsetDb),
     overall,
     byRegister,
@@ -1556,16 +1336,6 @@ async function main() {
         register,
         signedResidualSummary(pairs.filter((pair) => pair.register === register)),
       ])),
-      byLayer: Object.fromEntries([...new Set(pairs.map(({ layer }) => layer))].map((layer) => [
-        layer,
-        signedResidualSummary(pairs.filter((pair) => pair.layer === layer)),
-      ])),
-      byRegisterAndLayer: Object.fromEntries(['bass', 'middle', 'treble'].flatMap((register) =>
-        [...new Set(pairs.map(({ layer }) => layer))].map((layer) => [
-          `${register}:${layer}`,
-          signedResidualSummary(pairs.filter((pair) =>
-            pair.register === register && pair.layer === layer)),
-        ]))),
       byNote: Object.fromEntries([...new Set(pairs.map(({ note }) => note))].map((note) => [
         note,
         signedResidualSummary(pairs.filter((pair) => pair.note === note)),
@@ -1580,10 +1350,7 @@ async function main() {
     comparisons: pairs.map(serializePair),
   };
 
-  const suiteName = chromaticMode
-    ? 'Chromatic strict reference fidelity'
-    : 'Strict reference fidelity';
-  console.log(`${suiteName}: ${score}/100 ${report.passed ? 'PASS' : 'FAIL'}`);
+  console.log(`Strict reference fidelity: ${score}/100 ${report.passed ? 'PASS' : 'FAIL'}`);
   console.log(`  global level residual     median ${overall.levelResidualDb.median} dB, p90 ${overall.levelResidualDb.p90} dB`);
   console.log(`  attack envelope           median ${overall.attackEnvelopeMaeDb.median} dB, p90 ${overall.attackEnvelopeMaeDb.p90} dB`);
   console.log(`  transient spectrum        median ${overall.transientSpectrumMaeDb.median} dB, p90 ${overall.transientSpectrumMaeDb.p90} dB`);
@@ -1604,9 +1371,7 @@ async function main() {
   if (!noFail && !report.passed) process.exitCode = 1;
 }
 
-if (!isMainThread && workerData?.task === CHROMATIC_REFERENCE_WORKER_TASK) {
-  await serveParallelMap(workerData.jobs, extractChromaticReferenceFeatures, 1);
-} else if (!isMainThread && workerData?.task === SYNTHESIS_WORKER_TASK) {
+if (!isMainThread && workerData?.task === SYNTHESIS_WORKER_TASK) {
   await serveParallelMap(workerData.jobs, extractSynthesizedFeatures);
 } else if (
   isMainThread &&

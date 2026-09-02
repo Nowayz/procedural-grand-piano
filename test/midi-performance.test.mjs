@@ -5,7 +5,11 @@ import { parseStandardMidi, renderMidiPerformance } from '../tools/midi-performa
 function midiFile(track, division = 480) { const header = Buffer.from([0x4d, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 0, 0, 1, division >> 8, division & 255]), chunk = Buffer.alloc(8); chunk.write('MTrk'); chunk.writeUInt32BE(track.length, 4); return Buffer.concat([header, chunk, Buffer.from(track)]); }
 
 test('Standard MIDI tempo, running status, notes, and sustain become timed controls', () => {
- const bytes = midiFile([0x00, 0xff, 0x51, 0x03, 0x07, 0xa1, 0x20, 0x00, 0x90, 60, 100, 0x00, 64, 80, 0x81, 0x70, 0xb0, 64, 127, 0x81, 0x70, 0x80, 60, 32, 0x00, 64, 0, 0x83, 0x60, 0xb0, 64, 0, 0x00, 0xff, 0x2f, 0]); const parsed = parseStandardMidi(bytes); assert.equal(parsed.noteCount, 2); assert.equal(parsed.trackCount, 1); assert.deepEqual(parsed.controls.map(({ type, seconds }) => [type, seconds]), [['noteOn', 0], ['noteOn', 0], ['sustain', .25], ['noteOff', .5], ['noteOff', .5], ['sustain', 1]]); assert.equal(parsed.controls[0].midi, 60); assert.equal(parsed.controls[1].midi, 64); assert.equal(parsed.controls[3].velocity, 32 / 127); assert.equal(parsed.controls[4].velocity, 64 / 127);
+ const bytes = midiFile([0x00, 0xff, 0x51, 0x03, 0x07, 0xa1, 0x20, 0x00, 0x90, 60, 100, 0x00, 64, 80, 0x81, 0x70, 0xb0, 64, 96, 0x81, 0x70, 0x80, 60, 32, 0x00, 64, 0, 0x83, 0x60, 0xb0, 64, 0, 0x00, 0xff, 0x2f, 0]); const parsed = parseStandardMidi(bytes); assert.equal(parsed.noteCount, 2); assert.equal(parsed.trackCount, 1); assert.deepEqual(parsed.controls.map(({ type, seconds }) => [type, seconds]), [['noteOn', 0], ['noteOn', 0], ['sustain', .25], ['noteOff', .5], ['noteOff', .5], ['sustain', 1]]); assert.equal(parsed.controls[0].midi, 60); assert.equal(parsed.controls[1].midi, 64); assert.equal(parsed.controls[2].position, 96 / 127); assert.equal(parsed.controls[2].down, true); assert.equal(parsed.controls[3].velocity, 32 / 127); assert.equal(parsed.controls[4].velocity, 64 / 127);
+});
+
+test('continuous MIDI CC64 values are preserved as normalized pedal lift', () => {
+ const bytes = midiFile([0, 0xb0, 64, 32, 0, 0xb0, 64, 64, 0, 0xb0, 64, 96, 0, 0xb0, 64, 127, 0, 0xff, 0x2f, 0]), parsed = parseStandardMidi(bytes); assert.deepEqual(parsed.controls.map(({ position }) => position), [32 / 127, 64 / 127, 96 / 127, 1]);
 });
 
 test('equal-tick note controls retain source order and pair overlapping strikes', () => {
@@ -20,8 +24,8 @@ test('MIDI rendering releases incomplete input and reports a forced tail cap', (
  const performance = { controls: [{ type: 'noteOn', seconds: 0, id: 1, frequency: 261.625565, velocity: .8 }], durationSeconds: .01 }, rendered = renderMidiPerformance(performance, { tailSeconds: 0, maximumTailSeconds: .1, polyphony: 2 }); assert.equal(rendered.truncatedVoices, 1); assert.equal(rendered.mono.length, Math.round(.11 * rendered.sampleRate)); assert.ok(Math.abs(rendered.mono.at(-1)) < 1e-7);
 });
 
-test('adaptive MIDI tails retain the natural decay of a damperless treble key', () => {
- const frequency = 440 * 2 ** ((91 - 69) / 12), performance = { controls: [{ type: 'noteOn', seconds: 0, id: 1, frequency, velocity: .8 }, { type: 'noteOff', seconds: .01, id: 1, velocity: 1 }], durationSeconds: .01 }, rendered = renderMidiPerformance(performance, { tailSeconds: 0, maximumTailSeconds: 12, polyphony: 2 }); assert.equal(rendered.truncatedVoices, 0); assert.ok(rendered.mono.length > 5 * rendered.sampleRate, `natural tail is ${rendered.mono.length / rendered.sampleRate} seconds`); assert.ok(rendered.mono.length < 12.01 * rendered.sampleRate);
+test('adaptive MIDI tails do not truncate the longest surveyed damperless treble key', () => {
+ const frequency = 440 * 2 ** ((104 - 69) / 12), performance = { controls: [{ type: 'noteOn', seconds: 0, id: 1, frequency, velocity: .8 }, { type: 'noteOff', seconds: .01, id: 1, velocity: 1 }], durationSeconds: .01 }, rendered = renderMidiPerformance(performance, { tailSeconds: 0, polyphony: 2 }); assert.equal(rendered.truncatedVoices, 0); assert.ok(rendered.mono.length > 12 * rendered.sampleRate, `natural tail is ${rendered.mono.length / rendered.sampleRate} seconds`); assert.ok(rendered.mono.length < 14 * rendered.sampleRate);
 });
 
 test('malformed and unsupported MIDI inputs are rejected', () => {

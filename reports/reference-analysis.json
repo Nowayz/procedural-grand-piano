@@ -24,7 +24,7 @@
     "waveform": "Decode the native reference format without resampling; normalize signed PCM by its bit depth; arithmetic stereo mid is used for waveform peak/RMS/onset.",
     "spectral": "Analyze L/R separately with a Hann window, average power spectra to avoid AB-microphone phase cancellation, and ignore energy above 16 kHz for centroid.",
     "onset": "Causal 3 ms sliding RMS (no future samples at the buffer boundary); first crossing at 4% of the first-250-ms maximum; spectral window begins 25 ms after that crossing.",
-    "pitch": "Find a local spectral maximum near equal-tempered pitch. Raw and SFZ-retuned estimates are both reported; PCM is not pitch shifted.",
+    "pitch": "Find and report the recorded local spectral maximum near equal-tempered pitch without retuning or transposition.",
     "decay": "Fit dB/second to Hann-windowed partial peaks on microphone channel 1 at fixed post-onset times; T60=-60/slope. This is a proxy and is sensitive to beating/noise floors.",
     "focusedTransient": "A6v16 uses onset-aligned 0-5/5-10/10-20/20-40/40-80 ms frames on the arithmetic stereo mid, a fixed 50 ms RMS trajectory, and a 1.5 s L/R power-averaged FFT for the unison cluster."
   },
@@ -40,7 +40,6 @@
         43
       ],
       "normalizedVelocityMidpoint": 0.315,
-      "retunedSfzCents": 10,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -60,7 +59,6 @@
         "fftSize": 131072,
         "centroidHz": 164.79,
         "rawFundamentalPeakHz": 27.3186,
-        "estimatedAfterRetuneHz": 27.4769,
         "inharmonicityB": 0.00014163,
         "partials": [
           {
@@ -151,7 +149,6 @@
         43
       ],
       "normalizedVelocityMidpoint": 0.315,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -171,7 +168,6 @@
         "fftSize": 131072,
         "centroidHz": 217.77,
         "rawFundamentalPeakHz": 109.6598,
-        "estimatedAfterRetuneHz": 109.4067,
         "inharmonicityB": 0.00016704,
         "partials": [
           {
@@ -262,7 +258,6 @@
         43
       ],
       "normalizedVelocityMidpoint": 0.315,
-      "retunedSfzCents": -6,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -282,7 +277,6 @@
         "fftSize": 131072,
         "centroidHz": 422.17,
         "rawFundamentalPeakHz": 261.3565,
-        "estimatedAfterRetuneHz": 260.4522,
         "inharmonicityB": 0.00031487,
         "partials": [
           {
@@ -373,7 +367,6 @@
         43
       ],
       "normalizedVelocityMidpoint": 0.315,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -393,7 +386,6 @@
         "fftSize": 131072,
         "centroidHz": 481.26,
         "rawFundamentalPeakHz": 440.4531,
-        "estimatedAfterRetuneHz": 439.4366,
         "inharmonicityB": 0.00060596,
         "partials": [
           {
@@ -484,7 +476,6 @@
         43
       ],
       "normalizedVelocityMidpoint": 0.315,
-      "retunedSfzCents": -12,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -504,7 +495,6 @@
         "fftSize": 131072,
         "centroidHz": 1767.41,
         "rawFundamentalPeakHz": 1771.2468,
-        "estimatedAfterRetuneHz": 1759.0119,
         "inharmonicityB": 0.00518862,
         "partials": [
           {
@@ -595,7 +585,6 @@
         64
       ],
       "normalizedVelocityMidpoint": 0.4764,
-      "retunedSfzCents": 10,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -615,7 +604,6 @@
         "fftSize": 131072,
         "centroidHz": 197.57,
         "rawFundamentalPeakHz": 27.4327,
-        "estimatedAfterRetuneHz": 27.5916,
         "inharmonicityB": 0.00010883,
         "partials": [
           {
@@ -706,7 +694,6 @@
         64
       ],
       "normalizedVelocityMidpoint": 0.4764,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -726,7 +713,6 @@
         "fftSize": 131072,
         "centroidHz": 247.75,
         "rawFundamentalPeakHz": 109.6547,
-        "estimatedAfterRetuneHz": 109.4016,
         "inharmonicityB": 0.00016895,
         "partials": [
           {
@@ -817,7 +803,6 @@
         64
       ],
       "normalizedVelocityMidpoint": 0.4764,
-      "retunedSfzCents": -6,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -837,7 +822,6 @@
         "fftSize": 131072,
         "centroidHz": 445.04,
         "rawFundamentalPeakHz": 261.3499,
-        "estimatedAfterRetuneHz": 260.4457,
         "inharmonicityB": 0.00031543,
         "partials": [
           {
@@ -928,7 +912,6 @@
         64
       ],
       "normalizedVelocityMidpoint": 0.4764,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -948,7 +931,6 @@
         "fftSize": 131072,
         "centroidHz": 514.72,
         "rawFundamentalPeakHz": 440.4766,
-        "estimatedAfterRetuneHz": 439.46,
         "inharmonicityB": 0.00061971,
         "partials": [
           {
@@ -1039,7 +1021,6 @@
         64
       ],
       "normalizedVelocityMidpoint": 0.4764,
-      "retunedSfzCents": -12,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1059,7 +1040,6 @@
         "fftSize": 131072,
         "centroidHz": 1779.41,
         "rawFundamentalPeakHz": 1771.1286,
-        "estimatedAfterRetuneHz": 1758.8945,
         "inharmonicityB": 0.00517439,
         "partials": [
           {
@@ -1150,7 +1130,6 @@
         96
       ],
       "normalizedVelocityMidpoint": 0.7283,
-      "retunedSfzCents": 10,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1170,7 +1149,6 @@
         "fftSize": 131072,
         "centroidHz": 222.1,
         "rawFundamentalPeakHz": 27.1766,
-        "estimatedAfterRetuneHz": 27.334,
         "inharmonicityB": 0.00022731,
         "partials": [
           {
@@ -1261,7 +1239,6 @@
         96
       ],
       "normalizedVelocityMidpoint": 0.7283,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1281,7 +1258,6 @@
         "fftSize": 131072,
         "centroidHz": 282.61,
         "rawFundamentalPeakHz": 109.6494,
-        "estimatedAfterRetuneHz": 109.3964,
         "inharmonicityB": 0.00017092,
         "partials": [
           {
@@ -1372,7 +1348,6 @@
         96
       ],
       "normalizedVelocityMidpoint": 0.7283,
-      "retunedSfzCents": -6,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1392,7 +1367,6 @@
         "fftSize": 131072,
         "centroidHz": 472.87,
         "rawFundamentalPeakHz": 261.3458,
-        "estimatedAfterRetuneHz": 260.4416,
         "inharmonicityB": 0.00031652,
         "partials": [
           {
@@ -1483,7 +1457,6 @@
         96
       ],
       "normalizedVelocityMidpoint": 0.7283,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1503,7 +1476,6 @@
         "fftSize": 131072,
         "centroidHz": 527.86,
         "rawFundamentalPeakHz": 440.495,
-        "estimatedAfterRetuneHz": 439.4784,
         "inharmonicityB": 0.00061668,
         "partials": [
           {
@@ -1594,7 +1566,6 @@
         96
       ],
       "normalizedVelocityMidpoint": 0.7283,
-      "retunedSfzCents": -12,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1614,7 +1585,6 @@
         "fftSize": 131072,
         "centroidHz": 1804.57,
         "rawFundamentalPeakHz": 1771.0221,
-        "estimatedAfterRetuneHz": 1758.7887,
         "inharmonicityB": 0.00513077,
         "partials": [
           {
@@ -1705,7 +1675,6 @@
         127
       ],
       "normalizedVelocityMidpoint": 0.9764,
-      "retunedSfzCents": 10,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1725,7 +1694,6 @@
         "fftSize": 131072,
         "centroidHz": 276.94,
         "rawFundamentalPeakHz": 26.7141,
-        "estimatedAfterRetuneHz": 26.8688,
         "inharmonicityB": 0.00088818,
         "partials": [
           {
@@ -1816,7 +1784,6 @@
         127
       ],
       "normalizedVelocityMidpoint": 0.9764,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1836,7 +1803,6 @@
         "fftSize": 131072,
         "centroidHz": 359.94,
         "rawFundamentalPeakHz": 109.6492,
-        "estimatedAfterRetuneHz": 109.3961,
         "inharmonicityB": 0.00017376,
         "partials": [
           {
@@ -1927,7 +1893,6 @@
         127
       ],
       "normalizedVelocityMidpoint": 0.9764,
-      "retunedSfzCents": -6,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -1947,7 +1912,6 @@
         "fftSize": 131072,
         "centroidHz": 482.17,
         "rawFundamentalPeakHz": 261.3487,
-        "estimatedAfterRetuneHz": 260.4445,
         "inharmonicityB": 0.00031592,
         "partials": [
           {
@@ -2038,7 +2002,6 @@
         127
       ],
       "normalizedVelocityMidpoint": 0.9764,
-      "retunedSfzCents": -4,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -2058,7 +2021,6 @@
         "fftSize": 131072,
         "centroidHz": 534.13,
         "rawFundamentalPeakHz": 440.5169,
-        "estimatedAfterRetuneHz": 439.5003,
         "inharmonicityB": 0.00061102,
         "partials": [
           {
@@ -2149,7 +2111,6 @@
         127
       ],
       "normalizedVelocityMidpoint": 0.9764,
-      "retunedSfzCents": -12,
       "format": {
         "sampleRate": 48000,
         "channels": 2,
@@ -2169,7 +2130,6 @@
         "fftSize": 131072,
         "centroidHz": 1839.65,
         "rawFundamentalPeakHz": 1771.0956,
-        "estimatedAfterRetuneHz": 1758.8618,
         "inharmonicityB": 0.00131638,
         "partials": [
           {
@@ -2307,7 +2267,6 @@
       127
     ],
     "normalizedVelocityMidpoint": 0.976378,
-    "sfzTuneCents": -12,
     "causalAttack": {
       "onsetSeconds": 0.012208,
       "onsetToPeakSeconds": 0.021208,
@@ -2466,27 +2425,22 @@
       "analysisStartSeconds": 0.092208,
       "analysisWindowSeconds": 1.5,
       "fftSize": 262144,
-      "rawSpanHz": 5.7233,
-      "retunedSpanHz": 5.6838,
+      "spanHz": 5.7233,
       "peaks": [
         {
-          "rawFrequencyHz": 1769.5046,
-          "sfzRetunedFrequencyHz": 1757.2817,
+          "frequencyHz": 1769.5046,
           "relativeDb": -7.02
         },
         {
-          "rawFrequencyHz": 1771.0907,
-          "sfzRetunedFrequencyHz": 1758.8569,
+          "frequencyHz": 1771.0907,
           "relativeDb": 0
         },
         {
-          "rawFrequencyHz": 1773.9484,
-          "sfzRetunedFrequencyHz": 1761.6948,
+          "frequencyHz": 1773.9484,
           "relativeDb": -1.565
         },
         {
-          "rawFrequencyHz": 1775.2279,
-          "sfzRetunedFrequencyHz": 1762.9655,
+          "frequencyHz": 1775.2279,
           "relativeDb": -1.539
         }
       ]
@@ -2502,7 +2456,6 @@
         127
       ],
       "normalizedVelocityMidpoint": 0.976378,
-      "sfzTuneCents": -12,
       "causalAttack": {
         "onsetSeconds": 0.012208,
         "onsetToPeakSeconds": 0.021208,
@@ -2661,27 +2614,22 @@
         "analysisStartSeconds": 0.092208,
         "analysisWindowSeconds": 1.5,
         "fftSize": 262144,
-        "rawSpanHz": 5.7233,
-        "retunedSpanHz": 5.6838,
+        "spanHz": 5.7233,
         "peaks": [
           {
-            "rawFrequencyHz": 1769.5046,
-            "sfzRetunedFrequencyHz": 1757.2817,
+            "frequencyHz": 1769.5046,
             "relativeDb": -7.02
           },
           {
-            "rawFrequencyHz": 1771.0907,
-            "sfzRetunedFrequencyHz": 1758.8569,
+            "frequencyHz": 1771.0907,
             "relativeDb": 0
           },
           {
-            "rawFrequencyHz": 1773.9484,
-            "sfzRetunedFrequencyHz": 1761.6948,
+            "frequencyHz": 1773.9484,
             "relativeDb": -1.565
           },
           {
-            "rawFrequencyHz": 1775.2279,
-            "sfzRetunedFrequencyHz": 1762.9655,
+            "frequencyHz": 1775.2279,
             "relativeDb": -1.539
           }
         ]

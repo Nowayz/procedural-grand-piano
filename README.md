@@ -5,10 +5,9 @@ recognizably grand-piano-like note entirely from math at call time. The runtime
 module has no dependencies, files, encoded audio, network access, sample
 decoder, or playback code.
 
-The focused behavior suite scores **100/100**. The 480-recording suites score
-**90/100 PASS** (wide) and **94.15/100** (strict), while the all-88-key suites
-score **100/100 PASS** (wide) and **95.06/100** (strict). The strict commands
-still report `FAIL` because several category gates remain outside their stretch
+The focused behavior suite scores **97/100 PASS**. The direct 480-recording
+suites score **90/100 PASS** (wide) and **88.15/100** (strict). The strict command
+still reports `FAIL` because several category gates remain outside its stretch
 tolerances. These are regression proxies, not a claim of perceptual equivalence
 to a sampled concert grand.
 
@@ -16,6 +15,7 @@ to a sampled concert grand.
 
 ```js
 import synthesizeGrandPiano, {
+  renderGrandPianoNote,
   synthesizeGrandPiano as piano,
   synthesizeGrandPianoInto,
   SAMPLE_RATE,
@@ -28,6 +28,10 @@ const pcm = piano(440, 0.8, 2.5);
 
 const reusable = new Float32Array(SAMPLE_RATE);
 synthesizeGrandPianoInto(reusable, 440, 0.8, 1);
+
+// Here 0.013 is key-down time, not output duration. The returned buffer keeps
+// the modeled action travel, damper interaction, and acoustic tail.
+const staccato = renderGrandPianoNote(261.625565, 0.8, 0.013);
 ```
 
 The default and named exports are the same function. It returns a new mono
@@ -43,6 +47,15 @@ a buffer shorter than the physical release span is boundary-faded and therefore
 truncates that span. The damperless top 18 keys (MIDI 91–108, G6–C8) simply
 decay naturally. Sample count is
 `Math.round(clampedDuration * SAMPLE_RATE)`.
+
+Use `renderGrandPianoNote(note_hz, velocity, key_down_seconds, options)` when
+musical duration should mean physical key-down time. It drives the persistent
+voice engine, issues key-up at that exact sample, and returns only after the
+modeled voice has remained 80 dB below its own peak for 20 ms. Options are
+`releaseVelocity`, `sampleRate`, and the safety cap `maximumTailSeconds`
+(default 30). Key-down and maximum-tail inputs are each bounded to 30 seconds;
+zero strike velocity returns an empty buffer. If the cap is reached, the
+remaining 50 ms are boundary-faded.
 
 Input handling is deliberate:
 
@@ -120,22 +133,25 @@ damper contact is scheduled 45–85 ms after key-up and cannot precede 50 ms aft
 the strike. Consequently, even a 13 ms key gate produces a finite piano tone
 rather than a 13 ms sample cut.
 
-`sustain()` is a binary damper-pedal control. Pedal-down defers damper contact.
-Re-pedaling during key return or damping catches the string at its current
-energy: future attenuation stops, but energy already absorbed by the felt is
-not restored.
+`sustain()` accepts either a Boolean or normalized pedal lift from `0` (felt
+fully down) to `1` (felt clear). Intermediate values drive the narrow
+part-pedal interaction regime. The model begins with free key-return travel,
+applies nonlinear partial felt contact, then leaves a quieter free residual
+when string motion falls below the remaining felt gap. Re-pedaling during key
+return or damping catches the string at its current energy: future attenuation
+stops, but energy already absorbed by the felt is not restored.
 
-All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices, supports up to 64, and deterministically steals the oldest released voice, then the oldest key-up/pedal-held voice, then the oldest held voice when full. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
+All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices, supports up to 256, and deterministically steals the oldest released voice, then the oldest key-up/pedal-held voice, then the oldest held voice when full. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
 
 Realtime coefficients and timing follow the actual `AudioContext.sampleRate`; rates from 32 to 96 kHz are supported. Sustained 32-voice rendering at 48 kHz measured 1.37 ms median and 1.62 ms p95 per 2.67 ms quantum on the development machine. Starting many voices is more expensive because each strike constructs its modal state: an artificial simultaneous 32-note onset took 5.75 ms, while ordinary one-to-ten-finger keyboard attacks stay within a quantum on that machine.
 
-Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and binary sustain; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 12). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the bundled Small Hall convolution reverb.
+Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and continuous CC64 pedal values; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 30). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the bundled Small Hall convolution reverb.
 
 ## Compact runtime
 
-The distributable runtime module is **95,226 bytes** (**44,476 bytes gzip level 9**) and remains dependency-free with no required build step. Its 65,756-byte embedded WebAssembly module owns the complete offline and realtime simulation: calibration interpolation, hammer/string modes, soundboard and radiation filters, deterministic microstructure, staged damper contact, envelopes, voice state, event scheduling, mixing, limiting, fades, and output. JavaScript only validates the API contract, manages caller-owned buffers, invokes Wasm, and copies finished samples.
+The distributable runtime remains dependency-free with no required build step. Its embedded WebAssembly module owns the complete offline and realtime simulation: hammer/string modes, soundboard and radiation filters, deterministic microstructure, staged damper contact, envelopes, voice state, event scheduling, mixing, limiting, fades, and output. JavaScript only validates the API contract, manages caller-owned buffers, invokes Wasm, and copies finished samples.
 
-The 1,845-byte packed coefficient payload contains only quarter/half-dB physical mobility, loss, and modal-color measurements—not PCM, phase, waveform segments, or an impulse response. Each independent engine has one fixed 12 MiB Wasm memory containing the 64-voice pool, 256-event queue, mix block, every scratch value, calibration byte, and the maximum 30-second offline output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into caller-provided buffers performs no allocation.
+Each independent engine has one fixed 32 MiB Wasm memory containing the 256-voice pool, 256-event queue, mix block, every scratch value, and the maximum 30-second offline output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into caller-provided buffers performs no allocation.
 
 The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 96,000 raw bytes and 45,000 gzip bytes; that includes the complete model, realtime engine, fixed data, and required standalone math routines.
 
@@ -151,29 +167,32 @@ than an oscillator bank under one shared envelope:
 - A finite nonlinear felt-force pulse drives damped second-order string
   resonators from rest. Contact duration, force shape, strike position, and
   spectral hardness vary continuously with register and velocity.
-- One, two, or three strings are used by register. Unequal string coupling and
-  several-cent treble offsets form resolvable unison lines; weak orthogonal
+- One, two, or three strings are used by register. Unequal string coupling,
+  several-cent treble offsets, and a small deterministic per-strike zero-mean
+  phase spread form resolvable unison lines; weak orthogonal
   polarizations add irregular energy returns rather than a periodic tremolo.
 - Each mode has independent fast vertical, slow horizontal, polarization, and
   damper poles. Bridge transmission rises causally, upper modes shed energy
   faster, and short treble strings transfer most vertical energy very early.
   Modal loss follows the reduced stiff-string law
-  `T60(f) ~ T60base / (1 + (f / 9500)²)` plus measured bridge radiation loss;
+  `T60(f) ~ T60base / (1 + (f / 9500)²)` plus smooth register-dependent loss;
   poles are `exp(-ln(1000)/(T60·44100))`.
-- Ten broad radiation filters plus 22 short, mathematically generated plate
-  modes model soundboard/bridge/case response. Two quiet deterministic
+- Ten broad radiation filters sampled from a continuous mean-mobility profile
+  plus 22 short plate modes generated from a warped modal-density, loss, and
+  bridge-participation model describe the soundboard/bridge/case response. Two quiet deterministic
   microstructure bands add a decaying low-mid wooden body and delayed plate
   diffusion between the string lines. Their register-dependent coupling
   supplies the action thud, body bloom, and residual plate presence without an
   impulse response or recorded data.
-- A compact absolute-frequency bridge-mobility surface follows the measured
-  homogeneous-plate to inter-rib transition. Pitch/velocity interpolation
-  changes string-to-board coupling continuously rather than replaying a stored
-  spectral frame.
+- A sixth-order function of log-frequency supplies the mean bridge-mobility
+  envelope across the homogeneous-plate to inter-rib transition. It has no
+  per-key or per-velocity interpolation and never replays a spectral frame.
 - Separate deterministic felt, mechanical, presence, air, and diffuse-board
   bands model non-periodic energy. They have independent rise/decay constants;
   the hammer bands stay local to the collision while the board microstructure
   decays through the sustain.
+- Same-key restrikes add a new coherent hammer excitation while the prior
+  string vibration continues to decay instead of being reset.
 - Key-up starts an action-return stage rather than multiplying the shared output
   by a release envelope. Release speed sets 45–85 ms of travel and 4–30 ms of
   felt-contact settling; contact never begins before 50 ms from the strike.
@@ -185,9 +204,16 @@ than an oscillator bank under one shared envelope:
   coupled body modes are attenuated in their internal state at 100–180 dB/s,
   while already-radiating broad soundboard modes decay naturally. Damper noise
   starts at felt contact and follows release speed.
+- Normalized pedal lift maps through a smooth, narrow felt-contact interval.
+  Partial lift weakens modal damping and ends contact when the decaying string
+  displacement falls below the modeled felt gap, preserving the measured
+  quieter final free-vibration stage instead of treating CC64 as a mute switch.
 - Keys G6–C8 have no dampers and ignore key release acoustically. Realtime
   voices retire only after their peak-relative envelope remains below −80 dB
   for 20 ms; there is no fixed note-off cutoff or forced release fade.
+- Extreme-treble participation in the very slow low-frequency body branch tapers
+  toward C8, so a synthetic 58 Hz body rumble no longer determines an
+  eighteen-second top-key lifespan.
 - A low-cut DC blocker, register-dependent raised-cosine onset ramp, 256-sample
   final fade, and fixed soft saturation keep boundaries quiet and output
   bounded.
@@ -221,10 +247,10 @@ CC BY 3.0. The attached SFZ itself identifies Holm and `CC-by`; its hash and the
 full usage/preprocessing record are in
 [`reports/reference-analysis.json`](reports/reference-analysis.json).
 
-Reference PCM is decoded at its native format and bit depth. Direct analysis
-keeps the source sample rate; comparisons resample the upstream 48 kHz FLAC
-edition onto the synthesizer's 44.1 kHz timebase with the same deterministic
-band-limited resampler used for chromatic zones. Waveform statistics use an
+Reference PCM is decoded at its native format and bit depth. Comparisons
+convert the upstream 48 kHz FLAC edition onto the synthesizer's 44.1 kHz
+timebase while preserving both physical pitch and duration. No SFZ tuning,
+key-zone transposition, or other frequency shift is applied. Waveform statistics use an
 arithmetic stereo mid; spectra are measured per channel and power-averaged so
 AB phase cancellation does not erase treble
 energy. Only scalar measurements are retained in reports. No recording or
@@ -237,24 +263,15 @@ at A2, 12.4 s at C4, 7.5 s at A4, and 4.1 s at A6. Bass T60 estimates are less
 reliable because the reference fundamental is weak and the recordings reach a
 noise floor.
 
-The second physics pass focused on `A6v16.wav`, whose SFZ region is velocity
-121–127 (midpoint `0.976378`) and is retuned by −12 cents. Its causal
-onset-to-peak time is 21.202 ms. On the current model the corresponding render
-is 22.15 ms. The measured reference unison spans 5.690 Hz; the model spans
-5.524 Hz with lines at 1757.34, 1759.06, and 1762.86 Hz. Across thirty
-onset-aligned body/string/presence/air measurements, the mean absolute error is
-about 1.56 dB; the five-frame normalized RMS-shape error is under 0.7 dB. These are
-calibration proxies, not waveform matching.
-
 The wide-grid pass independently onset-aligns every pair, power-averages the
-two reference microphone channels, applies the retuned SFZ metadata, and
+two reference microphone channels, and
 compares pitch, attack time, five-frame onset shape, broadband centroid, up to
 twelve normalized partials, and a seven-window decay trajectory. It also
 scores every 16-point within-note velocity curve and every 30-note scale at all
-16 layers. Current aggregate errors are: pitch-gap median **4.31 cents**
-(reference tuning residuals dominate its p90), attack-time median **10.60 ms**,
-onset-shape median **2.47 dB**, partial-profile median **2.34 dB**, and decay
-trajectory median **2.34 dB**. It scores **90/100 PASS**; its deliberately
+16 layers. Current aggregate errors are: pitch-gap median **9.01 cents**
+(natural recording offsets dominate its p90), attack-time median **10.48 ms**,
+onset-shape median **2.74 dB**, partial-profile median **4.08 dB**, and decay
+trajectory median **2.45 dB**. It scores **90/100 PASS**; its deliberately
 retained broadband-centroid diagnostic misses its p90 stretch target even
 though the resolved-partial and strict time-frequency measures improve. The
 complete matrix and per-layer/per-register results are in
@@ -270,17 +287,17 @@ decay, harmonic-to-residual energy, unison modulation, and every note's
 velocity surface. Reference features are cached as measurements only; the
 cache contains no PCM.
 
-| Strict metric, median / p90 | Frozen baseline | Current |
-|---|---:|---:|
-| Global level residual | 1.94 / 5.11 dB | **1.49 / 4.26 dB** |
-| Attack envelope | 1.39 / 3.53 dB | **1.20 / 3.34 dB** |
-| Transient spectrum | 8.00 / 14.02 dB | **5.17 / 7.41 dB** |
-| Sustain spectrum | 14.40 / 24.91 dB | **6.27 / 8.41 dB** |
-| Partial balance | 6.31 / 14.99 dB | **4.00 / 5.39 dB** |
-| Partial decay | 6.03 / 12.99 dB | **5.23 / 7.51 dB** |
-| Multiband decay | 13.73 / 31.43 dB | **5.38 / 7.63 dB** |
-| Harmonic/residual balance | 1.36 / 14.15 dB | **0.17 / 4.02 dB** |
-| Stiff-partial location | 3.22 / 6.80 cents | **0.55 / 3.33 cents** |
+| Strict metric, median / p90 | Current |
+|---|---:|
+| Global level residual | **1.63 / 4.48 dB** |
+| Attack envelope | **1.36 / 3.24 dB** |
+| Transient spectrum | **6.45 / 8.96 dB** |
+| Sustain spectrum | **7.37 / 10.34 dB** |
+| Partial balance | **5.15 / 8.62 dB** |
+| Partial decay | **5.51 / 9.21 dB** |
+| Multiband decay | **5.87 / 8.66 dB** |
+| Harmonic/residual balance | **0.29 / 4.92 dB** |
+| Stiff-partial location | **2.40 / 4.24 cents** |
 
 The complete score, tolerances, signed residual maps, register/layer buckets,
 worst pairs, and remaining failed gates are in
@@ -289,29 +306,9 @@ Its spectrum and decay errors are perceptual proxies: they expose static buzz,
 missing body, and implausible loss rates, but do not measure stereo image,
 microphone phase, or listener preference.
 
-Two companion chromatic suites cover **all 88 keys from A0 through C8** at SFZ
-layers **1, 8, and 16**: low, lower-median, and highest recorded velocity. That
-is **264 independently rendered comparisons**. The 30 sampled root pitches
-provide 90 direct-pitch evaluations; the other 174 follow the SFZ key zones and
-apply their ±1-semitone transposition plus Retuned-SFZ tuning through a
-deterministic band-limited resampler. These are faithful sampler-playback
-references, not 174 additional recordings. Reference PCM and resampling remain
-development-only and never enter the runtime module.
-
-The chromatic wide grid scores **100/100 PASS**. Against the canonical FLAC
-submodule, its strict companion scores **94.30/100** under unchanged stretch
-tolerances; it intentionally
-gives the difficult softest layer one-third of the weight rather than
-one-sixteenth. It still reports `FAIL` because transient color, sustained color,
-three decay gates, and the worst-register surface remain outside their stretch
-targets. The 480-recording strict suite scores **93.25/100**, with its remaining
-surface penalty dominated by irregular rank order
-among intermediate recorded velocity layers.
-Full results and preprocessing metadata are in
-[`reports/chromatic-reference-convergence.json`](reports/chromatic-reference-convergence.json)
-and
-[`reports/chromatic-strict-fidelity-report.json`](reports/chromatic-strict-fidelity-report.json).
-The scalar reference-feature cache contains no PCM.
+Reference validation is intentionally limited to the 30 keys that were
+physically recorded. The tools never manufacture missing-key references from a
+neighboring string. Scalar reference-feature caches contain no PCM.
 
 ## Evaluation
 
@@ -321,9 +318,9 @@ Run everything with:
 npm run validate
 ```
 
-This runs twenty API/runtime/tooling tests, the focused 100-point synthesis
-analysis, reference re-analysis, the 480-cell recorded-root suites, both
-264-cell chromatic suites, and complete public-domain-track validation. Strict
+This runs the API/runtime/tooling tests, the focused 100-point synthesis
+analysis, reference re-analysis, the 480-cell recorded-root suites, and
+complete public-domain-track validation. Strict
 suites are report-only within this umbrella command: their remaining stretch
 failures are printed and retained in JSON without hiding successful runtime
 validation. Run a strict command without its `:report` suffix when failures
@@ -336,10 +333,8 @@ npm test                  # API, edge, pitch, dynamics, no-sample checks
 npm run analyze           # writes reports/validation-report.json
 npm run analyze:references # writes reports/reference-analysis.json
 npm run analyze:grid      # all 30 pitches × all 16 SFZ velocity layers
-npm run analyze:chromatic # all 88 keys × SFZ layers 1, 8, and 16
 npm run analyze:fidelity  # strict 480-pair suite; exits nonzero on any failed gate
-npm run analyze:fidelity:quick # 120-pair tuning subset, report-only
-npm run analyze:fidelity:chromatic # strict 264-pair all-key suite
+npm run analyze:fidelity:quick # 120-pair recorded subset, report-only
 npm run demos             # deterministically regenerates demos/*.wav
 npm run track             # renders the complete BWV 846 Prelude
 npm run validate:track    # validates the generated full-track WAV
@@ -361,10 +356,10 @@ The focused behavior score requires at least 90/100 and currently earns:
 |---|---:|---|
 | Signal contract | 20/20 | counts/rate, finite and bounded PCM, RMS/DC, boundaries |
 | Pitch | 12/12 | local fundamental peak across A0–C8, ≤3 cents |
-| Attack and dynamics | 13/13 | timing, monotonic energy, velocity brightness |
-| Spectrum | 15/15 | partials, stiffness, middle-C body response, register contrast |
+| Attack and dynamics | 10/13 | timing, monotonic energy, velocity brightness |
+| Spectrum | 12/15 | partials, stiffness, middle-C body response, register contrast |
 | Decay | 12/12 | natural loss, bass contrast, register-dependent partial ordering |
-| Hammer and resonance | 20/20 | A6 attack shape, transient bands, unison lines, two-stage/beat behavior |
+| Hammer and resonance | 16/20 | A6 attack shape, transient bands, unison lines, two-stage/beat behavior |
 | Edges/repeatability | 8/8 | determinism, prefix consistency, silence, clamps, durations |
 
 These metrics are proxies. Spectral centroid approximates brightness; fitted
@@ -378,9 +373,9 @@ The separate full-grid score also requires exact 480-cell coverage, procedural
 pitch accuracy at every cell, reference-relative pitch and attack agreement,
 onset/spectral/decay convergence, all 30 within-note velocity curves, separate
 bass/middle/treble bounds, and scale-order convergence at **each of the 16
-velocity layers**. Its pitch-gap allowance is explicitly tied to the measured
-residual tuning of the retuned references: weak bass fundamentals and the C8
-files cannot serve as sub-cent pitch ground truth. Likewise, exact sampled-key
+velocity layers**. Its pitch-gap allowance accounts for the raw recordings'
+natural tuning and weak fundamentals; the bass and C8 files cannot serve as
+sub-cent pitch ground truth. Likewise, exact sampled-key
 attack-peak order is reported but not treated as perceptual ground truth; the
 gain-invariant five-frame onset shape is the stricter transient gate.
 

@@ -22,7 +22,7 @@ import { loadSalamanderReference } from './salamander-reference.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const reference = await loadSalamanderReference(root);
-const { referenceRoot, sampleRoot, sfzPath, retunedSfzPath } = reference;
+const { referenceRoot, sampleRoot, sfzPath } = reference;
 const outputPath = path.join(root, 'reports', 'reference-analysis.json');
 const shouldWrite = process.argv.includes('--write-report');
 
@@ -69,7 +69,6 @@ function parseNoteRegions(sfzText) {
       midi: noteToMidi(note),
       velocityLow: attribute('lovel', 0),
       velocityHigh: attribute('hivel', 127),
-      tuneCents: attribute('tune', 0),
     });
   }
   return regions;
@@ -90,7 +89,7 @@ async function hashFile(filePath) {
   return createHash('sha256').update(await readFile(filePath)).digest('hex');
 }
 
-async function analyzeNoteRegion(region, tuneCents) {
+async function analyzeNoteRegion(region) {
   const filePath = path.join(sampleRoot, region.file);
   const wav = await readWav(filePath, { preserveChannels: true });
   const expectedHz = midiToFrequency(region.midi);
@@ -137,7 +136,6 @@ async function analyzeNoteRegion(region, tuneCents) {
       (region.velocityLow + region.velocityHigh) / (2 * 127),
       4,
     ),
-    retunedSfzCents: tuneCents,
     format: {
       sampleRate: wav.sampleRate,
       channels: wav.channels,
@@ -157,7 +155,6 @@ async function analyzeNoteRegion(region, tuneCents) {
       fftSize: 131_072,
       centroidHz: round(spectralCentroid(spectralData, 20, 16_000), 2),
       rawFundamentalPeakHz: round(fundamental.frequencyHz, 4),
-      estimatedAfterRetuneHz: round(fundamental.frequencyHz * 2 ** (tuneCents / 1_200), 4),
       inharmonicityB: round(estimateInharmonicity(peaks), 8),
       partials: peaks.map((peak) => ({
         number: peak.partial,
@@ -189,7 +186,7 @@ async function analyzeReleaseFile(file) {
   };
 }
 
-async function analyzeA6Focus(tuneCents) {
+async function analyzeA6Focus() {
   const file = `A6v16.${reference.extension}`;
   const wav = await readWav(path.join(sampleRoot, file), { preserveChannels: true });
   const attack = attackMetrics(wav.samples, wav.sampleRate);
@@ -215,13 +212,10 @@ async function analyzeA6Focus(tuneCents) {
     relativeThresholdDb: -14,
     minimumSeparationHz: 0.65,
   });
-  const retuneRatio = 2 ** (tuneCents / 1_200);
-
   return {
     file,
     sfzVelocityRange: [121, 127],
     normalizedVelocityMidpoint: round((121 + 127) / (2 * 127), 6),
-    sfzTuneCents: tuneCents,
     causalAttack: {
       onsetSeconds: round(attack.onsetSeconds, 6),
       onsetToPeakSeconds: round(attack.peakSeconds, 6),
@@ -253,11 +247,9 @@ async function analyzeA6Focus(tuneCents) {
       analysisStartSeconds: round(clusterStart / wav.sampleRate, 6),
       analysisWindowSeconds: round(clusterLength / wav.sampleRate, 6),
       fftSize: 262_144,
-      rawSpanHz: round(rawCluster.spanHz, 4),
-      retunedSpanHz: round(rawCluster.spanHz * retuneRatio, 4),
+      spanHz: round(rawCluster.spanHz, 4),
       peaks: rawCluster.peaks.map((peak) => ({
-        rawFrequencyHz: round(peak.frequencyHz, 4),
-        sfzRetunedFrequencyHz: round(peak.frequencyHz * retuneRatio, 4),
+        frequencyHz: round(peak.frequencyHz, 4),
         relativeDb: round(peak.relativeDb, 3),
       })),
     },
@@ -318,10 +310,8 @@ async function main() {
     return;
   }
 
-  const { sfzText, retunedText } = reference;
+  const { sfzText } = reference;
   const regions = parseNoteRegions(sfzText);
-  const retunedRegions = parseNoteRegions(retunedText);
-  const retuneByFile = new Map(retunedRegions.map((region) => [region.file, region.tuneCents]));
   const selectedNotes = new Set(['A0', 'A2', 'C4', 'A4', 'A6']);
   const selectedLayers = new Set([4, 8, 12, 16]);
   const selected = regions.filter(
@@ -331,7 +321,7 @@ async function main() {
   const noteAnalyses = [];
   for (const region of selected) {
     process.stdout.write(`reference ${region.file.padEnd(10)} `);
-    const analysis = await analyzeNoteRegion(region, retuneByFile.get(region.file) ?? 0);
+    const analysis = await analyzeNoteRegion(region);
     noteAnalyses.push(analysis);
     console.log(
       `attack=${(analysis.waveform.attackToPeakSeconds * 1_000).toFixed(1)}ms ` +
@@ -352,8 +342,7 @@ async function main() {
   for (const file of releaseFiles) {
     releaseAnalyses.push(await analyzeReleaseFile(file));
   }
-  const a6FocusFile = `A6v16.${reference.extension}`;
-  const a6Focus = await analyzeA6Focus(retuneByFile.get(a6FocusFile) ?? 0);
+  const a6Focus = await analyzeA6Focus();
 
   const report = {
     schemaVersion: 2,
@@ -389,7 +378,7 @@ async function main() {
       onset:
         'Causal 3 ms sliding RMS (no future samples at the buffer boundary); first crossing at 4% of the first-250-ms maximum; spectral window begins 25 ms after that crossing.',
       pitch:
-        'Find a local spectral maximum near equal-tempered pitch. Raw and SFZ-retuned estimates are both reported; PCM is not pitch shifted.',
+        'Find and report the recorded local spectral maximum near equal-tempered pitch without retuning or transposition.',
       decay:
         'Fit dB/second to Hann-windowed partial peaks on microphone channel 1 at fixed post-onset times; T60=-60/slope. This is a proxy and is sensitive to beating/noise floors.',
       focusedTransient:

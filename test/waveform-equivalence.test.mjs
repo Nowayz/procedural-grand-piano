@@ -21,17 +21,17 @@ const REFERENCE_RENDERS = [
   {
     name: 'A0 soft',
     arguments: [27.5, 0.3, 0.06],
-    sha256: 'e4b0ef8297799540732e77c0b180e3a870a954aa271910091580509dfa2f7bc8',
+    sha256: '27da37154c5659bf39c0c5d97ac421e83e327fdfccfd63cb8220fa8bb8dce27b',
   },
   {
     name: 'A4 medium-long render',
     arguments: [440, 0.731, 0.45],
-    sha256: '9bea30159da4e1b1083750d327dc05bd26662e76b69e169111e69567b38947dc',
+    sha256: '0fa0e82d68c0c9ee611c2340a087dfc796e44ec39cbc9e57b56b166597ec8be2',
   },
   {
     name: 'C8 maximum velocity',
     arguments: [4_186.009_044_809_578, 1, 0.06],
-    sha256: 'bc9238ed451c5279dbd4c5233aea423ad17371b24f19e453a9d843ffe62b69ff',
+    sha256: '1ffc657d50e0afdfab5a30f8d9a2d1fe2d1e66cc74a3be465fd6da520579e05c',
   },
   {
     name: 'one-sample render',
@@ -41,37 +41,37 @@ const REFERENCE_RENDERS = [
   {
     name: 'fade length minus one',
     arguments: [440, 0.731, 255 / SAMPLE_RATE],
-    sha256: '2739b4f24f5c290c8a657e634aa946087a37dcbee054fece1b951976376c9ee8',
+    sha256: 'a0ac19914d6fb7c589600219d30d63ff90c781c4c008420ee6ab81fc90211de4',
   },
   {
     name: 'exact fade length',
     arguments: [440, 0.731, 256 / SAMPLE_RATE],
-    sha256: '3591f8a5574b1654f9223ec8e68c4cf6c0a706bef0779d82ddd5fffdc7d2762d',
+    sha256: 'b710d2c0c52e7ad280aa08f821abfeedef285a325254fbdab037de9ddf41a626',
   },
   {
     name: 'fade length plus one',
     arguments: [440, 0.731, 257 / SAMPLE_RATE],
-    sha256: '2152bd8d88f2e9fba7ae2e716bcc35aa5732cea0f61dad7b35e47fa32ba83841',
+    sha256: '8d42e815f35ea6cc35c2e4ed9e09068a92c5cc0a56bceee98275ac6214bb00fb',
   },
   {
     name: 'near-zero nonzero velocity',
     arguments: [440, 0.000_001, 0.03],
-    sha256: 'd5e3053b08949f5479cdf2e0b502bc8fa9f77d96f6aef3604920908411c0939e',
+    sha256: '294e9d1aa408099154444c9af79576d7b965d8018d24d6118399ed90c4ccbbb1',
   },
   {
     name: 'frequency clamped below A0',
     arguments: [-1, 0.7, 0.025],
-    sha256: 'cc40b010b8453acc4f370ba0d515acaf744017a169026bc2a7599841290684a8',
+    sha256: 'c287b044db95714f1912e1edd6df699d0547c9ec73e74a6991cef811ee36da05',
   },
   {
     name: 'frequency clamped above C8',
     arguments: [99_999, 0.7, 0.025],
-    sha256: '49898ab10a3915d7fbae18ae53d49207e22cd11b99bfeec2cfecb49f76218f04',
+    sha256: '7de8b70518d87821e1217e4519dc41d40a969877893f832728eb1d4b03bfa723',
   },
   {
     name: 'velocity clamped above one',
     arguments: [440, 7, 0.025],
-    sha256: 'fe49af03b5b439206eebbb52c09fe80eb4a28c979bb8711c59f0eebc1e8c9c97',
+    sha256: '9939d16a8b994a3bdc6588f03bc6c2eca2dee83a40f6e0c49aa9becd97452339',
   },
 ];
 
@@ -93,7 +93,7 @@ test('all 88 keys remain deterministic at soft, medium, and hard velocities', ()
   }
   assert.equal(
     aggregate.digest('hex'),
-    'a82d8fcd45cd69f37ca0ba644540456cfb08f22e3d7253f65e439f3f3662edb8',
+    '916cd9467e2ac55891e35d62645616d5fd4eca711357b5ab9b39a0f6e09555d1',
   );
 });
 
@@ -106,9 +106,8 @@ test('full-model Wasm memory is module-preallocated and reused', async () => {
   const module = new WebAssembly.Module(Buffer.from(wasmBytes, 'base64'));
   assert.deepEqual(WebAssembly.Module.imports(module), []);
   const wasm = new WebAssembly.Instance(module).exports;
-  assert.equal(wasm.memory.buffer.byteLength, 12_582_912);
+  assert.equal(wasm.memory.buffer.byteLength, 33_554_432);
   assert.throws(() => wasm.memory.grow(1), RangeError);
-  assert.ok(wasm.calibration_ptr() + 1_845 <= wasm.output_ptr());
   assert.ok(wasm.output_ptr() + MAX_DURATION_SECONDS * SAMPLE_RATE * 4 <= wasm.memory.buffer.byteLength);
   assert.match(source, /const WASM_OUTPUT = new Float32Array\(WASM\.memory\.buffer, WASM\.output_ptr\(\), MAX_SAMPLES\)/);
   assert.match(render, /WASM\.synthesize\(/);

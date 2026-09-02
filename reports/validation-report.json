@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "passThreshold": 90,
-  "score": 100,
+  "score": 97,
   "possible": 100,
   "passed": true,
   "sampleRate": 44100,
@@ -26,7 +26,7 @@
       "possible": 13
     },
     "spectrum": {
-      "earned": 15,
+      "earned": 12,
       "possible": 15
     },
     "decay": {
@@ -174,7 +174,7 @@
       "weight": 4,
       "earned": 4,
       "passed": true,
-      "actual": 0.586949,
+      "actual": 0.738678,
       "target": "(0.05, 0.940001]",
       "proxy": "Bounds prevent clipping; peak level alone does not measure realism."
     },
@@ -185,8 +185,8 @@
       "earned": 3,
       "passed": true,
       "actual": {
-        "minimum": 0.00109,
-        "maximum": 0.06085
+        "minimum": 0.00342,
+        "maximum": 0.1194
       },
       "target": "[0.0005, 0.32]",
       "proxy": "A coarse gain/crest-factor guard, not loudness matching."
@@ -197,7 +197,7 @@
       "weight": 3,
       "earned": 3,
       "passed": true,
-      "actual": 0.0001367,
+      "actual": 0.0001677,
       "target": "<0.002",
       "proxy": "Direct electrical/PCM hygiene criterion."
     },
@@ -209,8 +209,8 @@
       "passed": true,
       "actual": {
         "endpointsExact": true,
-        "maximumStartDelta": 0.001309,
-        "maximumEndDelta": 0.000102
+        "maximumStartDelta": 0.001129,
+        "maximumEndDelta": 0.000134
       },
       "target": "endpoints=0 and boundary delta <0.035",
       "proxy": "Boundary discontinuity is a strong click proxy; it cannot catch every audible artifact."
@@ -222,15 +222,15 @@
       "earned": 12,
       "passed": true,
       "actual": {
-        "maximumAbsoluteCents": 2.977,
+        "maximumAbsoluteCents": 2.965,
         "perNoteHardCents": {
-          "A0": -0.524,
-          "A1": 0.09,
-          "A2": 0.041,
-          "C4": -0.172,
-          "A4": -0.413,
-          "A5": -1.228,
-          "A6": -0.704,
+          "A0": -0.311,
+          "A1": -0.168,
+          "A2": 0.018,
+          "C4": -0.163,
+          "A4": -0.426,
+          "A5": -1.159,
+          "A6": -0.709,
           "C8": 2.852
         }
       },
@@ -244,8 +244,8 @@
       "earned": 3,
       "passed": true,
       "actual": {
-        "minimumMs": 13.4,
-        "maximumMs": 34.94
+        "minimumMs": 13.65,
+        "maximumMs": 36.98
       },
       "target": "3..65 ms (reference median 22.7 ms)",
       "proxy": "3 ms RMS attack timing is a proxy for hammer immediacy."
@@ -257,14 +257,14 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": 2.244,
-        "A1": 2.592,
-        "A2": 2.231,
-        "C4": 2.778,
-        "A4": 3.297,
-        "A5": 4.339,
-        "A6": 5.207,
-        "C8": 9.935
+        "A0": 3.667,
+        "A1": 2.715,
+        "A2": 2.748,
+        "C4": 3.073,
+        "A4": 3.912,
+        "A5": 4.288,
+        "A6": 4.965,
+        "C8": 3.428
       },
       "target": "every hard/soft RMS ratio in [2.2, 10]",
       "proxy": "RMS is a useful dynamics proxy, but perceived loudness also depends on spectrum."
@@ -278,19 +278,19 @@
       "actual": [
         {
           "velocity": 0.18,
-          "rms": 0.01635
+          "rms": 0.01155
         },
         {
           "velocity": 0.4,
-          "rms": 0.03541
+          "rms": 0.02409
         },
         {
           "velocity": 0.65,
-          "rms": 0.05805
+          "rms": 0.03977
         },
         {
           "velocity": 0.9,
-          "rms": 0.07408
+          "rms": 0.05391
         }
       ],
       "target": "strictly increasing RMS at v=.18,.40,.65,.90",
@@ -303,14 +303,14 @@
       "earned": 3,
       "passed": true,
       "actual": {
-        "A0": 1.706,
-        "A1": 4.336,
-        "A2": 1.446,
-        "C4": 1.492,
-        "A4": 1.151,
-        "A5": 1.15,
-        "A6": 1.007,
-        "C8": 1.256
+        "A0": 2.655,
+        "A1": 3.847,
+        "A2": 1.905,
+        "C4": 1.122,
+        "A4": 1.091,
+        "A5": 1.079,
+        "A6": 1.027,
+        "C8": 4.864
       },
       "target": "every hard/soft centroid ratio >1.001; reference ratios 1.038..1.671",
       "proxy": "Spectral centroid is a brightness proxy and can be influenced by attack noise."
@@ -336,11 +336,11 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": 0.000303,
-        "A2": 0.00014025,
-        "C4": 0.00029562,
-        "A4": 0.00065762,
-        "A6": 0.00149443
+        "A0": 0.00025138,
+        "A2": 0.00012923,
+        "C4": 0.00030553,
+        "A4": 0.00064364,
+        "A6": 0.00149626
       },
       "target": "1e-6 < B < 0.015",
       "proxy": "A single fitted B summarizes inharmonicity; real strings have local deviations and coupled modes."
@@ -349,12 +349,12 @@
       "category": "spectrum",
       "name": "treble stiffness exceeds middle-register stiffness",
       "weight": 3,
-      "earned": 3,
-      "passed": true,
+      "earned": 0,
+      "passed": false,
       "actual": {
-        "A2": 0.00014025,
-        "C4": 0.00029562,
-        "A6": 0.00149443
+        "A2": 0.00012923,
+        "C4": 0.00030553,
+        "A6": 0.00149626
       },
       "target": "A6 > 5*C4 and C4 > A2",
       "proxy": "Register trend was measured in the reference; fitted peak ambiguity limits exact matching."
@@ -365,7 +365,7 @@
       "weight": 2,
       "earned": 2,
       "passed": true,
-      "actual": -0.79,
+      "actual": -2.65,
       "target": "-6..+3 dB relative to strongest of first 12",
       "proxy": "Matches a salient reference spectral feature but does not encode the reference waveform."
     },
@@ -376,10 +376,10 @@
       "earned": 2,
       "passed": true,
       "actual": {
-        "A0": 15.205,
-        "A2": 2.357,
-        "C4": 1.954,
-        "A6": 0.979
+        "A0": 18.871,
+        "A2": 3.648,
+        "C4": 1.505,
+        "A6": 0.997
       },
       "target": "A0 > A2 > C4 > A6 in centroid/f0",
       "proxy": "Normalized centroid captures broad register contrast, not fine timbral identity."
@@ -391,11 +391,11 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": -8.53,
-        "A2": -9.1,
-        "C4": -22.9,
-        "A4": -17.36,
-        "A6": -27.67
+        "A0": -6.99,
+        "A2": -9.52,
+        "C4": -24.37,
+        "A4": -17.87,
+        "A6": -26.24
       },
       "target": "late/early RMS change <-1.5 dB",
       "proxy": "Broadband RMS decay is robust to beating but collapses many partial envelopes."
@@ -407,9 +407,9 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A0": -8.53,
-        "C4": -22.9,
-        "A6": -27.67
+        "A0": -6.99,
+        "C4": -24.37,
+        "A6": -26.24
       },
       "target": "C4 and A6 each lose >=10 dB more than A0; C4/A6 finite-window loss within 10 dB",
       "proxy": "The supplied reference loses 6.0 dB at A0, 28.9 dB at C4, and 31.7 dB at A6 in these finite windows; beating makes a strict C4/A6 ordering brittle."
@@ -421,10 +421,10 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "A2Partial1Db": -6.79,
-        "A2Partial4Db": -9.05,
-        "C4Partial1Db": -23.41,
-        "C4Partial4Db": -15.4
+        "A2Partial1Db": -6.03,
+        "A2Partial4Db": -10.86,
+        "C4Partial1Db": -24.85,
+        "C4Partial4Db": -22.26
       },
       "target": "A2 partial 4 loses >=2 dB more than f0; C4 f0 loses >=2 dB more than partial 4",
       "proxy": "The reference reverses ordering at C4 (f0 −30.4 dB, partial 4 −16.0 dB) because fast vertical low modes expose a slower upper body; narrow bands remain beat-sensitive."
@@ -436,16 +436,16 @@
       "earned": 5,
       "passed": true,
       "actual": {
-        "attackErrorMs": 0.969,
-        "frameRmsShapeMaeDb": 0.64,
-        "frameCrestFactorMae": 0.089,
-        "peakEnvelopeRatio": 0.832,
+        "attackErrorMs": 2.138,
+        "frameRmsShapeMaeDb": 0.475,
+        "frameCrestFactorMae": 0.093,
+        "peakEnvelopeRatio": 0.791,
         "frameRmsRelativeDb": [
-          -9.02,
-          -3.34,
+          -8.4,
+          -3.35,
           0,
-          -0.16,
-          -5.15
+          -0.26,
+          -5.27
         ]
       },
       "target": "attack error <=6 ms, frame RMS MAE <=2.5 dB, crest MAE <=0.75, envelope ratio .7..1.3",
@@ -458,16 +458,16 @@
       "earned": 6,
       "passed": true,
       "actual": {
-        "onsetFrameBandMaeDb": 1.376,
-        "maximumSingleBandErrorDb": 6.028,
-        "centroidMeanAbsolutePercent": 1.449,
-        "secondPartial_5to10ms_to_40to80ms_Db": -17.692,
+        "onsetFrameBandMaeDb": 1.907,
+        "maximumSingleBandErrorDb": 10.222,
+        "centroidMeanAbsolutePercent": 3.365,
+        "secondPartial_5to10ms_to_40to80ms_Db": -17.446,
         "centroidsHz": [
-          2285.4,
-          1855.1,
-          1780.2,
-          1760.6,
-          1745.9
+          2510.4,
+          1988.1,
+          1820.3,
+          1771.5,
+          1748.5
         ]
       },
       "target": "30 onset-aligned band values MAE <=4 dB, centroid MAE <=10%, f2 drop 10..22 dB",
@@ -481,26 +481,25 @@
       "passed": true,
       "actual": {
         "peakCount": 3,
-        "spanHz": 5.7014,
-        "referenceSpanHz": 5.6838,
-        "referenceToNearestPeakMaeHz": 0.3857,
+        "spanHz": 5.6876,
+        "referenceSpanHz": 5.7233,
         "peaks": [
           {
-            "frequencyHz": 1757.243,
-            "relativeDb": -7.589
+            "frequencyHz": 1757.2541,
+            "relativeDb": -7.593
           },
           {
-            "frequencyHz": 1759.0904,
-            "relativeDb": -0.221
+            "frequencyHz": 1759.0913,
+            "relativeDb": -0.31
           },
           {
-            "frequencyHz": 1762.9444,
+            "frequencyHz": 1762.9418,
             "relativeDb": 0
           }
         ]
       },
-      "target": ">=3 lines, span within 1.5 Hz of 5.69 Hz, nearest-line MAE <=1.5 Hz",
-      "proxy": "Resolved line spacing predicts unison beating; microphone phase and tuning drift make exact amplitudes inappropriate targets."
+      "target": ">=3 lines and span within 1.5 Hz of the directly recorded 5.73 Hz span",
+      "proxy": "Resolved line spacing predicts unison beating without calibrating absolute oscillator frequencies to a retuned recording."
     },
     {
       "category": "hammer-and-resonance",
@@ -509,20 +508,20 @@
       "earned": 4,
       "passed": true,
       "actual": {
-        "trajectoryMaeDb": 2.42,
-        "rebound_100to150ms_Db": 2.002,
+        "trajectoryMaeDb": 2.35,
+        "rebound_100to150ms_Db": 2,
         "trajectoryDb": [
           0,
           -6.06,
-          -17.52,
-          -15.52,
-          -20.83,
-          -29.19,
-          -28.37,
-          -36.74,
-          -44.61,
-          -50.81,
-          -60.44
+          -16.76,
+          -14.76,
+          -20.24,
+          -28.18,
+          -27.31,
+          -35.3,
+          -42.47,
+          -47.82,
+          -57.06
         ]
       },
       "target": "trajectory MAE <=8 dB, 100->150 ms rebound >=2 dB, 100 ms -24..-12 dB, 3 s -65..-45 dB",
@@ -616,10 +615,10 @@
     "hardVelocity": 0.97,
     "focusedA6": {
       "velocity": 0.976378,
-      "attackToPeakMs": 22.177,
-      "frameBandMaeDb": 1.376,
-      "trajectoryMaeDb": 2.42,
-      "unisonSpanHz": 5.7014
+      "attackToPeakMs": 19.07,
+      "frameBandMaeDb": 1.907,
+      "trajectoryMaeDb": 2.35,
+      "unisonSpanHz": 5.6876
     },
     "soft": [
       {
@@ -628,78 +627,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.12783,
-        "rms": 0.01885,
-        "dc": -0.0000565,
-        "attackToPeakMs": 34.94,
-        "fundamentalEstimateHz": 27.49812,
-        "pitchErrorCents": -0.118,
-        "centroidHz": 245.09,
-        "centroidToFundamental": 8.912,
-        "inharmonicityB": 0.00029268,
-        "totalDecayDb_0_18s_to_1_45s": -6.09,
+        "peak": 0.22828,
+        "rms": 0.03256,
+        "dc": -0.0000827,
+        "attackToPeakMs": 36.98,
+        "fundamentalEstimateHz": 27.49585,
+        "pitchErrorCents": -0.262,
+        "centroidHz": 195.42,
+        "centroidToFundamental": 7.106,
+        "inharmonicityB": 0.00026818,
+        "totalDecayDb_0_18s_to_1_45s": -6.26,
         "startBoundaryDelta": 0,
-        "endBoundaryDelta": 0,
+        "endBoundaryDelta": 0.000022,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 27.501,
-            "relativeDb": -38.45
+            "frequencyHz": 27.497,
+            "relativeDb": -23.11
           },
           {
             "number": 2,
-            "frequencyHz": 55.027,
-            "relativeDb": -21.59
+            "frequencyHz": 55.021,
+            "relativeDb": -12.05
           },
           {
             "number": 3,
-            "frequencyHz": 82.602,
-            "relativeDb": -0.78
+            "frequencyHz": 82.588,
+            "relativeDb": -0.63
           },
           {
             "number": 4,
-            "frequencyHz": 110.246,
+            "frequencyHz": 110.218,
             "relativeDb": 0
           },
           {
             "number": 5,
-            "frequencyHz": 137.984,
-            "relativeDb": -3.92
+            "frequencyHz": 137.935,
+            "relativeDb": -2.05
           },
           {
             "number": 6,
-            "frequencyHz": 165.842,
-            "relativeDb": -5.71
+            "frequencyHz": 165.763,
+            "relativeDb": -5.61
           },
           {
             "number": 7,
-            "frequencyHz": 193.841,
-            "relativeDb": -13.84
+            "frequencyHz": 193.72,
+            "relativeDb": -11.54
           },
           {
             "number": 8,
-            "frequencyHz": 222.014,
-            "relativeDb": -22.54
+            "frequencyHz": 221.829,
+            "relativeDb": -19.74
           },
           {
             "number": 9,
-            "frequencyHz": 250.36,
-            "relativeDb": -17.83
+            "frequencyHz": 250.108,
+            "relativeDb": -14.46
           },
           {
             "number": 10,
-            "frequencyHz": 278.924,
-            "relativeDb": -9.67
+            "frequencyHz": 278.58,
+            "relativeDb": -12.9
           },
           {
             "number": 11,
-            "frequencyHz": 307.721,
-            "relativeDb": -9.88
+            "frequencyHz": 307.266,
+            "relativeDb": -11.51
           },
           {
             "number": 12,
-            "frequencyHz": 336.777,
-            "relativeDb": -10.37
+            "frequencyHz": 336.189,
+            "relativeDb": -9.69
           }
         ]
       },
@@ -709,78 +708,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.11807,
-        "rms": 0.02348,
-        "dc": -1e-7,
-        "attackToPeakMs": 20.45,
-        "fundamentalEstimateHz": 55.00105,
-        "pitchErrorCents": 0.033,
-        "centroidHz": 168.28,
-        "centroidToFundamental": 3.06,
-        "inharmonicityB": 0.00008184,
-        "totalDecayDb_0_18s_to_1_45s": -7.55,
-        "startBoundaryDelta": 0.000018,
-        "endBoundaryDelta": 0,
+        "peak": 0.2125,
+        "rms": 0.03706,
+        "dc": 0,
+        "attackToPeakMs": 20.43,
+        "fundamentalEstimateHz": 54.99484,
+        "pitchErrorCents": -0.162,
+        "centroidHz": 198.53,
+        "centroidToFundamental": 3.61,
+        "inharmonicityB": 0.00013623,
+        "totalDecayDb_0_18s_to_1_45s": -7.21,
+        "startBoundaryDelta": 0.000019,
+        "endBoundaryDelta": 0.000026,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 55.005,
-            "relativeDb": -25.56
+            "frequencyHz": 54.999,
+            "relativeDb": -14.67
           },
           {
             "number": 2,
-            "frequencyHz": 110.029,
-            "relativeDb": 0
+            "frequencyHz": 110.022,
+            "relativeDb": -4.72
           },
           {
             "number": 3,
-            "frequencyHz": 165.076,
-            "relativeDb": -5.64
+            "frequencyHz": 165.091,
+            "relativeDb": 0
           },
           {
             "number": 4,
-            "frequencyHz": 220.158,
-            "relativeDb": -7.5
+            "frequencyHz": 220.223,
+            "relativeDb": -2.98
           },
           {
             "number": 5,
-            "frequencyHz": 275.293,
-            "relativeDb": -7.5
+            "frequencyHz": 275.444,
+            "relativeDb": -6.66
           },
           {
             "number": 6,
-            "frequencyHz": 330.5,
-            "relativeDb": -13.34
+            "frequencyHz": 330.781,
+            "relativeDb": -12.2
           },
           {
             "number": 7,
-            "frequencyHz": 385.78,
-            "relativeDb": -16.45
+            "frequencyHz": 386.244,
+            "relativeDb": -18.95
           },
           {
             "number": 8,
-            "frequencyHz": 441.192,
-            "relativeDb": -36.05
+            "frequencyHz": 441.871,
+            "relativeDb": -29.06
           },
           {
             "number": 9,
-            "frequencyHz": 496.655,
-            "relativeDb": -25.81
+            "frequencyHz": 497.661,
+            "relativeDb": -22.88
           },
           {
             "number": 10,
-            "frequencyHz": 552.255,
-            "relativeDb": -22.65
+            "frequencyHz": 553.653,
+            "relativeDb": -20.97
           },
           {
             "number": 11,
-            "frequencyHz": 607.994,
-            "relativeDb": -20.09
+            "frequencyHz": 609.871,
+            "relativeDb": -19.45
           },
           {
             "number": 12,
-            "frequencyHz": 663.887,
-            "relativeDb": -23.1
+            "frequencyHz": 666.331,
+            "relativeDb": -18.29
           }
         ]
       },
@@ -790,78 +789,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.09602,
-        "rms": 0.0215,
-        "dc": 0,
-        "attackToPeakMs": 20.25,
-        "fundamentalEstimateHz": 110.00054,
-        "pitchErrorCents": 0.009,
-        "centroidHz": 179.3,
-        "centroidToFundamental": 1.63,
-        "inharmonicityB": 0.00014133,
-        "totalDecayDb_0_18s_to_1_45s": -8.4,
-        "startBoundaryDelta": 0.000019,
-        "endBoundaryDelta": 0,
+        "peak": 0.10264,
+        "rms": 0.02063,
+        "dc": 1e-7,
+        "attackToPeakMs": 20.07,
+        "fundamentalEstimateHz": 110.00211,
+        "pitchErrorCents": 0.033,
+        "centroidHz": 210.72,
+        "centroidToFundamental": 1.916,
+        "inharmonicityB": 0.000129,
+        "totalDecayDb_0_18s_to_1_45s": -9.06,
+        "startBoundaryDelta": 0.000024,
+        "endBoundaryDelta": 0.000014,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 110,
+            "frequencyHz": 110.001,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 220.046,
-            "relativeDb": -3.57
+            "frequencyHz": 220.043,
+            "relativeDb": -2.36
           },
           {
             "number": 3,
-            "frequencyHz": 330.195,
-            "relativeDb": -9.77
+            "frequencyHz": 330.179,
+            "relativeDb": -6.19
           },
           {
             "number": 4,
-            "frequencyHz": 440.471,
-            "relativeDb": -15.84
+            "frequencyHz": 440.428,
+            "relativeDb": -9.62
           },
           {
             "number": 5,
-            "frequencyHz": 550.937,
-            "relativeDb": -16.27
+            "frequencyHz": 550.854,
+            "relativeDb": -12.58
           },
           {
             "number": 6,
-            "frequencyHz": 661.644,
-            "relativeDb": -17.06
+            "frequencyHz": 661.502,
+            "relativeDb": -14.95
           },
           {
             "number": 7,
-            "frequencyHz": 772.601,
-            "relativeDb": -18.5
+            "frequencyHz": 772.379,
+            "relativeDb": -20.95
           },
           {
             "number": 8,
-            "frequencyHz": 883.895,
-            "relativeDb": -34.13
+            "frequencyHz": 883.569,
+            "relativeDb": -30.44
           },
           {
             "number": 9,
-            "frequencyHz": 995.573,
-            "relativeDb": -29.64
+            "frequencyHz": 995.11,
+            "relativeDb": -28.3
           },
           {
             "number": 10,
-            "frequencyHz": 1107.617,
-            "relativeDb": -33.81
+            "frequencyHz": 1106.993,
+            "relativeDb": -28.93
           },
           {
             "number": 11,
-            "frequencyHz": 1220.166,
-            "relativeDb": -41.08
+            "frequencyHz": 1219.333,
+            "relativeDb": -33.68
           },
           {
             "number": 12,
-            "frequencyHz": 1333.207,
-            "relativeDb": -51.77
+            "frequencyHz": 1332.134,
+            "relativeDb": -43.75
           }
         ]
       },
@@ -871,78 +870,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.1328,
-        "rms": 0.01963,
-        "dc": -1e-7,
-        "attackToPeakMs": 16.71,
-        "fundamentalEstimateHz": 261.61877,
-        "pitchErrorCents": -0.045,
-        "centroidHz": 342.61,
-        "centroidToFundamental": 1.31,
-        "inharmonicityB": 0.00029389,
-        "totalDecayDb_0_18s_to_1_45s": -16.88,
-        "startBoundaryDelta": 0.00002,
-        "endBoundaryDelta": 0,
+        "peak": 0.09891,
+        "rms": 0.01308,
+        "dc": 0,
+        "attackToPeakMs": 16.8,
+        "fundamentalEstimateHz": 261.61285,
+        "pitchErrorCents": -0.084,
+        "centroidHz": 350.87,
+        "centroidToFundamental": 1.341,
+        "inharmonicityB": 0.00030425,
+        "totalDecayDb_0_18s_to_1_45s": -20.24,
+        "startBoundaryDelta": 0.000017,
+        "endBoundaryDelta": 0.000006,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 261.623,
+            "frequencyHz": 261.617,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 523.451,
-            "relativeDb": -3.98
+            "frequencyHz": 523.452,
+            "relativeDb": -3.64
           },
           {
             "number": 3,
-            "frequencyHz": 785.639,
-            "relativeDb": -30.44
+            "frequencyHz": 785.662,
+            "relativeDb": -28.27
           },
           {
             "number": 4,
-            "frequencyHz": 1048.039,
-            "relativeDb": -20.67
+            "frequencyHz": 1048.134,
+            "relativeDb": -21.09
           },
           {
             "number": 5,
-            "frequencyHz": 1311.862,
-            "relativeDb": -24.16
+            "frequencyHz": 1311.993,
+            "relativeDb": -23.47
           },
           {
             "number": 6,
-            "frequencyHz": 1576.96,
-            "relativeDb": -28.97
+            "frequencyHz": 1577.216,
+            "relativeDb": -23.91
           },
           {
             "number": 7,
-            "frequencyHz": 1843.575,
-            "relativeDb": -29.16
+            "frequencyHz": 1843.986,
+            "relativeDb": -28.66
           },
           {
             "number": 8,
-            "frequencyHz": 2111.884,
-            "relativeDb": -36.76
+            "frequencyHz": 2112.499,
+            "relativeDb": -39.29
           },
           {
             "number": 9,
-            "frequencyHz": 2381.733,
-            "relativeDb": -47.82
+            "frequencyHz": 2382.635,
+            "relativeDb": -42.96
           },
           {
             "number": 10,
-            "frequencyHz": 2653.69,
-            "relativeDb": -52.8
+            "frequencyHz": 2654.953,
+            "relativeDb": -45.22
           },
           {
             "number": 11,
-            "frequencyHz": 2927.602,
-            "relativeDb": -58.6
+            "frequencyHz": 2929.337,
+            "relativeDb": -51.03
           },
           {
             "number": 12,
-            "frequencyHz": 3204.045,
-            "relativeDb": -66.92
+            "frequencyHz": 3206.309,
+            "relativeDb": -61.97
           }
         ]
       },
@@ -952,78 +951,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.10608,
-        "rms": 0.01311,
+        "peak": 0.12609,
+        "rms": 0.01186,
         "dc": -1e-7,
-        "attackToPeakMs": 17.62,
-        "fundamentalEstimateHz": 439.8837,
-        "pitchErrorCents": -0.458,
-        "centroidHz": 458.21,
-        "centroidToFundamental": 1.041,
-        "inharmonicityB": 0.00068121,
-        "totalDecayDb_0_18s_to_1_45s": -14.6,
-        "startBoundaryDelta": 0.000026,
-        "endBoundaryDelta": 0,
+        "attackToPeakMs": 14.81,
+        "fundamentalEstimateHz": 439.89855,
+        "pitchErrorCents": -0.399,
+        "centroidHz": 575.6,
+        "centroidToFundamental": 1.308,
+        "inharmonicityB": 0.00065083,
+        "totalDecayDb_0_18s_to_1_45s": -18.07,
+        "startBoundaryDelta": 0.000017,
+        "endBoundaryDelta": 0.000005,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 439.929,
+            "frequencyHz": 439.944,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 879.928,
-            "relativeDb": -15.62
+            "frequencyHz": 879.906,
+            "relativeDb": -7.78
           },
           {
             "number": 3,
-            "frequencyHz": 1322.481,
-            "relativeDb": -24.34
+            "frequencyHz": 1322.39,
+            "relativeDb": -13.72
           },
           {
             "number": 4,
-            "frequencyHz": 1767.892,
-            "relativeDb": -29.33
+            "frequencyHz": 1767.581,
+            "relativeDb": -17.21
           },
           {
             "number": 5,
-            "frequencyHz": 2215.741,
-            "relativeDb": -35.51
+            "frequencyHz": 2215.301,
+            "relativeDb": -24.45
           },
           {
             "number": 6,
-            "frequencyHz": 2670.835,
-            "relativeDb": -35.7
+            "frequencyHz": 2670.148,
+            "relativeDb": -33.58
           },
           {
             "number": 7,
-            "frequencyHz": 3128.264,
-            "relativeDb": -37.57
+            "frequencyHz": 3127.2,
+            "relativeDb": -42.65
           },
           {
             "number": 8,
-            "frequencyHz": 3591.205,
-            "relativeDb": -47.57
+            "frequencyHz": 3589.625,
+            "relativeDb": -54.2
           },
           {
             "number": 9,
-            "frequencyHz": 4060.608,
-            "relativeDb": -64.28
+            "frequencyHz": 4058.408,
+            "relativeDb": -61.43
           },
           {
             "number": 10,
-            "frequencyHz": 4531.718,
-            "relativeDb": -74.22
+            "frequencyHz": 4534.059,
+            "relativeDb": -68.25
           },
           {
             "number": 11,
-            "frequencyHz": 5015.421,
-            "relativeDb": -87.51
+            "frequencyHz": 5017.187,
+            "relativeDb": -77.81
           },
           {
             "number": 12,
-            "frequencyHz": 5513.806,
-            "relativeDb": -79.84
+            "frequencyHz": 5508.654,
+            "relativeDb": -72.24
           }
         ]
       },
@@ -1033,78 +1032,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.0729,
-        "rms": 0.00683,
+        "peak": 0.09358,
+        "rms": 0.00829,
         "dc": 0,
-        "attackToPeakMs": 17.03,
-        "fundamentalEstimateHz": 879.45479,
-        "pitchErrorCents": -1.073,
-        "centroidHz": 885.3,
-        "centroidToFundamental": 1.006,
-        "inharmonicityB": 0.00214318,
-        "totalDecayDb_0_18s_to_1_45s": -16.62,
-        "startBoundaryDelta": 0.000019,
-        "endBoundaryDelta": 0,
+        "attackToPeakMs": 15.26,
+        "fundamentalEstimateHz": 879.44842,
+        "pitchErrorCents": -1.085,
+        "centroidHz": 917.36,
+        "centroidToFundamental": 1.042,
+        "inharmonicityB": 0.00153332,
+        "totalDecayDb_0_18s_to_1_45s": -18.51,
+        "startBoundaryDelta": 0.00007,
+        "endBoundaryDelta": 0.000002,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 879.088,
+            "frequencyHz": 879.095,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 1763.935,
-            "relativeDb": -19.98
+            "frequencyHz": 1763.515,
+            "relativeDb": -15.64
           },
           {
             "number": 3,
-            "frequencyHz": 2661.511,
-            "relativeDb": -32.47
+            "frequencyHz": 2659.728,
+            "relativeDb": -29.12
           },
           {
             "number": 4,
-            "frequencyHz": 3569.8,
-            "relativeDb": -47
+            "frequencyHz": 3559.363,
+            "relativeDb": -51.43
           },
           {
             "number": 5,
-            "frequencyHz": 4408.91,
-            "relativeDb": -71.86
+            "frequencyHz": 4479.569,
+            "relativeDb": -65.21
           },
           {
             "number": 6,
-            "frequencyHz": 5339.536,
-            "relativeDb": -69.89
+            "frequencyHz": 5339.519,
+            "relativeDb": -63.56
           },
           {
             "number": 7,
-            "frequencyHz": 6088.884,
-            "relativeDb": -72.55
+            "frequencyHz": 6088.863,
+            "relativeDb": -66.2
           },
           {
             "number": 8,
-            "frequencyHz": 6942.502,
-            "relativeDb": -71.79
+            "frequencyHz": 6942.495,
+            "relativeDb": -65.18
           },
           {
             "number": 9,
-            "frequencyHz": 8059.566,
-            "relativeDb": -72.08
+            "frequencyHz": 8059.539,
+            "relativeDb": -65.37
           },
           {
             "number": 10,
-            "frequencyHz": 9165.275,
-            "relativeDb": -74.61
+            "frequencyHz": 9165.28,
+            "relativeDb": -68.02
           },
           {
             "number": 11,
-            "frequencyHz": 9967.692,
-            "relativeDb": -76.86
+            "frequencyHz": 9967.696,
+            "relativeDb": -70.11
           },
           {
             "number": 12,
-            "frequencyHz": 10620.416,
-            "relativeDb": -78.2
+            "frequencyHz": 10620.407,
+            "relativeDb": -71.47
           }
         ]
       },
@@ -1114,78 +1113,78 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.06998,
-        "rms": 0.00613,
+        "peak": 0.06884,
+        "rms": 0.00615,
         "dc": 1e-7,
-        "attackToPeakMs": 21.54,
-        "fundamentalEstimateHz": 1763.02946,
-        "pitchErrorCents": 2.977,
-        "centroidHz": 1710.56,
+        "attackToPeakMs": 22.09,
+        "fundamentalEstimateHz": 1763.01659,
+        "pitchErrorCents": 2.965,
+        "centroidHz": 1709.89,
         "centroidToFundamental": 0.972,
-        "inharmonicityB": 0.00377987,
-        "totalDecayDb_0_18s_to_1_45s": -22.49,
-        "startBoundaryDelta": 0.000036,
-        "endBoundaryDelta": 0.000055,
+        "inharmonicityB": 0.00245223,
+        "totalDecayDb_0_18s_to_1_45s": -21.33,
+        "startBoundaryDelta": 0.00003,
+        "endBoundaryDelta": 0.000079,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 1759.309,
+            "frequencyHz": 1759.288,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 3546.144,
-            "relativeDb": -26.97
+            "frequencyHz": 3539.146,
+            "relativeDb": -21.21
           },
           {
             "number": 3,
-            "frequencyHz": 5317.234,
-            "relativeDb": -58.23
+            "frequencyHz": 5317.204,
+            "relativeDb": -59.22
           },
           {
             "number": 4,
-            "frequencyHz": 7116.22,
-            "relativeDb": -62.02
+            "frequencyHz": 7116.199,
+            "relativeDb": -62.72
           },
           {
             "number": 5,
-            "frequencyHz": 8814.091,
-            "relativeDb": -62.7
+            "frequencyHz": 8814.067,
+            "relativeDb": -63.21
           },
           {
             "number": 6,
-            "frequencyHz": 10513.167,
-            "relativeDb": -67.13
+            "frequencyHz": 10513.146,
+            "relativeDb": -67.62
           },
           {
             "number": 7,
-            "frequencyHz": 12165.346,
-            "relativeDb": -72.12
+            "frequencyHz": 12580.041,
+            "relativeDb": -72.57
           },
           {
             "number": 8,
-            "frequencyHz": 13911.527,
-            "relativeDb": -74.65
+            "frequencyHz": 13911.498,
+            "relativeDb": -75.09
           },
           {
             "number": 9,
-            "frequencyHz": 16222.023,
-            "relativeDb": -78.91
+            "frequencyHz": 16222.02,
+            "relativeDb": -79.26
           },
           {
             "number": 10,
-            "frequencyHz": 17542.232,
-            "relativeDb": -86.52
+            "frequencyHz": 17542.243,
+            "relativeDb": -86.9
           },
           {
             "number": 11,
-            "frequencyHz": 19467.744,
-            "relativeDb": -94.95
+            "frequencyHz": 19467.738,
+            "relativeDb": -95.24
           },
           {
             "number": 12,
-            "frequencyHz": 20921.686,
-            "relativeDb": -110.34
+            "frequencyHz": 20921.693,
+            "relativeDb": -110.63
           }
         ]
       },
@@ -1195,43 +1194,43 @@
         "velocity": 0.315,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.01747,
-        "rms": 0.00109,
-        "dc": 1e-7,
-        "attackToPeakMs": 13.4,
-        "fundamentalEstimateHz": 4192.94493,
-        "pitchErrorCents": 2.866,
-        "centroidHz": 3136.54,
-        "centroidToFundamental": 0.749,
-        "inharmonicityB": 0.00071274,
-        "totalDecayDb_0_18s_to_1_45s": -20.31,
-        "startBoundaryDelta": 0.000032,
-        "endBoundaryDelta": 0.000045,
+        "peak": 0.04913,
+        "rms": 0.00342,
+        "dc": 0,
+        "attackToPeakMs": 13.74,
+        "fundamentalEstimateHz": 4192.94044,
+        "pitchErrorCents": 2.864,
+        "centroidHz": 422.01,
+        "centroidToFundamental": 0.101,
+        "inharmonicityB": 0.00071403,
+        "totalDecayDb_0_18s_to_1_45s": -32.06,
+        "startBoundaryDelta": 0.000046,
+        "endBoundaryDelta": 0.000001,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 4192.933,
+            "frequencyHz": 4192.928,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 8374.296,
-            "relativeDb": -59.55
+            "frequencyHz": 8374.302,
+            "relativeDb": -59.23
           },
           {
             "number": 3,
-            "frequencyHz": 12526.659,
-            "relativeDb": -67.4
+            "frequencyHz": 12526.697,
+            "relativeDb": -67.3
           },
           {
             "number": 4,
-            "frequencyHz": 16558.515,
-            "relativeDb": -79.09
+            "frequencyHz": 16558.513,
+            "relativeDb": -78.94
           },
           {
             "number": 5,
-            "frequencyHz": 20702.068,
-            "relativeDb": -105.36
+            "frequencyHz": 20702.08,
+            "relativeDb": -105.19
           }
         ]
       }
@@ -1243,78 +1242,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.28762,
-        "rms": 0.04229,
-        "dc": -0.0001367,
-        "attackToPeakMs": 31.47,
-        "fundamentalEstimateHz": 27.49168,
-        "pitchErrorCents": -0.524,
-        "centroidHz": 418.13,
-        "centroidToFundamental": 15.205,
-        "inharmonicityB": 0.000303,
-        "totalDecayDb_0_18s_to_1_45s": -8.53,
+        "peak": 0.61082,
+        "rms": 0.1194,
+        "dc": -0.0001677,
+        "attackToPeakMs": 34.63,
+        "fundamentalEstimateHz": 27.49505,
+        "pitchErrorCents": -0.311,
+        "centroidHz": 518.95,
+        "centroidToFundamental": 18.871,
+        "inharmonicityB": 0.00025138,
+        "totalDecayDb_0_18s_to_1_45s": -6.99,
         "startBoundaryDelta": 0,
-        "endBoundaryDelta": 0,
+        "endBoundaryDelta": 0.000105,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 27.497,
-            "relativeDb": -39.41
+            "frequencyHz": 27.474,
+            "relativeDb": -25.89
           },
           {
             "number": 2,
-            "frequencyHz": 55.022,
-            "relativeDb": -20.91
+            "frequencyHz": 55.017,
+            "relativeDb": -13.64
           },
           {
             "number": 3,
-            "frequencyHz": 82.598,
-            "relativeDb": -1.14
+            "frequencyHz": 82.587,
+            "relativeDb": -1.24
           },
           {
             "number": 4,
-            "frequencyHz": 110.242,
+            "frequencyHz": 110.22,
             "relativeDb": 0
           },
           {
             "number": 5,
-            "frequencyHz": 137.981,
-            "relativeDb": -3.12
+            "frequencyHz": 137.937,
+            "relativeDb": -1.54
           },
           {
             "number": 6,
-            "frequencyHz": 165.84,
-            "relativeDb": -4.53
+            "frequencyHz": 165.764,
+            "relativeDb": -4.63
           },
           {
             "number": 7,
-            "frequencyHz": 193.84,
-            "relativeDb": -12.32
+            "frequencyHz": 193.725,
+            "relativeDb": -10.16
           },
           {
             "number": 8,
-            "frequencyHz": 222.007,
-            "relativeDb": -20.38
+            "frequencyHz": 221.832,
+            "relativeDb": -17.86
           },
           {
             "number": 9,
-            "frequencyHz": 250.361,
-            "relativeDb": -15.64
+            "frequencyHz": 250.112,
+            "relativeDb": -12
           },
           {
             "number": 10,
-            "frequencyHz": 278.924,
-            "relativeDb": -7.41
+            "frequencyHz": 278.579,
+            "relativeDb": -9.96
           },
           {
             "number": 11,
-            "frequencyHz": 307.72,
-            "relativeDb": -8.97
+            "frequencyHz": 307.27,
+            "relativeDb": -7.97
           },
           {
             "number": 12,
-            "frequencyHz": 336.778,
-            "relativeDb": -9.88
+            "frequencyHz": 336.191,
+            "relativeDb": -5.67
           }
         ]
       },
@@ -1324,78 +1323,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.58695,
-        "rms": 0.06085,
-        "dc": -0.0000025,
-        "attackToPeakMs": 19.43,
-        "fundamentalEstimateHz": 55.00286,
-        "pitchErrorCents": 0.09,
-        "centroidHz": 729.74,
-        "centroidToFundamental": 13.268,
-        "inharmonicityB": 0.00007472,
-        "totalDecayDb_0_18s_to_1_45s": -11.56,
-        "startBoundaryDelta": 0.000607,
-        "endBoundaryDelta": 0,
+        "peak": 0.73868,
+        "rms": 0.10062,
+        "dc": -0.0000018,
+        "attackToPeakMs": 19.16,
+        "fundamentalEstimateHz": 54.99465,
+        "pitchErrorCents": -0.168,
+        "centroidHz": 763.8,
+        "centroidToFundamental": 13.887,
+        "inharmonicityB": 0.00013674,
+        "totalDecayDb_0_18s_to_1_45s": -10.3,
+        "startBoundaryDelta": 0.000341,
+        "endBoundaryDelta": 0.000081,
         "partials": [
           {
             "number": 1,
             "frequencyHz": 54.997,
-            "relativeDb": -29.19
-          },
-          {
-            "number": 2,
-            "frequencyHz": 110.025,
-            "relativeDb": 0
-          },
-          {
-            "number": 3,
-            "frequencyHz": 165.072,
-            "relativeDb": -6.41
-          },
-          {
-            "number": 4,
-            "frequencyHz": 220.155,
-            "relativeDb": -8.42
-          },
-          {
-            "number": 5,
-            "frequencyHz": 275.291,
-            "relativeDb": -8.16
-          },
-          {
-            "number": 6,
-            "frequencyHz": 330.499,
-            "relativeDb": -13.04
-          },
-          {
-            "number": 7,
-            "frequencyHz": 385.779,
-            "relativeDb": -14.21
-          },
-          {
-            "number": 8,
-            "frequencyHz": 441.187,
-            "relativeDb": -33.89
-          },
-          {
-            "number": 9,
-            "frequencyHz": 496.653,
-            "relativeDb": -20.4
-          },
-          {
-            "number": 10,
-            "frequencyHz": 552.244,
-            "relativeDb": -18.54
-          },
-          {
-            "number": 11,
-            "frequencyHz": 607.986,
             "relativeDb": -17.1
           },
           {
+            "number": 2,
+            "frequencyHz": 110.02,
+            "relativeDb": -5.56
+          },
+          {
+            "number": 3,
+            "frequencyHz": 165.091,
+            "relativeDb": 0
+          },
+          {
+            "number": 4,
+            "frequencyHz": 220.224,
+            "relativeDb": -2.25
+          },
+          {
+            "number": 5,
+            "frequencyHz": 275.446,
+            "relativeDb": -5.15
+          },
+          {
+            "number": 6,
+            "frequencyHz": 330.785,
+            "relativeDb": -9.79
+          },
+          {
+            "number": 7,
+            "frequencyHz": 386.247,
+            "relativeDb": -15.45
+          },
+          {
+            "number": 8,
+            "frequencyHz": 441.865,
+            "relativeDb": -24.25
+          },
+          {
+            "number": 9,
+            "frequencyHz": 497.661,
+            "relativeDb": -16.52
+          },
+          {
+            "number": 10,
+            "frequencyHz": 553.653,
+            "relativeDb": -12.85
+          },
+          {
+            "number": 11,
+            "frequencyHz": 609.872,
+            "relativeDb": -9.26
+          },
+          {
             "number": 12,
-            "frequencyHz": 663.878,
-            "relativeDb": -19.29
+            "frequencyHz": 666.334,
+            "relativeDb": -5.52
           }
         ]
       },
@@ -1405,78 +1404,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.31656,
-        "rms": 0.04797,
-        "dc": -0.0000012,
-        "attackToPeakMs": 19.91,
-        "fundamentalEstimateHz": 110.00258,
-        "pitchErrorCents": 0.041,
-        "centroidHz": 259.22,
-        "centroidToFundamental": 2.357,
-        "inharmonicityB": 0.00014025,
-        "totalDecayDb_0_18s_to_1_45s": -9.1,
-        "startBoundaryDelta": 0.0009,
-        "endBoundaryDelta": 0,
+        "peak": 0.47,
+        "rms": 0.05668,
+        "dc": -0.000001,
+        "attackToPeakMs": 19.89,
+        "fundamentalEstimateHz": 110.00115,
+        "pitchErrorCents": 0.018,
+        "centroidHz": 401.33,
+        "centroidToFundamental": 3.648,
+        "inharmonicityB": 0.00012923,
+        "totalDecayDb_0_18s_to_1_45s": -9.52,
+        "startBoundaryDelta": 0.00106,
+        "endBoundaryDelta": 0.000056,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 110.001,
+            "frequencyHz": 110,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 220.047,
-            "relativeDb": -3.15
+            "frequencyHz": 220.041,
+            "relativeDb": -1.23
           },
           {
             "number": 3,
-            "frequencyHz": 330.196,
-            "relativeDb": -7.3
+            "frequencyHz": 330.179,
+            "relativeDb": -4.59
           },
           {
             "number": 4,
-            "frequencyHz": 440.468,
-            "relativeDb": -14.11
+            "frequencyHz": 440.428,
+            "relativeDb": -7.29
           },
           {
             "number": 5,
-            "frequencyHz": 550.933,
-            "relativeDb": -14.9
+            "frequencyHz": 550.855,
+            "relativeDb": -9.17
           },
           {
             "number": 6,
-            "frequencyHz": 661.641,
-            "relativeDb": -15.12
+            "frequencyHz": 661.508,
+            "relativeDb": -10.03
           },
           {
             "number": 7,
-            "frequencyHz": 772.585,
-            "relativeDb": -15.06
+            "frequencyHz": 772.376,
+            "relativeDb": -14.11
           },
           {
             "number": 8,
-            "frequencyHz": 883.878,
-            "relativeDb": -28.73
+            "frequencyHz": 883.566,
+            "relativeDb": -21.13
           },
           {
             "number": 9,
-            "frequencyHz": 995.562,
-            "relativeDb": -17.59
+            "frequencyHz": 995.115,
+            "relativeDb": -15.97
           },
           {
             "number": 10,
-            "frequencyHz": 1107.596,
-            "relativeDb": -16.33
+            "frequencyHz": 1106.988,
+            "relativeDb": -12.58
           },
           {
             "number": 11,
-            "frequencyHz": 1220.15,
-            "relativeDb": -20.8
+            "frequencyHz": 1219.335,
+            "relativeDb": -11.72
           },
           {
             "number": 12,
-            "frequencyHz": 1333.195,
-            "relativeDb": -23.02
+            "frequencyHz": 1332.139,
+            "relativeDb": -11.72
           }
         ]
       },
@@ -1486,78 +1485,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.45287,
-        "rms": 0.05454,
-        "dc": -3e-7,
+        "peak": 0.37651,
+        "rms": 0.04019,
+        "dc": 1e-7,
         "attackToPeakMs": 16.83,
-        "fundamentalEstimateHz": 261.59953,
-        "pitchErrorCents": -0.172,
-        "centroidHz": 511.23,
-        "centroidToFundamental": 1.954,
-        "inharmonicityB": 0.00029562,
-        "totalDecayDb_0_18s_to_1_45s": -22.9,
-        "startBoundaryDelta": 0.000676,
-        "endBoundaryDelta": 0.000001,
+        "fundamentalEstimateHz": 261.60091,
+        "pitchErrorCents": -0.163,
+        "centroidHz": 393.83,
+        "centroidToFundamental": 1.505,
+        "inharmonicityB": 0.00030553,
+        "totalDecayDb_0_18s_to_1_45s": -24.37,
+        "startBoundaryDelta": 0.000667,
+        "endBoundaryDelta": 0.00002,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 261.606,
+            "frequencyHz": 261.607,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 523.438,
-            "relativeDb": -0.79
+            "frequencyHz": 523.446,
+            "relativeDb": -2.65
           },
           {
             "number": 3,
-            "frequencyHz": 785.64,
-            "relativeDb": -22.14
+            "frequencyHz": 785.676,
+            "relativeDb": -25.49
           },
           {
             "number": 4,
-            "frequencyHz": 1048.042,
-            "relativeDb": -10.72
+            "frequencyHz": 1048.149,
+            "relativeDb": -17.77
           },
           {
             "number": 5,
-            "frequencyHz": 1311.844,
-            "relativeDb": -12.03
+            "frequencyHz": 1311.988,
+            "relativeDb": -19.21
           },
           {
             "number": 6,
-            "frequencyHz": 1576.911,
-            "relativeDb": -17.67
+            "frequencyHz": 1577.192,
+            "relativeDb": -18.29
           },
           {
             "number": 7,
-            "frequencyHz": 1843.502,
-            "relativeDb": -12.67
+            "frequencyHz": 1843.948,
+            "relativeDb": -21.22
           },
           {
             "number": 8,
-            "frequencyHz": 2111.791,
-            "relativeDb": -21.76
+            "frequencyHz": 2112.451,
+            "relativeDb": -29.46
           },
           {
             "number": 9,
-            "frequencyHz": 2381.6,
-            "relativeDb": -24.75
+            "frequencyHz": 2382.555,
+            "relativeDb": -29.93
           },
           {
             "number": 10,
-            "frequencyHz": 2653.607,
-            "relativeDb": -23.66
+            "frequencyHz": 2654.912,
+            "relativeDb": -27.99
           },
           {
             "number": 11,
-            "frequencyHz": 2927.621,
-            "relativeDb": -26.33
+            "frequencyHz": 2929.364,
+            "relativeDb": -28
           },
           {
             "number": 12,
-            "frequencyHz": 3204.027,
-            "relativeDb": -28.07
+            "frequencyHz": 3206.302,
+            "relativeDb": -29.21
           }
         ]
       },
@@ -1567,78 +1566,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.42619,
-        "rms": 0.04321,
-        "dc": -5e-7,
-        "attackToPeakMs": 18.14,
-        "fundamentalEstimateHz": 439.89494,
-        "pitchErrorCents": -0.413,
-        "centroidHz": 527.32,
-        "centroidToFundamental": 1.198,
-        "inharmonicityB": 0.00065762,
-        "totalDecayDb_0_18s_to_1_45s": -17.36,
-        "startBoundaryDelta": 0.001309,
-        "endBoundaryDelta": 0.000001,
+        "peak": 0.52115,
+        "rms": 0.04641,
+        "dc": 1e-7,
+        "attackToPeakMs": 13.65,
+        "fundamentalEstimateHz": 439.89169,
+        "pitchErrorCents": -0.426,
+        "centroidHz": 627.89,
+        "centroidToFundamental": 1.427,
+        "inharmonicityB": 0.00064364,
+        "totalDecayDb_0_18s_to_1_45s": -17.87,
+        "startBoundaryDelta": 0.000302,
+        "endBoundaryDelta": 0.000015,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 439.937,
+            "frequencyHz": 439.938,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 879.926,
-            "relativeDb": -13.23
+            "frequencyHz": 879.913,
+            "relativeDb": -6.88
           },
           {
             "number": 3,
-            "frequencyHz": 1322.406,
-            "relativeDb": -17.05
+            "frequencyHz": 1322.351,
+            "relativeDb": -12.92
           },
           {
             "number": 4,
-            "frequencyHz": 1767.744,
-            "relativeDb": -22.1
+            "frequencyHz": 1767.506,
+            "relativeDb": -15.03
           },
           {
             "number": 5,
-            "frequencyHz": 2215.756,
-            "relativeDb": -25.82
+            "frequencyHz": 2215.33,
+            "relativeDb": -20.22
           },
           {
             "number": 6,
-            "frequencyHz": 2670.781,
-            "relativeDb": -27.19
+            "frequencyHz": 2670.142,
+            "relativeDb": -27.38
           },
           {
             "number": 7,
-            "frequencyHz": 3128.228,
-            "relativeDb": -27.37
+            "frequencyHz": 3127.2,
+            "relativeDb": -33.37
           },
           {
             "number": 8,
-            "frequencyHz": 3591.148,
-            "relativeDb": -27.34
+            "frequencyHz": 3589.604,
+            "relativeDb": -40.74
           },
           {
             "number": 9,
-            "frequencyHz": 4060.581,
-            "relativeDb": -36.87
+            "frequencyHz": 4058.383,
+            "relativeDb": -42.24
           },
           {
             "number": 10,
-            "frequencyHz": 4531.754,
-            "relativeDb": -37.66
+            "frequencyHz": 4534.021,
+            "relativeDb": -40.12
           },
           {
             "number": 11,
-            "frequencyHz": 5021.151,
-            "relativeDb": -46.84
+            "frequencyHz": 5017.165,
+            "relativeDb": -39.98
           },
           {
             "number": 12,
-            "frequencyHz": 5513.825,
-            "relativeDb": -49.62
+            "frequencyHz": 5508.669,
+            "relativeDb": -41.63
           }
         ]
       },
@@ -1648,78 +1647,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.38957,
-        "rms": 0.02963,
-        "dc": -7e-7,
-        "attackToPeakMs": 17.19,
-        "fundamentalEstimateHz": 879.37577,
-        "pitchErrorCents": -1.228,
-        "centroidHz": 1018.19,
-        "centroidToFundamental": 1.157,
-        "inharmonicityB": 0.00076605,
-        "totalDecayDb_0_18s_to_1_45s": -19.98,
-        "startBoundaryDelta": 0.001137,
-        "endBoundaryDelta": 0,
+        "peak": 0.44865,
+        "rms": 0.03553,
+        "dc": 4e-7,
+        "attackToPeakMs": 17.07,
+        "fundamentalEstimateHz": 879.41099,
+        "pitchErrorCents": -1.159,
+        "centroidHz": 990.05,
+        "centroidToFundamental": 1.125,
+        "inharmonicityB": 0.00155742,
+        "totalDecayDb_0_18s_to_1_45s": -18.52,
+        "startBoundaryDelta": 0.000973,
+        "endBoundaryDelta": 0.000008,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 879.054,
+            "frequencyHz": 879.082,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 1763.891,
-            "relativeDb": -11.53
+            "frequencyHz": 1763.514,
+            "relativeDb": -12.03
           },
           {
             "number": 3,
-            "frequencyHz": 2661.454,
-            "relativeDb": -18.93
+            "frequencyHz": 2659.727,
+            "relativeDb": -21.65
           },
           {
             "number": 4,
-            "frequencyHz": 3569.633,
-            "relativeDb": -27.14
+            "frequencyHz": 3565.387,
+            "relativeDb": -35.26
           },
           {
             "number": 5,
-            "frequencyHz": 4483.785,
-            "relativeDb": -63.39
+            "frequencyHz": 4479.665,
+            "relativeDb": -51.05
           },
           {
             "number": 6,
-            "frequencyHz": 5274.729,
-            "relativeDb": -65.75
+            "frequencyHz": 5274.738,
+            "relativeDb": -66.68
           },
           {
             "number": 7,
-            "frequencyHz": 6269.718,
-            "relativeDb": -64.92
+            "frequencyHz": 6269.719,
+            "relativeDb": -65.91
           },
           {
             "number": 8,
-            "frequencyHz": 7154.776,
-            "relativeDb": -66.72
+            "frequencyHz": 7154.763,
+            "relativeDb": -67.76
           },
           {
             "number": 9,
-            "frequencyHz": 8166.708,
-            "relativeDb": -68.62
+            "frequencyHz": 8166.741,
+            "relativeDb": -69.76
           },
           {
             "number": 10,
-            "frequencyHz": 8970.666,
-            "relativeDb": -68.02
+            "frequencyHz": 8970.671,
+            "relativeDb": -69.15
           },
           {
             "number": 11,
-            "frequencyHz": 9601.566,
-            "relativeDb": -67.8
+            "frequencyHz": 9601.621,
+            "relativeDb": -69.11
           },
           {
             "number": 12,
-            "frequencyHz": 11009.012,
-            "relativeDb": -70.91
+            "frequencyHz": 11009.007,
+            "relativeDb": -72.17
           }
         ]
       },
@@ -1729,78 +1728,78 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.38441,
-        "rms": 0.03193,
+        "peak": 0.39195,
+        "rms": 0.03056,
         "dc": 0.0000013,
-        "attackToPeakMs": 22.18,
-        "fundamentalEstimateHz": 1759.28458,
-        "pitchErrorCents": -0.704,
-        "centroidHz": 1722.49,
-        "centroidToFundamental": 0.979,
-        "inharmonicityB": 0.00149443,
-        "totalDecayDb_0_18s_to_1_45s": -27.67,
-        "startBoundaryDelta": 0.000607,
-        "endBoundaryDelta": 0.000102,
+        "attackToPeakMs": 19.05,
+        "fundamentalEstimateHz": 1759.27935,
+        "pitchErrorCents": -0.709,
+        "centroidHz": 1755.59,
+        "centroidToFundamental": 0.997,
+        "inharmonicityB": 0.00149626,
+        "totalDecayDb_0_18s_to_1_45s": -26.24,
+        "startBoundaryDelta": 0.000746,
+        "endBoundaryDelta": 0.000134,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 1759.25,
+            "frequencyHz": 1759.238,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 3546.141,
-            "relativeDb": -17.27
+            "frequencyHz": 3539.173,
+            "relativeDb": -13.72
           },
           {
             "number": 3,
-            "frequencyHz": 5309.651,
-            "relativeDb": -58.23
+            "frequencyHz": 5309.659,
+            "relativeDb": -57.82
           },
           {
             "number": 4,
-            "frequencyHz": 7119.673,
-            "relativeDb": -60.26
+            "frequencyHz": 7119.679,
+            "relativeDb": -59.46
           },
           {
             "number": 5,
-            "frequencyHz": 8903.313,
-            "relativeDb": -64.32
+            "frequencyHz": 8903.323,
+            "relativeDb": -63.24
           },
           {
             "number": 6,
-            "frequencyHz": 10612.563,
-            "relativeDb": -64.89
+            "frequencyHz": 10612.557,
+            "relativeDb": -63.64
           },
           {
             "number": 7,
-            "frequencyHz": 12141.72,
-            "relativeDb": -70.31
+            "frequencyHz": 12447.814,
+            "relativeDb": -68.95
           },
           {
             "number": 8,
-            "frequencyHz": 14388.444,
-            "relativeDb": -73.89
+            "frequencyHz": 14388.445,
+            "relativeDb": -72.58
           },
           {
             "number": 9,
-            "frequencyHz": 15812.387,
-            "relativeDb": -81.04
+            "frequencyHz": 15812.41,
+            "relativeDb": -79.63
           },
           {
             "number": 10,
-            "frequencyHz": 17582.579,
-            "relativeDb": -84.37
+            "frequencyHz": 17582.574,
+            "relativeDb": -82.87
           },
           {
             "number": 11,
-            "frequencyHz": 19162.857,
-            "relativeDb": -95.89
+            "frequencyHz": 19162.856,
+            "relativeDb": -94.44
           },
           {
             "number": 12,
-            "frequencyHz": 20918.343,
-            "relativeDb": -108.6
+            "frequencyHz": 20918.356,
+            "relativeDb": -107.25
           }
         ]
       },
@@ -1810,43 +1809,43 @@
         "velocity": 0.97,
         "durationSeconds": 2.2,
         "sampleCount": 97020,
-        "peak": 0.1581,
-        "rms": 0.01087,
-        "dc": 5e-7,
-        "attackToPeakMs": 16.37,
-        "fundamentalEstimateHz": 4192.91011,
+        "peak": 0.20475,
+        "rms": 0.01172,
+        "dc": -1e-7,
+        "attackToPeakMs": 18.3,
+        "fundamentalEstimateHz": 4192.91021,
         "pitchErrorCents": 2.852,
-        "centroidHz": 3940.74,
-        "centroidToFundamental": 0.941,
+        "centroidHz": 2052.73,
+        "centroidToFundamental": 0.49,
         "inharmonicityB": null,
-        "totalDecayDb_0_18s_to_1_45s": -33.54,
-        "startBoundaryDelta": 0.000914,
-        "endBoundaryDelta": 0.000032,
+        "totalDecayDb_0_18s_to_1_45s": -34.6,
+        "startBoundaryDelta": 0.001129,
+        "endBoundaryDelta": 0.000006,
         "partials": [
           {
             "number": 1,
-            "frequencyHz": 4192.883,
+            "frequencyHz": 4192.884,
             "relativeDb": 0
           },
           {
             "number": 2,
-            "frequencyHz": 8358.98,
-            "relativeDb": -59.52
+            "frequencyHz": 8358.984,
+            "relativeDb": -58.46
           },
           {
             "number": 3,
-            "frequencyHz": 12562.803,
-            "relativeDb": -68.38
+            "frequencyHz": 12562.827,
+            "relativeDb": -67.28
           },
           {
             "number": 4,
-            "frequencyHz": 16588.471,
-            "relativeDb": -80.46
+            "frequencyHz": 16588.481,
+            "relativeDb": -79.55
           },
           {
             "number": 5,
-            "frequencyHz": 20662.161,
-            "relativeDb": -104.51
+            "frequencyHz": 20662.16,
+            "relativeDb": -103.81
           }
         ]
       }

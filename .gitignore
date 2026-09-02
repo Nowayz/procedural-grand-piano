@@ -1,4 +1,5 @@
 node_modules/
 *.tgz
 *.wav
+!src/impulse-responses/genesis-6-studio-room.wav
 .DS_Store
