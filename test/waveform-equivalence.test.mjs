@@ -21,12 +21,12 @@ const REFERENCE_RENDERS = [
   {
     name: 'A0 soft',
     arguments: [27.5, 0.3, 0.06],
-    sha256: '27da37154c5659bf39c0c5d97ac421e83e327fdfccfd63cb8220fa8bb8dce27b',
+    sha256: 'eec70cb347cd1a517328a1cd5eaa20dc0b5251e852d0670cd85b175622fbb6f7',
   },
   {
     name: 'A4 medium-long render',
     arguments: [440, 0.731, 0.45],
-    sha256: '0fa0e82d68c0c9ee611c2340a087dfc796e44ec39cbc9e57b56b166597ec8be2',
+    sha256: '9e0a019ca75afa2213b4c76468157dfc7a1b9a98dd041fbe115ac88f7d2990a7',
   },
   {
     name: 'C8 maximum velocity',
@@ -41,32 +41,32 @@ const REFERENCE_RENDERS = [
   {
     name: 'fade length minus one',
     arguments: [440, 0.731, 255 / SAMPLE_RATE],
-    sha256: 'a0ac19914d6fb7c589600219d30d63ff90c781c4c008420ee6ab81fc90211de4',
+    sha256: '2f6bf507ed012c6e35732214984675363ec988d2b6cc839f51ab3fd84bfdb8e4',
   },
   {
     name: 'exact fade length',
     arguments: [440, 0.731, 256 / SAMPLE_RATE],
-    sha256: 'b710d2c0c52e7ad280aa08f821abfeedef285a325254fbdab037de9ddf41a626',
+    sha256: '0d73a5fcb2a90aa80a34a47462be2dda76810a838b956ce4a8f141547c2c95c7',
   },
   {
     name: 'fade length plus one',
     arguments: [440, 0.731, 257 / SAMPLE_RATE],
-    sha256: '8d42e815f35ea6cc35c2e4ed9e09068a92c5cc0a56bceee98275ac6214bb00fb',
+    sha256: '589bddbbee3a6beb9a97142a0dc86cf39515ef4288a286dae686bce7dd58c5c7',
   },
   {
     name: 'near-zero nonzero velocity',
     arguments: [440, 0.000_001, 0.03],
-    sha256: '294e9d1aa408099154444c9af79576d7b965d8018d24d6118399ed90c4ccbbb1',
+    sha256: '88f1dcde353a5e7ac4c117749ab1c988533c6adea94c936888230a5f13f5f02c',
   },
   {
     name: 'frequency clamped below A0',
     arguments: [-1, 0.7, 0.025],
-    sha256: 'c287b044db95714f1912e1edd6df699d0547c9ec73e74a6991cef811ee36da05',
+    sha256: '4285e6217951425f4a653eb72a30e01a10ebfbcbd0ab785cecfcd58aa50aed29',
   },
   {
     name: 'frequency clamped above C8',
     arguments: [99_999, 0.7, 0.025],
-    sha256: '7de8b70518d87821e1217e4519dc41d40a969877893f832728eb1d4b03bfa723',
+    sha256: '4087beecc0da993c4724b9ab4be238a62bdc24605f086158cafadb74e0225a00',
   },
   {
     name: 'velocity clamped above one',
@@ -93,7 +93,7 @@ test('all 88 keys remain deterministic at soft, medium, and hard velocities', ()
   }
   assert.equal(
     aggregate.digest('hex'),
-    '916cd9467e2ac55891e35d62645616d5fd4eca711357b5ab9b39a0f6e09555d1',
+    '4743d46d6fcd164dc5c3c1ea33ce72d61fb7e5e4769fb812a1ec7c85edf17ae8',
   );
 });
 

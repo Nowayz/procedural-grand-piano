@@ -62,8 +62,10 @@ Input handling is deliberate:
 - All three arguments must be finite JavaScript numbers; other values throw
   `TypeError`.
 - `note_hz` is clamped to A0–C8 (`27.5`–`4186.009...` Hz).
-- `velocity` is clamped to `0..1`; exactly zero produces correctly sized
-  digital silence.
+- `velocity` is clamped to `0..1` and follows the MIDI-CI Piano Profile's
+  default Note On velocity curve. The renderer maps it logarithmically onto
+  normalized hammer impact speed using the recommended 3% slowest-sounding
+  speed; exactly zero produces correctly sized digital silence.
 - `duration_seconds` is clamped to `0..30` seconds. The upper limit prevents an
   accidental unbounded allocation.
 
@@ -167,6 +169,12 @@ than an oscillator bank under one shared envelope:
 - A finite nonlinear felt-force pulse drives damped second-order string
   resonators from rest. Contact duration, force shape, strike position, and
   spectral hardness vary continuously with register and velocity.
+- The force pulse is normalized to unit area and its excitation magnitude is
+  linear in normalized hammer impact speed. MIDI velocity is first converted
+  to hammer speed by `s = 0.03 * (1 / 0.03) ** velocity` for nonzero input, as
+  specified by the MIDI-CI Piano Profile receiver curve. Thus doubling hammer
+  speed gives an unclipped first-order peak-amplitude change of approximately
+  6.02 dB; register voicing does not redefine that dynamic law.
 - One, two, or three strings are used by register. Unequal string coupling,
   several-cent treble offsets, and a small deterministic per-strike zero-mean
   phase spread form resolvable unison lines; weak orthogonal
@@ -232,6 +240,11 @@ recordings spanning A0, A2, C4, A4, and A6 at four velocities plus six
 release/resonance recordings. The final wide-grid analysis measures **all 480
 sustain recordings** (30 pitches × 16 velocity layers) against independently
 rendered procedural notes.
+
+Those SFZ layer numbers are sample-switching regions, not measured hammer
+speeds and not a MIDI-CI Piano Profile calibration. Their within-note level
+curve remains a useful recording comparison, but it is not physical evidence
+for redefining the hammer-speed-to-amplitude law.
 
 That path is now a submodule pointing to the canonical Salamander Grand Piano
 repository. Upstream currently ships a newer 48 kHz/24-bit FLAC edition; the

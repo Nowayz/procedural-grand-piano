@@ -24,8 +24,8 @@ test('MIDI rendering releases incomplete input and reports a forced tail cap', (
  const performance = { controls: [{ type: 'noteOn', seconds: 0, id: 1, frequency: 261.625565, velocity: .8 }], durationSeconds: .01 }, rendered = renderMidiPerformance(performance, { tailSeconds: 0, maximumTailSeconds: .1, polyphony: 2 }); assert.equal(rendered.truncatedVoices, 1); assert.equal(rendered.mono.length, Math.round(.11 * rendered.sampleRate)); assert.ok(Math.abs(rendered.mono.at(-1)) < 1e-7);
 });
 
-test('adaptive MIDI tails do not truncate the longest surveyed damperless treble key', () => {
- const frequency = 440 * 2 ** ((104 - 69) / 12), performance = { controls: [{ type: 'noteOn', seconds: 0, id: 1, frequency, velocity: .8 }, { type: 'noteOff', seconds: .01, id: 1, velocity: 1 }], durationSeconds: .01 }, rendered = renderMidiPerformance(performance, { tailSeconds: 0, polyphony: 2 }); assert.equal(rendered.truncatedVoices, 0); assert.ok(rendered.mono.length > 12 * rendered.sampleRate, `natural tail is ${rendered.mono.length / rendered.sampleRate} seconds`); assert.ok(rendered.mono.length < 14 * rendered.sampleRate);
+test('adaptive MIDI tails retain the longest surveyed damperless treble key until it is inaudible', () => {
+ const frequency = 440 * 2 ** ((104 - 69) / 12), performance = { controls: [{ type: 'noteOn', seconds: 0, id: 1, frequency, velocity: .8 }, { type: 'noteOff', seconds: .01, id: 1, velocity: 1 }], durationSeconds: .01 }, rendered = renderMidiPerformance(performance, { tailSeconds: 0, polyphony: 2 }); assert.equal(rendered.truncatedVoices, 0); assert.ok(rendered.mono.length > 10 * rendered.sampleRate, `audible tail is ${rendered.mono.length / rendered.sampleRate} seconds`); assert.ok(rendered.mono.length < 12 * rendered.sampleRate);
 });
 
 test('malformed and unsupported MIDI inputs are rejected', () => {

@@ -57,6 +57,17 @@ impulse response, or resampled PCM is present in the runtime.
   exponent, duration, and bandwidth vary with register and hammer velocity.
   The model remains causal and avoids solving a nonlinear collision at every
   output sample. [Physics-informed piano model](https://www.frontiersin.org/journals/signal-processing/articles/10.3389/frsip.2023.1276748/full)
+- Palmer and Brown measured a greater than 0.99 correlation between final
+  hammer velocity and both initial string-motion amplitude and radiated peak
+  amplitude over most of their approximately 0.5–4 m/s test range. This
+  supports linear excitation magnitude for a fixed key; it does not support a
+  register-dependent output exponent.
+  [Palmer & Brown (1991)](https://escholarship.mcgill.ca/downloads/c821gq19r)
+- The MIDI-CI Profile for Piano defines Note On velocity as logarithmic in
+  hammer speed. Its recommended starting curve assigns the slowest sounding
+  strike 3% of maximum speed, giving the normalized inverse
+  `s = 0.03(1/0.03)^v`.
+  [MIDI Association profile](https://midi.org/midi-ci-profile-for-piano)
 
 ## Key return, damper contact, and acoustic note length
 
@@ -165,7 +176,8 @@ profiles. No neighboring-key interpolation occurs at runtime.
 |---|---|---|
 | String scale | `F0=(1/2L)sqrt(T/mu)`, `B=pi^3 E d^4/(64 T L^2)`, and `f_n=n F0 sqrt(1+B n^2)` | The synthesizer divides by `sqrt(1+B)` because its input is the actual first partial. Following Rigaud et al., whole-compass `B(m)` is the sum of bass- and treble-bridge exponential asymptotes: `exp(-0.0764347m-6.68229)+exp(0.0796515m-12.91564)`. This is a literature-backed smooth scale model, not key interpolation. |
 | String loss | `y_tt=c^2 y_xx-kappa^2 y_xxxx-2b1 y_t+2b3 y_txx`; modal damping therefore contains a constant and a frequency-squared term | The modal pole uses an analytic base T60 and quadratic high-frequency reduction. A held-out, bounded smooth correction of at most 3 dB/s adjusts the loss surface over register, velocity, and partial number; it changes the profile without replacing the physical positive-loss baseline. |
-| Hammer contact | Classical felt laws use one-sided nonlinear contact `F=K delta^p H(delta)` and improve it with hysteresis | The finite asymmetric force pulse is a causal, efficient surrogate, not an exact solution of the hammer mass/contact ODE. Velocity-dependent duration and bandwidth are physically motivated but phenomenological. |
+| Hammer contact and level | Classical felt laws use one-sided nonlinear contact `F=K delta^p H(delta)` and improve it with hysteresis. Measured initial string motion and radiated peak amplitude are approximately proportional to hammer impact speed for a fixed key. The MIDI-CI Piano Profile receiver curve maps Note On velocity logarithmically to hammer speed and recommends a 3% slowest-sounding speed as its starting point. | Nonzero normalized MIDI velocity `v` maps to normalized hammer speed `s=0.03(1/0.03)^v`; zero remains silence. The finite asymmetric force pulse is a causal, unit-area surrogate, not an exact solution of the hammer mass/contact ODE. Its magnitude is linear in `s`, while speed-dependent duration and bandwidth remain physically motivated but phenomenological. |
+| Passive modal voicing | A loss factor may remove modal energy but cannot amplify it. Velocity changes the hammer's spectral distribution rather than turning string loss into gain. | The extreme-treble loss coefficient is lower-bounded at zero, ensuring its exponential multiplier remains in `(0, 1]`. This removes the former soft-note energy injection that the empirical output exponent had masked. |
 | Strike point | Pinned-string mode shape is `sin(n pi x/L)` | Modal drive uses that sine factor directly. This part is analytic and physically derived. |
 | Unison coupling | Bridge admittance couples doublets/triplets; symmetric and antisymmetric modes have different loss and produce beats/aftersound | Slightly unequal strings plus independent fast, slow, and polarization poles are a reduced modal realization. It reproduces the mechanism but does not solve the full admittance matrix. |
 | Bridge/soundboard mobility | Mechanical mobility is `Y(omega)=V(omega)/F(omega)`; mean mobility depends on structural mass, modal density, and loss factor. Rib confinement changes the regime near 1.1 kHz | Ten log-frequency quadrature sections approximate the mean response. Their gain is a low-frequency radiation-efficiency term times a smooth log-mobility loss, while Q rises continuously toward local inter-rib motion. The short impact bank uses a power-warped retained modal density, `tau(f)` loss, alternating bridge participation, and a smooth 2.35 kHz mobility lobe. These are calibrated reduced profiles, not identified eigenmodes of a particular board. |

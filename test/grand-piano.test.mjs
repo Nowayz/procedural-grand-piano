@@ -135,6 +135,29 @@ test('velocity changes both energy and attack-spectrum brightness', () => {
   }
 });
 
+test('normalized hammer speed supplies linear impulse magnitude', async () => {
+  const cSource = await readFile(new URL('../tools/grand-piano-wasm.c', import.meta.url), 'utf8');
+  assert.match(cSource, /piano_velocity_to_hammer_speed\(double velocity\)/);
+  assert.match(cSource, /return velocity > 0 \? \.03 \* pow\(1 \/ \.03, velocity\) : 0/);
+  assert.match(cSource, /hammer_speed_gain\(double normalized_speed\) \{ return clamp\(normalized_speed, 0, 1\); \}/);
+  assert.match(cSource, /target->hammer_speed = piano_velocity_to_hammer_speed\(target->strike_velocity\)/);
+  assert.match(cSource, /velocity_gain = \.3 \* bass_compensation \* bass_trim \* pow\(10, register_radiation_db\(target->midi\) \/ 20\) \* hammer_speed_gain\(target->hammer_speed\)/);
+  assert.doesNotMatch(cSource, /velocity_exponent|bass_velocity_bump_db/);
+  assert.match(cSource, /treble_loss = fmax\(0,/);
+  const hammerSpeed = (velocity) => velocity > 0 ? 0.03 * (1 / 0.03) ** velocity : 0;
+  assert.equal(hammerSpeed(0), 0);
+  assert.ok(Math.abs(hammerSpeed(0.5) - Math.sqrt(0.03)) < 1e-12);
+  assert.equal(hammerSpeed(1), 1);
+  assert.ok(Math.abs(20 * Math.log10(hammerSpeed(0.6) / hammerSpeed(0.3)) - 20 * 0.3 * Math.log10(1 / 0.03)) < 1e-12);
+});
+
+test('polyphonic mixing does not change master gain with retained voice count', async () => {
+  const cSource = await readFile(new URL('../tools/grand-piano-wasm.c', import.meta.url), 'utf8');
+  assert.doesNotMatch(cSource, /mix_scale|sqrt\([^;]*active_voices/);
+  assert.match(cSource, /realtime_mix\[frame\] \+= sample;/);
+  assert.match(cSource, /realtime_side\[frame\] \+= target->stereo_side;/);
+});
+
 test('middle C retains broadband bridge presence without a fitted spectral target', () => {
   const pcm = synthesizeGrandPiano(261.625565, 0.62, 1.65);
   const attack = attackMetrics(pcm, SAMPLE_RATE);
@@ -202,7 +225,7 @@ test('runtime implementation has no sample-loading or playback path', async () =
 
 test('runtime implementation stays within its compact source budgets', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url));
-  assert.ok(source.length <= 97_000, `raw module is ${source.length} bytes`);
+  assert.ok(source.length <= 99_000, `raw module is ${source.length} bytes`);
   const gzipBytes = gzipSync(source, { level: 9 }).length;
   assert.ok(gzipBytes <= 45_000, `gzip module is ${gzipBytes} bytes`);
 });

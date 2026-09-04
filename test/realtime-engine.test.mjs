@@ -72,7 +72,11 @@ test('continuous key motion controls damper lift and repetition return', () => {
 });
 
 test('physical note renderer treats duration as key-down time and retains the complete acoustic release', () => {
- const short = renderGrandPianoNote(midiFrequency(60), .8, .013), ordinary = renderGrandPianoNote(440, .8, .5), damperless = renderGrandPianoNote(midiFrequency(108), .8, .01); assert.ok(short.length > .5 * 44_100, `13 ms key gate rendered ${short.length / 44_100} seconds`); assert.ok(ordinary.length > .9 * 44_100, `ordinary note rendered ${ordinary.length / 44_100} seconds`); assert.ok(damperless.length > 5 * 44_100 && damperless.length < 7 * 44_100, `damperless note rendered ${damperless.length / 44_100} seconds`); assert.equal(short.at(-1), 0); assert.equal(ordinary.at(-1), 0); assert.equal(damperless.at(-1), 0);
+ const short = renderGrandPianoNote(midiFrequency(60), .8, .013), ordinary = renderGrandPianoNote(440, .8, .5), damperless = renderGrandPianoNote(midiFrequency(108), .8, .01); assert.ok(short.length > .5 * 44_100, `13 ms key gate rendered ${short.length / 44_100} seconds`); assert.ok(ordinary.length > .9 * 44_100, `ordinary note rendered ${ordinary.length / 44_100} seconds`); assert.ok(damperless.length > 4 * 44_100 && damperless.length < 5 * 44_100, `damperless note rendered ${damperless.length / 44_100} seconds`); assert.equal(short.at(-1), 0); assert.equal(ordinary.at(-1), 0); assert.equal(damperless.at(-1), 0);
+});
+
+test('terminal tail energy is below the calibrated human hearing threshold', () => {
+ const sampleRate = 44_100, pcm = renderGrandPianoNote(midiFrequency(108), .8, .01), last = pcm.findLastIndex((sample) => sample !== 0), windowSamples = Math.round(.12 * sampleRate), first = last - windowSamples + 1; let energy = 0; for (let index = first; index <= last; index += 1) energy += pcm[index] ** 2; const rms = Math.sqrt(energy / windowSamples), estimatedDbSpl = 100 + 20 * Math.log10(rms); assert.ok(estimatedDbSpl <= .5, `terminal tail is ${estimatedDbSpl} dB SPL`);
 });
 
 test('same-identity restrikes preserve the previous string vibration', () => {
@@ -101,6 +105,10 @@ test('realtime API validates fixed queue, block, rate, and identifier contracts'
 
 test('AudioWorklet render callback and C realtime path contain no dynamic allocation', async () => {
  const worklet = await readFile(new URL('../src/grand-piano-worklet.js', import.meta.url), 'utf8'), cSource = await readFile(new URL('../tools/grand-piano-wasm.c', import.meta.url), 'utf8'); const processBody = /process\(_inputs, outputs\) \{([^}]*)\}/.exec(worklet)?.[1]; assert.ok(processBody); assert.doesNotMatch(processBody, /\bnew\b|\.(?:map|slice|subarray|push)\(|\{\s*\w+\s*:/); assert.doesNotMatch(cSource, /\b(?:malloc|calloc|realloc|free)\s*\(/); assert.match(cSource, /#define MAX_VOICES 256/); assert.match(cSource, /#define EVENT_COUNT 256/); assert.match(cSource, /#define BLOCK_SIZE 128/); assert.match(cSource, /#define FIRST_UNDAMPED_MIDI 91/); assert.match(cSource, /#define DAMPER_RETIREMENT_DB 80/); assert.match(cSource, /#define MODE_ROWS 23/); assert.match(cSource, /modes\[21\]\[mode_count\] = \.9 \* extreme_treble/); assert.match(cSource, /modes\[22\]\[mode_count\] = decay\(1, \.7\)/);
+});
+
+test('inaudible released and pedal-held voices retire by calibrated acoustic energy', async () => {
+ const cSource = await readFile(new URL('../tools/grand-piano-wasm.c', import.meta.url), 'utf8'); assert.match(cSource, /#define FULL_SCALE_SOUND_PRESSURE_DB_SPL 100/); assert.match(cSource, /#define HEARING_THRESHOLD_DB_SPL 0/); assert.match(cSource, /#define INAUDIBLE_SECONDS \.12/); assert.match(cSource, /pow\(10, \(HEARING_THRESHOLD_DB_SPL - FULL_SCALE_SOUND_PRESSURE_DB_SPL\) \/ 20\.0\)/); assert.match(cSource, /target->inaudible_energy \+= sample \* sample/); assert.match(cSource, /target->inaudible_bridge_energy \+= target->bridge_output \* target->bridge_output/); assert.match(cSource, /target->inaudible_energy > threshold_energy \|\| target->inaudible_bridge_energy > threshold_energy/); assert.equal(10 ** ((0 - 100) / 20), 1e-5);
 });
 
 test('browser controller loads one worklet node and sends absolute-time controls', async () => {

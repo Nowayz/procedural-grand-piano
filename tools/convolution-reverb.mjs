@@ -118,6 +118,17 @@ function masterStereo(left, right, sampleRate) {
   return gain;
 }
 
+export function applyStereoLoudnessCeiling(left, right, { ceilingDb = -26, detectorAttackSeconds = 0.03, detectorReleaseSeconds = 0.3, gainAttackSeconds = 0.008, gainReleaseSeconds = 0.7, lookaheadSeconds = 0.04, sampleRate = 44_100 } = {}) {
+  if (left.length !== right.length) throw new RangeError('stereo channel lengths must match');
+  if (!(sampleRate > 0) || !Number.isFinite(ceilingDb)) throw new RangeError('sample rate and loudness ceiling must be finite');
+  const desiredGain = new Float32Array(left.length), threshold = 10 ** (ceilingDb / 20), detectorAttack = Math.exp(-1 / (detectorAttackSeconds * sampleRate)), detectorRelease = Math.exp(-1 / (detectorReleaseSeconds * sampleRate));
+  let power = 0;
+  for (let index = 0; index < left.length; index += 1) { const instantaneousPower = .5 * (left[index] ** 2 + right[index] ** 2), coefficient = instantaneousPower > power ? detectorAttack : detectorRelease; power = coefficient * power + (1 - coefficient) * instantaneousPower; desiredGain[index] = Math.min(1, threshold / Math.sqrt(Math.max(power, Number.EPSILON))); }
+  const gainAttack = Math.exp(-1 / (gainAttackSeconds * sampleRate)), gainRelease = Math.exp(-1 / (gainReleaseSeconds * sampleRate)), lookahead = Math.round(lookaheadSeconds * sampleRate); let gain = 1, minimumGain = 1;
+  for (let index = 0; index < left.length; index += 1) { const target = desiredGain[Math.min(left.length - 1, index + lookahead)], coefficient = target < gain ? gainAttack : gainRelease; gain = coefficient * gain + (1 - coefficient) * target; minimumGain = Math.min(minimumGain, gain); left[index] *= gain; right[index] *= gain; }
+  return { minimumGain, maximumReductionDb: -20 * Math.log10(minimumGain) };
+}
+
 export function applyConvolverReverb(left, right, impulseLeft, impulseRight, { wet = 0.18, normalize = true, master = true, sampleRate = 44_100, blockSize = 16_384 } = {}) {
   if (left.length !== right.length || impulseLeft.length !== impulseRight.length || impulseLeft.length === 0) throw new RangeError('stereo channel lengths must match and the impulse response must not be empty');
   if (blockSize < 2 || blockSize & blockSize - 1) throw new RangeError('blockSize must be a power of two');
