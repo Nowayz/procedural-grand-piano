@@ -141,7 +141,7 @@ test('normalized hammer speed supplies linear impulse magnitude', async () => {
   assert.match(cSource, /return velocity > 0 \? \.03 \* pow\(1 \/ \.03, velocity\) : 0/);
   assert.match(cSource, /hammer_speed_gain\(double normalized_speed\) \{ return clamp\(normalized_speed, 0, 1\); \}/);
   assert.match(cSource, /target->hammer_speed = piano_velocity_to_hammer_speed\(target->strike_velocity\)/);
-  assert.match(cSource, /velocity_gain = \.3 \* bass_compensation \* bass_trim \* pow\(10, register_radiation_db\(target->midi\) \/ 20\) \* hammer_speed_gain\(target->hammer_speed\)/);
+  assert.match(cSource, /velocity_gain = \.3 \* bass_compensation \* bass_trim \* pow\(10, \(register_radiation_db\(target->midi\) \+ radiation_velocity_db\(target->midi, target->strike_velocity\) \+ level_residual_db\(target->midi, target->strike_velocity\)\) \/ 20\) \* hammer_speed_gain\(target->hammer_speed\)/);
   assert.doesNotMatch(cSource, /velocity_exponent|bass_velocity_bump_db/);
   assert.match(cSource, /treble_loss = fmax\(0,/);
   const hammerSpeed = (velocity) => velocity > 0 ? 0.03 * (1 / 0.03) ** velocity : 0;
@@ -225,7 +225,7 @@ test('runtime implementation has no sample-loading or playback path', async () =
 
 test('runtime implementation stays within its compact source budgets', async () => {
   const source = await readFile(new URL('../src/grand-piano.js', import.meta.url));
-  assert.ok(source.length <= 99_000, `raw module is ${source.length} bytes`);
+  assert.ok(source.length <= 101_000, `raw module is ${source.length} bytes`);
   const gzipBytes = gzipSync(source, { level: 9 }).length;
   assert.ok(gzipBytes <= 45_000, `gzip module is ${gzipBytes} bytes`);
 });

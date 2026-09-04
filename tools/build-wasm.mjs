@@ -11,10 +11,22 @@ const temporaryDirectory = mkdtempSync(path.join(tmpdir(), 'grand-piano-wasm-'))
 const unoptimizedPath = path.join(temporaryDirectory, 'piano.wasm');
 const optimizedPath = path.join(temporaryDirectory, 'piano-opt.wasm');
 const check = process.argv.includes('--check');
+const wasmOpt = process.env.EMSDK
+ ? path.join(process.env.EMSDK, 'upstream', 'bin', process.platform === 'win32' ? 'wasm-opt.exe' : 'wasm-opt')
+ : 'wasm-opt';
+const compilerOptimization = process.env.PIANO_WASM_OPTIMIZATION ?? '-Oz';
+if (!['-Oz', '-Os', '-O1', '-O2', '-O3'].includes(compilerOptimization)) throw new Error(`invalid Wasm compiler optimization ${compilerOptimization}`);
+const experimentalDefinitions = JSON.parse(process.env.PIANO_WASM_DEFINES ?? '{}');
+const definitionArguments = Object.entries(experimentalDefinitions).map(([name, value]) => {
+ if (!/^PIANO_[A-Z0-9_]+$/.test(name) || typeof value !== 'number' || !Number.isFinite(value)) {
+  throw new Error(`invalid experimental Wasm definition ${name}`);
+ }
+ return `-D${name}=${value}`;
+});
 
 try {
- execFileSync('emcc', [sourcePath, '-O3', '-msimd128', '-ffp-contract=fast', '-fno-math-errno', '-fno-trapping-math', '-s', 'STANDALONE_WASM=1', '--no-entry', '-s', 'EXPORTED_FUNCTIONS=["_synthesize","_output_ptr"]', '-s', 'INITIAL_MEMORY=33554432', '-s', 'ALLOW_MEMORY_GROWTH=0', '-o', unoptimizedPath], { stdio: 'inherit' });
- execFileSync('wasm-opt', ['-O4', '--enable-simd', '--enable-bulk-memory', '--enable-nontrapping-float-to-int', unoptimizedPath, '-o', optimizedPath], { stdio: 'inherit' });
+ execFileSync('emcc', [sourcePath, ...definitionArguments, compilerOptimization, '-msimd128', '-ffp-contract=fast', '-fno-math-errno', '-fno-trapping-math', '-s', 'STANDALONE_WASM=1', '--no-entry', '-s', 'EXPORTED_FUNCTIONS=["_synthesize","_output_ptr"]', '-s', 'INITIAL_MEMORY=33554432', '-s', 'ALLOW_MEMORY_GROWTH=0', '-o', unoptimizedPath], { stdio: 'inherit' });
+ execFileSync(wasmOpt, ['-Oz', '--code-folding', '--merge-similar-functions', '--enable-simd', '--enable-bulk-memory', '--enable-nontrapping-float-to-int', unoptimizedPath, '-o', optimizedPath], { stdio: 'inherit' });
  const encoded = readFileSync(optimizedPath).toString('base64');
  const runtime = readFileSync(runtimePath, 'utf8');
  const expression = /(const WASM_BYTES = Uint8Array\.from\(atob\(')[^']*/;

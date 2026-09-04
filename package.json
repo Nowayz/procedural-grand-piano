@@ -14,6 +14,7 @@
     "src",
     "README.md",
     "tools/grand-piano-wasm.c",
+    "tools/high-resolution-radiation-fit.h",
     "tools/build-wasm.mjs"
   ],
   "sideEffects": [

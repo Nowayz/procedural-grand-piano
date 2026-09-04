@@ -106,7 +106,7 @@ master preset rather than claiming to copy an Apple impulse response.
 
 ## Realtime keyboard API
 
-The realtime API keeps each note alive until a matching key-up event and uses an `AudioWorklet` as the audio clock. Wasm owns the fixed voice pool, note state, sustain state, and mono mix; JavaScript only forwards controls and copies the finished block into the browser-provided output channel. No objects, arrays, or views are created inside the worklet's `process()` callback.
+The realtime API keeps each note alive while it remains acoustically audible and uses an `AudioWorklet` as the audio clock. A matching key-up controls the damper, but a voice whose radiated output and bridge energy have both fallen below the hearing threshold retires even if its key or the sustain pedal remains down. Wasm owns the fixed voice pool, note state, sustain state, and mono mix; JavaScript only forwards controls and copies the finished block into the browser-provided output channel. No objects, arrays, or views are created inside the worklet's `process()` callback.
 
 ```js
 import { createRealtimeGrandPiano, REALTIME_SCHEDULING_LEAD_SECONDS } from 'procedural-grand-piano/realtime';
@@ -125,7 +125,7 @@ piano.sustain(true);
 piano.sustain(false, context.currentTime + 2);
 ```
 
-`id` identifies the physical key press, so applications may use different IDs for overlapping strikes of the same pitch. `noteOn`, `noteOff`, and `sustain` accept absolute `AudioContext` times. An omitted time means “the next available render quantum,” which minimizes interactive latency but depends on main-thread and `MessagePort` scheduling. Sequencers should submit events at least `REALTIME_SCHEDULING_LEAD_SECONDS` (20 ms) ahead for stable sample placement. DOM events and `EventTarget` may be used by the interface, but they are deliberately absent from the DSP callback.
+`id` identifies one physical key press. Different IDs may describe successive strikes, but all strikes whose frequencies map to the same one of the piano's 88 keys reuse that key's single string voice. A restrike transfers ownership to its newest ID, injects a fresh hammer excitation into the existing modal state, and makes a later stale note-off for the prior ID harmless. `noteOn`, `noteOff`, and `sustain` accept absolute `AudioContext` times. An omitted time means “the next available render quantum,” which minimizes interactive latency but depends on main-thread and `MessagePort` scheduling. Sequencers should submit events at least `REALTIME_SCHEDULING_LEAD_SECONDS` (20 ms) ahead for stable sample placement. DOM events and `EventTarget` may be used by the interface, but they are deliberately absent from the DSP callback.
 
 `release_velocity` is a normalized key-return speed, clamped to `0..1`: `0`
 gives the slowest return, `1` the fastest, and omission uses `64 / 127`. It
@@ -143,7 +143,7 @@ when string motion falls below the remaining felt gap. Re-pedaling during key
 return or damping catches the string at its current energy: future attenuation
 stops, but energy already absorbed by the felt is not restored.
 
-All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices, supports up to 256, and deterministically steals the oldest released voice, then the oldest key-up/pedal-held voice, then the oldest held voice when full. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
+All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices and supports up to 256 slots, although the one-resonator-per-key rule limits a piano performance to 88 active physical voices. When a smaller configured pool fills, it deterministically steals the quietest released voice, then the quietest key-up/pedal-held voice, then the quietest held voice. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
 
 Realtime coefficients and timing follow the actual `AudioContext.sampleRate`; rates from 32 to 96 kHz are supported. Sustained 32-voice rendering at 48 kHz measured 1.37 ms median and 1.62 ms p95 per 2.67 ms quantum on the development machine. Starting many voices is more expensive because each strike constructs its modal state: an artificial simultaneous 32-note onset took 5.75 ms, while ordinary one-to-ten-finger keyboard attacks stay within a quantum on that machine.
 
@@ -155,7 +155,7 @@ The distributable runtime remains dependency-free with no required build step. I
 
 Each independent engine has one fixed 32 MiB Wasm memory containing the 256-voice pool, 256-event queue, mix block, every scratch value, and the maximum 30-second offline output arena. Memory growth is disabled and the simulation calls no allocator, so rendering into caller-provided buffers performs no allocation.
 
-The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 96,000 raw bytes and 45,000 gzip bytes; that includes the complete model, realtime engine, fixed data, and required standalone math routines.
+The canonical full-model source is [`tools/grand-piano-wasm.c`](tools/grand-piano-wasm.c). Run `npm run wasm:build` to compile and embed it with Emscripten and Binaryen, or `npm run wasm:check` to verify that the embedded bytes match the project source. The test suite enforces budgets of 101,000 raw bytes and 45,000 gzip bytes; that includes the complete model, realtime engine, fixed data, and required standalone math routines.
 
 ## Acoustic/DSP model
 
@@ -216,9 +216,11 @@ than an oscillator bank under one shared envelope:
   Partial lift weakens modal damping and ends contact when the decaying string
   displacement falls below the modeled felt gap, preserving the measured
   quieter final free-vibration stage instead of treating CC64 as a mute switch.
-- Keys G6–C8 have no dampers and ignore key release acoustically. Realtime
-  voices retire only after their peak-relative envelope remains below −80 dB
-  for 20 ms; there is no fixed note-off cutoff or forced release fade.
+- Keys G6–C8 have no dampers and ignore key release acoustically. Every realtime
+  voice, including a key-held or pedal-held one, retires only after both its
+  radiated output and bridge energy remain below the calibrated 0 dB SPL
+  hearing threshold for 120 ms; there is no fixed note-off cutoff or forced
+  release fade.
 - Extreme-treble participation in the very slow low-frequency body branch tapers
   toward C8, so a synthetic 58 Hz body rumble no longer determines an
   eighteen-second top-key lifespan.

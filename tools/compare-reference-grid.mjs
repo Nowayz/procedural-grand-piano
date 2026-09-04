@@ -9,6 +9,7 @@ import {
   attackMetrics,
   centsDifference,
   convertSampleRate,
+  fitStiffString,
   nextPowerOfTwo,
   partialPeaks,
   peakNear,
@@ -124,6 +125,23 @@ function averageSpectra(spectra) {
     }
   }
   return { ...first, powers };
+}
+
+function physicalFundamental(spectralData, expectedHz, lowRatio, highRatio) {
+  const fitted = fitStiffString(
+    spectralData,
+    expectedHz,
+    Math.max(1, Math.min(16, Math.floor(15_500 / expectedHz))),
+  );
+  if (fitted.strongPartials >= 3 && fitted.residualCents <= 8 &&
+      Math.abs(centsDifference(fitted.fundamentalHz, expectedHz)) <= 60) {
+    return fitted.fundamentalHz;
+  }
+  return peakNear(
+    spectralData,
+    expectedHz * lowRatio,
+    expectedHz * highRatio,
+  ).frequencyHz;
 }
 
 function averageChannels(channels) {
@@ -291,18 +309,10 @@ async function analyzePair(region) {
     synthesizedAttack.onsetSeconds,
     nominalHz,
   );
-  const referencePeak = peakNear(
-    referenceSpectrum,
-    nominalHz * 0.955,
-    nominalHz * 1.055,
-  );
-  const synthesizedPeak = peakNear(
-    synthesizedSpectrum,
-    nominalHz * 0.965,
-    nominalHz * 1.035,
-  );
-  const referencePitchCents = centsDifference(referencePeak.frequencyHz, nominalHz);
-  const synthesizedPitchCents = centsDifference(synthesizedPeak.frequencyHz, nominalHz);
+  const referenceFundamental = physicalFundamental(referenceSpectrum, nominalHz, 0.955, 1.055);
+  const synthesizedFundamental = physicalFundamental(synthesizedSpectrum, nominalHz, 0.965, 1.035);
+  const referencePitchCents = centsDifference(referenceFundamental, nominalHz);
+  const synthesizedPitchCents = centsDifference(synthesizedFundamental, nominalHz);
   const referenceCentroid = spectralCentroid(referenceSpectrum, 20, 16_000);
   const synthesizedCentroid = spectralCentroid(synthesizedSpectrum, 20, 16_000);
   const referenceFrameShape = onsetFrameShape(
@@ -325,8 +335,8 @@ async function analyzePair(region) {
     SAMPLE_RATE,
     synthesizedAttack.onsetSeconds,
   );
-  const referenceProfile = profileFromPartials(referenceSpectrum, referencePeak.frequencyHz);
-  const synthesizedProfile = profileFromPartials(synthesizedSpectrum, synthesizedPeak.frequencyHz);
+  const referenceProfile = profileFromPartials(referenceSpectrum, referenceFundamental);
+  const synthesizedProfile = profileFromPartials(synthesizedSpectrum, synthesizedFundamental);
   const referenceEarlyRms = rmsBetween(
     referenceSamples,
     (referenceAttack.onsetSeconds + 0.02) * SAMPLE_RATE,

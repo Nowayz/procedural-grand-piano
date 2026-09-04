@@ -429,9 +429,16 @@ export function estimateFundamental(samples, sampleRate, expectedHz, startSecond
   const start = Math.round(startSeconds * sampleRate);
   const length = Math.min(samples.length - start, Math.round(0.9 * sampleRate));
   if (length < 64) return Number.NaN;
-  const fftSize = nextPowerOfTwo(Math.max(length, 65_536));
+  const fftSize = nextPowerOfTwo(Math.max(length, 131_072));
   const spectralData = spectrum(samples, sampleRate, { start, length, fftSize });
-  return peakNear(spectralData, expectedHz * 0.965, expectedHz * 1.035).frequencyHz;
+  const fitted = fitStiffString(spectralData, expectedHz, Math.max(
+    1,
+    Math.min(16, Math.floor(15_500 / expectedHz)),
+  ));
+  return fitted.strongPartials >= 3 && fitted.residualCents <= 8 &&
+      Math.abs(centsDifference(fitted.fundamentalHz, expectedHz)) <= 60
+    ? fitted.fundamentalHz
+    : peakNear(spectralData, expectedHz * 0.965, expectedHz * 1.035).frequencyHz;
 }
 
 export function centsDifference(measuredHz, expectedHz) {
@@ -459,6 +466,88 @@ export function partialPeaks(spectralData, fundamentalHz, maximumPartial = 12) {
     result.push({ partial, ...peak });
   }
   return result;
+}
+
+/**
+ * Infer a string's f0 from several directly observed partials. This remains
+ * reliable when a piano's first partial is weak enough that a short-window
+ * FFT bin is a poor pitch estimate; it measures the stiff-string dispersion
+ * curve and never retunes or resamples the audio.
+ */
+export function fitStiffString(spectralData, expectedHz, maximumPartial = 16) {
+  const peaks = partialPeaks(spectralData, expectedHz, maximumPartial);
+  const strongest = Math.max(...peaks.map(({ power }) => power), Number.MIN_VALUE);
+  let selected = peaks.filter(({ power }) => 10 * Math.log10(
+    Math.max(power / strongest, Number.MIN_VALUE),
+  ) >= -35);
+
+  const fit = (items) => {
+    let weightSum = 0;
+    let meanX = 0;
+    let meanY = 0;
+    for (const peak of items) {
+      const weight = Math.sqrt(peak.power / strongest);
+      const x = peak.partial ** 2 - 1;
+      const y = (peak.frequencyHz / peak.partial) ** 2;
+      weightSum += weight;
+      meanX += weight * x;
+      meanY += weight * y;
+    }
+    meanX /= weightSum;
+    meanY /= weightSum;
+    let covariance = 0;
+    let variance = 0;
+    for (const peak of items) {
+      const weight = Math.sqrt(peak.power / strongest);
+      const x = peak.partial ** 2 - 1;
+      const y = (peak.frequencyHz / peak.partial) ** 2;
+      covariance += weight * (x - meanX) * (y - meanY);
+      variance += weight * (x - meanX) ** 2;
+    }
+    const slope = variance > 0 ? covariance / variance : 0;
+    const intercept = meanY - slope * meanX;
+    const stiffness = intercept > slope && slope >= 0
+      ? slope / (intercept - slope)
+      : 0;
+    return {
+      stiffness,
+      fundamentalHz: Math.sqrt(Math.max(intercept, Number.MIN_VALUE)),
+    };
+  };
+
+  if (selected.length < 3) {
+    return {
+      stiffness: Number.NaN,
+      fundamentalHz: peakNear(
+        spectralData,
+        expectedHz * 0.95,
+        expectedHz * 1.065,
+      ).frequencyHz,
+      residualCents: Number.NaN,
+      strongPartials: selected.length,
+    };
+  }
+
+  let model = fit(selected);
+  selected = selected.filter((peak) => {
+    const predicted = peak.partial * model.fundamentalHz * Math.sqrt(
+      (1 + model.stiffness * peak.partial ** 2) / (1 + model.stiffness),
+    );
+    return Math.abs(centsDifference(peak.frequencyHz, predicted)) <= 12;
+  });
+  if (selected.length >= 3) model = fit(selected);
+  const residuals = selected.map((peak) => {
+    const predicted = peak.partial * model.fundamentalHz * Math.sqrt(
+      (1 + model.stiffness * peak.partial ** 2) / (1 + model.stiffness),
+    );
+    return Math.abs(centsDifference(peak.frequencyHz, predicted));
+  });
+  return {
+    ...model,
+    residualCents: residuals.reduce((sum, value) => sum + value, 0) /
+      residuals.length,
+    strongPartials: selected.length,
+  };
 }
 
 export function estimateInharmonicity(peaks) {
