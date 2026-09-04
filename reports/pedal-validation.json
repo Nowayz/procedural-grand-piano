@@ -1,0 +1,2824 @@
+{
+  "generatedAt": "2026-09-04T20:30:41.446Z",
+  "coverage": "88 keys × 5 velocities × two pedal positions; 20–250 ms acoustic window",
+  "maximumSoftPedalLevelChange": {
+    "midi": 107,
+    "velocity": 1,
+    "levelChangeDb": 0.9879604819939733,
+    "brightnessRatio": 1.002664740003613
+  },
+  "motion": [
+    {
+      "sampleRate": 32000,
+      "milliseconds": 20,
+      "sustain": 0.18784876524426253,
+      "unaCorda": 0.11959624562215032
+    },
+    {
+      "sampleRate": 32000,
+      "milliseconds": 40,
+      "sustain": 0.4690033712796675,
+      "unaCorda": 0.33229460902327423
+    },
+    {
+      "sampleRate": 32000,
+      "milliseconds": 80,
+      "sustain": 0.8238540117664607,
+      "unaCorda": 0.6853978041177122
+    },
+    {
+      "sampleRate": 32000,
+      "milliseconds": 120,
+      "sustain": 0.9500000000000007,
+      "unaCorda": 0.8701060266810218
+    },
+    {
+      "sampleRate": 32000,
+      "milliseconds": 160,
+      "sustain": 0.9868829017682452,
+      "unaCorda": 0.9499999999999948
+    },
+    {
+      "sampleRate": 32000,
+      "milliseconds": 240,
+      "sustain": 0.9992052819228996,
+      "unaCorda": 0.993408566289691
+    },
+    {
+      "sampleRate": 44100,
+      "milliseconds": 20,
+      "sustain": 0.1878487652442603,
+      "unaCorda": 0.11959624562214688
+    },
+    {
+      "sampleRate": 44100,
+      "milliseconds": 40,
+      "sustain": 0.46900337127966363,
+      "unaCorda": 0.33229460902326924
+    },
+    {
+      "sampleRate": 44100,
+      "milliseconds": 80,
+      "sustain": 0.8238540117664608,
+      "unaCorda": 0.6853978041177092
+    },
+    {
+      "sampleRate": 44100,
+      "milliseconds": 120,
+      "sustain": 0.9500000000000015,
+      "unaCorda": 0.87010602668102
+    },
+    {
+      "sampleRate": 44100,
+      "milliseconds": 160,
+      "sustain": 0.9868829017682463,
+      "unaCorda": 0.9499999999999954
+    },
+    {
+      "sampleRate": 44100,
+      "milliseconds": 240,
+      "sustain": 0.9992052819228984,
+      "unaCorda": 0.9934085662896901
+    },
+    {
+      "sampleRate": 48000,
+      "milliseconds": 20,
+      "sustain": 0.18784876524423888,
+      "unaCorda": 0.11959624562213234
+    },
+    {
+      "sampleRate": 48000,
+      "milliseconds": 40,
+      "sustain": 0.469003371279634,
+      "unaCorda": 0.3322946090232419
+    },
+    {
+      "sampleRate": 48000,
+      "milliseconds": 80,
+      "sustain": 0.82385401176644,
+      "unaCorda": 0.6853978041176862
+    },
+    {
+      "sampleRate": 48000,
+      "milliseconds": 120,
+      "sustain": 0.9499999999999905,
+      "unaCorda": 0.8701060266810056
+    },
+    {
+      "sampleRate": 48000,
+      "milliseconds": 160,
+      "sustain": 0.9868829017682416,
+      "unaCorda": 0.9499999999999883
+    },
+    {
+      "sampleRate": 48000,
+      "milliseconds": 240,
+      "sustain": 0.9992052819228973,
+      "unaCorda": 0.9934085662896885
+    },
+    {
+      "sampleRate": 96000,
+      "milliseconds": 20,
+      "sustain": 0.1878487652442451,
+      "unaCorda": 0.11959624562215032
+    },
+    {
+      "sampleRate": 96000,
+      "milliseconds": 40,
+      "sustain": 0.46900337127964353,
+      "unaCorda": 0.33229460902326924
+    },
+    {
+      "sampleRate": 96000,
+      "milliseconds": 80,
+      "sustain": 0.823854011766447,
+      "unaCorda": 0.6853978041177062
+    },
+    {
+      "sampleRate": 96000,
+      "milliseconds": 120,
+      "sustain": 0.9499999999999987,
+      "unaCorda": 0.8701060266810176
+    },
+    {
+      "sampleRate": 96000,
+      "milliseconds": 160,
+      "sustain": 0.9868829017682454,
+      "unaCorda": 0.9499999999999923
+    },
+    {
+      "sampleRate": 96000,
+      "milliseconds": 240,
+      "sustain": 0.9992052819228969,
+      "unaCorda": 0.9934085662896922
+    }
+  ],
+  "performance": [
+    {
+      "voices": 1,
+      "sampleRate": 48000,
+      "blockBudgetMs": 2.6666666666666665,
+      "onsetMedianMs": 0.3122819999998683,
+      "sustainedMedianMs": 0.04622900000003938,
+      "sustainedP95Ms": 0.06198899999981222
+    },
+    {
+      "voices": 8,
+      "sampleRate": 48000,
+      "blockBudgetMs": 2.6666666666666665,
+      "onsetMedianMs": 2.016247000000021,
+      "sustainedMedianMs": 0.3352110000000721,
+      "sustainedP95Ms": 0.489636999999675
+    },
+    {
+      "voices": 32,
+      "sampleRate": 48000,
+      "blockBudgetMs": 2.6666666666666665,
+      "onsetMedianMs": 4.543350000000373,
+      "sustainedMedianMs": 0.7970489999997881,
+      "sustainedP95Ms": 1.284566000000268
+    }
+  ],
+  "cases": [
+    {
+      "midi": 21,
+      "velocity": 0.1,
+      "levelChangeDb": -0.5278679606430294,
+      "brightnessRatio": 0.8607568039997192
+    },
+    {
+      "midi": 21,
+      "velocity": 0.3,
+      "levelChangeDb": -0.913010151116943,
+      "brightnessRatio": 0.7378439392817846
+    },
+    {
+      "midi": 21,
+      "velocity": 0.6,
+      "levelChangeDb": -0.7620200112556585,
+      "brightnessRatio": 0.7723180661039781
+    },
+    {
+      "midi": 21,
+      "velocity": 0.8,
+      "levelChangeDb": -0.5899147699611627,
+      "brightnessRatio": 0.7978699460848966
+    },
+    {
+      "midi": 21,
+      "velocity": 1,
+      "levelChangeDb": -0.39291952247537987,
+      "brightnessRatio": 0.8632704145357056
+    },
+    {
+      "midi": 22,
+      "velocity": 0.1,
+      "levelChangeDb": -0.886277153453229,
+      "brightnessRatio": 0.8206086756812807
+    },
+    {
+      "midi": 22,
+      "velocity": 0.3,
+      "levelChangeDb": -0.8428276816615704,
+      "brightnessRatio": 0.7508719560638655
+    },
+    {
+      "midi": 22,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6354289316844997,
+      "brightnessRatio": 0.7515986730147783
+    },
+    {
+      "midi": 22,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7624056840307867,
+      "brightnessRatio": 0.7687464850387364
+    },
+    {
+      "midi": 22,
+      "velocity": 1,
+      "levelChangeDb": -0.5688133450436608,
+      "brightnessRatio": 0.8294620051688056
+    },
+    {
+      "midi": 23,
+      "velocity": 0.1,
+      "levelChangeDb": -0.9544775043991099,
+      "brightnessRatio": 0.8476119066669859
+    },
+    {
+      "midi": 23,
+      "velocity": 0.3,
+      "levelChangeDb": -0.8716623156142106,
+      "brightnessRatio": 0.713108288208316
+    },
+    {
+      "midi": 23,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6349527136702833,
+      "brightnessRatio": 0.719865602312246
+    },
+    {
+      "midi": 23,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7072403559535545,
+      "brightnessRatio": 0.7598143634330607
+    },
+    {
+      "midi": 23,
+      "velocity": 1,
+      "levelChangeDb": -0.5467008387316163,
+      "brightnessRatio": 0.8186740487647595
+    },
+    {
+      "midi": 24,
+      "velocity": 0.1,
+      "levelChangeDb": -0.7770925302759958,
+      "brightnessRatio": 0.8666408031558287
+    },
+    {
+      "midi": 24,
+      "velocity": 0.3,
+      "levelChangeDb": -0.7766488557633417,
+      "brightnessRatio": 0.6865189642237004
+    },
+    {
+      "midi": 24,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5882249873764138,
+      "brightnessRatio": 0.7115252041379955
+    },
+    {
+      "midi": 24,
+      "velocity": 0.8,
+      "levelChangeDb": -0.5568174293083898,
+      "brightnessRatio": 0.74970680163413
+    },
+    {
+      "midi": 24,
+      "velocity": 1,
+      "levelChangeDb": -0.3724340060899409,
+      "brightnessRatio": 0.7957641115546573
+    },
+    {
+      "midi": 25,
+      "velocity": 0.1,
+      "levelChangeDb": -0.6161339989439484,
+      "brightnessRatio": 0.8556052385440948
+    },
+    {
+      "midi": 25,
+      "velocity": 0.3,
+      "levelChangeDb": -0.6861807567652474,
+      "brightnessRatio": 0.6937991046296033
+    },
+    {
+      "midi": 25,
+      "velocity": 0.6,
+      "levelChangeDb": -0.4846970055754108,
+      "brightnessRatio": 0.7222991101259144
+    },
+    {
+      "midi": 25,
+      "velocity": 0.8,
+      "levelChangeDb": -0.40774973190889874,
+      "brightnessRatio": 0.7544048265565249
+    },
+    {
+      "midi": 25,
+      "velocity": 1,
+      "levelChangeDb": -0.2702372493677469,
+      "brightnessRatio": 0.7836806473704354
+    },
+    {
+      "midi": 26,
+      "velocity": 0.1,
+      "levelChangeDb": -0.4956793567122494,
+      "brightnessRatio": 0.8793583282288455
+    },
+    {
+      "midi": 26,
+      "velocity": 0.3,
+      "levelChangeDb": -0.5541014617264755,
+      "brightnessRatio": 0.742871101113395
+    },
+    {
+      "midi": 26,
+      "velocity": 0.6,
+      "levelChangeDb": -0.3747419881403441,
+      "brightnessRatio": 0.7336255717267134
+    },
+    {
+      "midi": 26,
+      "velocity": 0.8,
+      "levelChangeDb": -0.2941866849899556,
+      "brightnessRatio": 0.7568526099837503
+    },
+    {
+      "midi": 26,
+      "velocity": 1,
+      "levelChangeDb": -0.20704825757186626,
+      "brightnessRatio": 0.7726697054094006
+    },
+    {
+      "midi": 27,
+      "velocity": 0.1,
+      "levelChangeDb": -0.44553235944719327,
+      "brightnessRatio": 0.9143030107049482
+    },
+    {
+      "midi": 27,
+      "velocity": 0.3,
+      "levelChangeDb": -0.487028002458115,
+      "brightnessRatio": 0.7910543058208859
+    },
+    {
+      "midi": 27,
+      "velocity": 0.6,
+      "levelChangeDb": -0.3036473774347182,
+      "brightnessRatio": 0.7430826961591098
+    },
+    {
+      "midi": 27,
+      "velocity": 0.8,
+      "levelChangeDb": -0.2401642410361798,
+      "brightnessRatio": 0.7564799202457949
+    },
+    {
+      "midi": 27,
+      "velocity": 1,
+      "levelChangeDb": -0.19426751253707128,
+      "brightnessRatio": 0.7482577671978399
+    },
+    {
+      "midi": 28,
+      "velocity": 0.1,
+      "levelChangeDb": -0.4221153525438007,
+      "brightnessRatio": 0.9442480209631016
+    },
+    {
+      "midi": 28,
+      "velocity": 0.3,
+      "levelChangeDb": -0.44063633912153033,
+      "brightnessRatio": 0.8464731164111096
+    },
+    {
+      "midi": 28,
+      "velocity": 0.6,
+      "levelChangeDb": -0.2571647817664662,
+      "brightnessRatio": 0.751566503696198
+    },
+    {
+      "midi": 28,
+      "velocity": 0.8,
+      "levelChangeDb": -0.21823521331754217,
+      "brightnessRatio": 0.7539831749075379
+    },
+    {
+      "midi": 28,
+      "velocity": 1,
+      "levelChangeDb": -0.22763976276224035,
+      "brightnessRatio": 0.6954080384633721
+    },
+    {
+      "midi": 29,
+      "velocity": 0.1,
+      "levelChangeDb": -0.44162092811066567,
+      "brightnessRatio": 0.9590184312764336
+    },
+    {
+      "midi": 29,
+      "velocity": 0.3,
+      "levelChangeDb": -0.4244326873542889,
+      "brightnessRatio": 0.8700255076790071
+    },
+    {
+      "midi": 29,
+      "velocity": 0.6,
+      "levelChangeDb": -0.22345304959057624,
+      "brightnessRatio": 0.7730383286059189
+    },
+    {
+      "midi": 29,
+      "velocity": 0.8,
+      "levelChangeDb": -0.21243826661843973,
+      "brightnessRatio": 0.7565247370174609
+    },
+    {
+      "midi": 29,
+      "velocity": 1,
+      "levelChangeDb": -0.30493728794065456,
+      "brightnessRatio": 0.6564051941398371
+    },
+    {
+      "midi": 30,
+      "velocity": 0.1,
+      "levelChangeDb": -0.4766804142669607,
+      "brightnessRatio": 0.9701988491551031
+    },
+    {
+      "midi": 30,
+      "velocity": 0.3,
+      "levelChangeDb": -0.43983467557807293,
+      "brightnessRatio": 0.8687444346100579
+    },
+    {
+      "midi": 30,
+      "velocity": 0.6,
+      "levelChangeDb": -0.20061146695960064,
+      "brightnessRatio": 0.7758346067638651
+    },
+    {
+      "midi": 30,
+      "velocity": 0.8,
+      "levelChangeDb": -0.2237103175712679,
+      "brightnessRatio": 0.7394720222400792
+    },
+    {
+      "midi": 30,
+      "velocity": 1,
+      "levelChangeDb": -0.4641669603797187,
+      "brightnessRatio": 0.63171795784847
+    },
+    {
+      "midi": 31,
+      "velocity": 0.1,
+      "levelChangeDb": -1.461475724047222,
+      "brightnessRatio": 0.9397736536262704
+    },
+    {
+      "midi": 31,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2562747203958713,
+      "brightnessRatio": 0.7718763775059099
+    },
+    {
+      "midi": 31,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5240133437404288,
+      "brightnessRatio": 0.6501210544938331
+    },
+    {
+      "midi": 31,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6012737082212289,
+      "brightnessRatio": 0.5791142695858005
+    },
+    {
+      "midi": 31,
+      "velocity": 1,
+      "levelChangeDb": -1.1925480674800295,
+      "brightnessRatio": 0.40316923611324595
+    },
+    {
+      "midi": 32,
+      "velocity": 0.1,
+      "levelChangeDb": -1.613135873026155,
+      "brightnessRatio": 0.935900157243593
+    },
+    {
+      "midi": 32,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3855784544316105,
+      "brightnessRatio": 0.7395849040847906
+    },
+    {
+      "midi": 32,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5451618784397504,
+      "brightnessRatio": 0.6507334881411282
+    },
+    {
+      "midi": 32,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6953578842384145,
+      "brightnessRatio": 0.5638684723692866
+    },
+    {
+      "midi": 32,
+      "velocity": 1,
+      "levelChangeDb": -1.6167978266061631,
+      "brightnessRatio": 0.4182445228502293
+    },
+    {
+      "midi": 33,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7291285800973908,
+      "brightnessRatio": 0.9503385502414944
+    },
+    {
+      "midi": 33,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4515918464752542,
+      "brightnessRatio": 0.7228174038316246
+    },
+    {
+      "midi": 33,
+      "velocity": 0.6,
+      "levelChangeDb": -0.4950724184427607,
+      "brightnessRatio": 0.6406877306798109
+    },
+    {
+      "midi": 33,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7030268652771825,
+      "brightnessRatio": 0.5493692742150444
+    },
+    {
+      "midi": 33,
+      "velocity": 1,
+      "levelChangeDb": -1.8506584499608216,
+      "brightnessRatio": 0.4445647927027715
+    },
+    {
+      "midi": 34,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7715262100986968,
+      "brightnessRatio": 0.917621771452938
+    },
+    {
+      "midi": 34,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4861808623974433,
+      "brightnessRatio": 0.7075781170723393
+    },
+    {
+      "midi": 34,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5229843846792461,
+      "brightnessRatio": 0.6603772349035377
+    },
+    {
+      "midi": 34,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7604850716641791,
+      "brightnessRatio": 0.5638203123329093
+    },
+    {
+      "midi": 34,
+      "velocity": 1,
+      "levelChangeDb": -1.9887032938531066,
+      "brightnessRatio": 0.4775469272638299
+    },
+    {
+      "midi": 35,
+      "velocity": 0.1,
+      "levelChangeDb": -1.9341543803601149,
+      "brightnessRatio": 0.9185736892051577
+    },
+    {
+      "midi": 35,
+      "velocity": 0.3,
+      "levelChangeDb": -1.648174975744259,
+      "brightnessRatio": 0.73451437621284
+    },
+    {
+      "midi": 35,
+      "velocity": 0.6,
+      "levelChangeDb": -0.529434217136963,
+      "brightnessRatio": 0.68199545871503
+    },
+    {
+      "midi": 35,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7763126334749633,
+      "brightnessRatio": 0.5900003322056095
+    },
+    {
+      "midi": 35,
+      "velocity": 1,
+      "levelChangeDb": -1.9813905181570242,
+      "brightnessRatio": 0.5256352980833428
+    },
+    {
+      "midi": 36,
+      "velocity": 0.1,
+      "levelChangeDb": -2.0617538599913394,
+      "brightnessRatio": 0.9067020407508104
+    },
+    {
+      "midi": 36,
+      "velocity": 0.3,
+      "levelChangeDb": -1.6868711701507966,
+      "brightnessRatio": 0.7699425334982389
+    },
+    {
+      "midi": 36,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5393732359270186,
+      "brightnessRatio": 0.7086843426017496
+    },
+    {
+      "midi": 36,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7653304807268373,
+      "brightnessRatio": 0.6167435980549112
+    },
+    {
+      "midi": 36,
+      "velocity": 1,
+      "levelChangeDb": -1.8384722055296354,
+      "brightnessRatio": 0.5456438670682773
+    },
+    {
+      "midi": 37,
+      "velocity": 0.1,
+      "levelChangeDb": -2.114510870571791,
+      "brightnessRatio": 0.8877753459690239
+    },
+    {
+      "midi": 37,
+      "velocity": 0.3,
+      "levelChangeDb": -1.7134270365306448,
+      "brightnessRatio": 0.801486897460053
+    },
+    {
+      "midi": 37,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5672832042688579,
+      "brightnessRatio": 0.7353979105491787
+    },
+    {
+      "midi": 37,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7611813417428797,
+      "brightnessRatio": 0.6462514706114219
+    },
+    {
+      "midi": 37,
+      "velocity": 1,
+      "levelChangeDb": -1.6747746120479854,
+      "brightnessRatio": 0.564749137824797
+    },
+    {
+      "midi": 38,
+      "velocity": 0.1,
+      "levelChangeDb": -2.0877622921135157,
+      "brightnessRatio": 0.869101053182631
+    },
+    {
+      "midi": 38,
+      "velocity": 0.3,
+      "levelChangeDb": -1.7338886017075275,
+      "brightnessRatio": 0.8047170973244399
+    },
+    {
+      "midi": 38,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5714417646456762,
+      "brightnessRatio": 0.7590337767310978
+    },
+    {
+      "midi": 38,
+      "velocity": 0.8,
+      "levelChangeDb": -0.731835894555186,
+      "brightnessRatio": 0.6755685348134023
+    },
+    {
+      "midi": 38,
+      "velocity": 1,
+      "levelChangeDb": -1.4283709005824274,
+      "brightnessRatio": 0.5859084051960527
+    },
+    {
+      "midi": 39,
+      "velocity": 0.1,
+      "levelChangeDb": -2.0383130084961616,
+      "brightnessRatio": 0.8469005295511237
+    },
+    {
+      "midi": 39,
+      "velocity": 0.3,
+      "levelChangeDb": -1.6985478285501894,
+      "brightnessRatio": 0.792024136061849
+    },
+    {
+      "midi": 39,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5858149869457088,
+      "brightnessRatio": 0.7773207878078583
+    },
+    {
+      "midi": 39,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7166862839255951,
+      "brightnessRatio": 0.69813875439228
+    },
+    {
+      "midi": 39,
+      "velocity": 1,
+      "levelChangeDb": -1.2064296267571186,
+      "brightnessRatio": 0.603530018379883
+    },
+    {
+      "midi": 40,
+      "velocity": 0.1,
+      "levelChangeDb": -1.888908241560986,
+      "brightnessRatio": 0.831547025065929
+    },
+    {
+      "midi": 40,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5660266099032456,
+      "brightnessRatio": 0.7876487669211331
+    },
+    {
+      "midi": 40,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5659098218176563,
+      "brightnessRatio": 0.8016474821403481
+    },
+    {
+      "midi": 40,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6666971515398114,
+      "brightnessRatio": 0.7274418898366405
+    },
+    {
+      "midi": 40,
+      "velocity": 1,
+      "levelChangeDb": -0.9848001551294217,
+      "brightnessRatio": 0.6295402428586535
+    },
+    {
+      "midi": 41,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7612525269496322,
+      "brightnessRatio": 0.8225125001712863
+    },
+    {
+      "midi": 41,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4513729310367305,
+      "brightnessRatio": 0.7875762473735688
+    },
+    {
+      "midi": 41,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5818855203796436,
+      "brightnessRatio": 0.8163519809442943
+    },
+    {
+      "midi": 41,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6559549431210444,
+      "brightnessRatio": 0.7419122658805731
+    },
+    {
+      "midi": 41,
+      "velocity": 1,
+      "levelChangeDb": -0.8485937220494113,
+      "brightnessRatio": 0.6347186745174431
+    },
+    {
+      "midi": 42,
+      "velocity": 0.1,
+      "levelChangeDb": -1.6586857288380301,
+      "brightnessRatio": 0.8085370488572851
+    },
+    {
+      "midi": 42,
+      "velocity": 0.3,
+      "levelChangeDb": -1.332624260096984,
+      "brightnessRatio": 0.7906042181674932
+    },
+    {
+      "midi": 42,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5854971233767577,
+      "brightnessRatio": 0.8413800356682191
+    },
+    {
+      "midi": 42,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6342205963790277,
+      "brightnessRatio": 0.7703898243747123
+    },
+    {
+      "midi": 42,
+      "velocity": 1,
+      "levelChangeDb": -0.7392326040879511,
+      "brightnessRatio": 0.6581116199043334
+    },
+    {
+      "midi": 43,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5446594515830794,
+      "brightnessRatio": 0.8139250882823857
+    },
+    {
+      "midi": 43,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2330391220100352,
+      "brightnessRatio": 0.7941838877350582
+    },
+    {
+      "midi": 43,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5883061210273952,
+      "brightnessRatio": 0.8673104221889185
+    },
+    {
+      "midi": 43,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6194839785575226,
+      "brightnessRatio": 0.8053637119550978
+    },
+    {
+      "midi": 43,
+      "velocity": 1,
+      "levelChangeDb": -0.6706739639701292,
+      "brightnessRatio": 0.695212185835448
+    },
+    {
+      "midi": 44,
+      "velocity": 0.1,
+      "levelChangeDb": -1.4474635088344652,
+      "brightnessRatio": 0.8135654301745114
+    },
+    {
+      "midi": 44,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1811910564851893,
+      "brightnessRatio": 0.7912666372570393
+    },
+    {
+      "midi": 44,
+      "velocity": 0.6,
+      "levelChangeDb": -0.61079880769472,
+      "brightnessRatio": 0.8899671579767274
+    },
+    {
+      "midi": 44,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6356198172061157,
+      "brightnessRatio": 0.8337884800483447
+    },
+    {
+      "midi": 44,
+      "velocity": 1,
+      "levelChangeDb": -0.6705944939639672,
+      "brightnessRatio": 0.7193296015705165
+    },
+    {
+      "midi": 45,
+      "velocity": 0.1,
+      "levelChangeDb": -1.4118286733377525,
+      "brightnessRatio": 0.8164223302121708
+    },
+    {
+      "midi": 45,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1530522575534192,
+      "brightnessRatio": 0.7868251499839184
+    },
+    {
+      "midi": 45,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6622276022963087,
+      "brightnessRatio": 0.8913395182870962
+    },
+    {
+      "midi": 45,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6812939229661565,
+      "brightnessRatio": 0.8364494784107586
+    },
+    {
+      "midi": 45,
+      "velocity": 1,
+      "levelChangeDb": -0.7006114951081863,
+      "brightnessRatio": 0.7170179940179218
+    },
+    {
+      "midi": 46,
+      "velocity": 0.1,
+      "levelChangeDb": -1.410553938173817,
+      "brightnessRatio": 0.7949352897216062
+    },
+    {
+      "midi": 46,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1910614915736846,
+      "brightnessRatio": 0.7868160983909064
+    },
+    {
+      "midi": 46,
+      "velocity": 0.6,
+      "levelChangeDb": -0.7087673086379153,
+      "brightnessRatio": 0.9103053452687335
+    },
+    {
+      "midi": 46,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7233596202931942,
+      "brightnessRatio": 0.8619467747596039
+    },
+    {
+      "midi": 46,
+      "velocity": 1,
+      "levelChangeDb": -0.7375595389596135,
+      "brightnessRatio": 0.7456301100546354
+    },
+    {
+      "midi": 47,
+      "velocity": 0.1,
+      "levelChangeDb": -1.4485214424847386,
+      "brightnessRatio": 0.7925335099054918
+    },
+    {
+      "midi": 47,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2373186861875087,
+      "brightnessRatio": 0.7896515181667525
+    },
+    {
+      "midi": 47,
+      "velocity": 0.6,
+      "levelChangeDb": -0.7551377977604451,
+      "brightnessRatio": 0.9119826374261305
+    },
+    {
+      "midi": 47,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7685756983465096,
+      "brightnessRatio": 0.8636829831305965
+    },
+    {
+      "midi": 47,
+      "velocity": 1,
+      "levelChangeDb": -0.7856656477621518,
+      "brightnessRatio": 0.743568428504706
+    },
+    {
+      "midi": 48,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5668886262482498,
+      "brightnessRatio": 0.7854016531513571
+    },
+    {
+      "midi": 48,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3265069937397491,
+      "brightnessRatio": 0.7983747242215818
+    },
+    {
+      "midi": 48,
+      "velocity": 0.6,
+      "levelChangeDb": -0.8356827164486067,
+      "brightnessRatio": 0.9166396091885108
+    },
+    {
+      "midi": 48,
+      "velocity": 0.8,
+      "levelChangeDb": -0.8475420328673556,
+      "brightnessRatio": 0.8701870584294464
+    },
+    {
+      "midi": 48,
+      "velocity": 1,
+      "levelChangeDb": -0.8534724600013874,
+      "brightnessRatio": 0.7542254452134767
+    },
+    {
+      "midi": 49,
+      "velocity": 0.1,
+      "levelChangeDb": -1.179816793030902,
+      "brightnessRatio": 0.8083213179677707
+    },
+    {
+      "midi": 49,
+      "velocity": 0.3,
+      "levelChangeDb": -0.9956106438371533,
+      "brightnessRatio": 0.835575090108936
+    },
+    {
+      "midi": 49,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5715489928148981,
+      "brightnessRatio": 0.9596470049453846
+    },
+    {
+      "midi": 49,
+      "velocity": 0.8,
+      "levelChangeDb": -0.570058205728319,
+      "brightnessRatio": 0.9357273369144383
+    },
+    {
+      "midi": 49,
+      "velocity": 1,
+      "levelChangeDb": -0.5501244576161939,
+      "brightnessRatio": 0.8683374200451078
+    },
+    {
+      "midi": 50,
+      "velocity": 0.1,
+      "levelChangeDb": -1.2215172357976123,
+      "brightnessRatio": 0.8122281633084781
+    },
+    {
+      "midi": 50,
+      "velocity": 0.3,
+      "levelChangeDb": -1.0104037234064651,
+      "brightnessRatio": 0.8364367585427852
+    },
+    {
+      "midi": 50,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5874363013703732,
+      "brightnessRatio": 0.9665234664706726
+    },
+    {
+      "midi": 50,
+      "velocity": 0.8,
+      "levelChangeDb": -0.5793253317148355,
+      "brightnessRatio": 0.9470315450127853
+    },
+    {
+      "midi": 50,
+      "velocity": 1,
+      "levelChangeDb": -0.5370680357058546,
+      "brightnessRatio": 0.8883491082494506
+    },
+    {
+      "midi": 51,
+      "velocity": 0.1,
+      "levelChangeDb": -1.2353784084606187,
+      "brightnessRatio": 0.8326219970295201
+    },
+    {
+      "midi": 51,
+      "velocity": 0.3,
+      "levelChangeDb": -1.0442824270044324,
+      "brightnessRatio": 0.8448798936247003
+    },
+    {
+      "midi": 51,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6256401750851665,
+      "brightnessRatio": 0.9784133680655343
+    },
+    {
+      "midi": 51,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6130809349929709,
+      "brightnessRatio": 0.9654547269817133
+    },
+    {
+      "midi": 51,
+      "velocity": 1,
+      "levelChangeDb": -0.5434190318885989,
+      "brightnessRatio": 0.9236228017106078
+    },
+    {
+      "midi": 52,
+      "velocity": 0.1,
+      "levelChangeDb": -1.248650512140034,
+      "brightnessRatio": 0.8315709260436144
+    },
+    {
+      "midi": 52,
+      "velocity": 0.3,
+      "levelChangeDb": -1.0427576937242486,
+      "brightnessRatio": 0.8454135038273642
+    },
+    {
+      "midi": 52,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6359441665583331,
+      "brightnessRatio": 0.9905237624870318
+    },
+    {
+      "midi": 52,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6154337578398321,
+      "brightnessRatio": 0.9808976917978084
+    },
+    {
+      "midi": 52,
+      "velocity": 1,
+      "levelChangeDb": -0.5263833272127225,
+      "brightnessRatio": 0.9454449257660774
+    },
+    {
+      "midi": 53,
+      "velocity": 0.1,
+      "levelChangeDb": -1.2964300149391934,
+      "brightnessRatio": 0.8370261478980653
+    },
+    {
+      "midi": 53,
+      "velocity": 0.3,
+      "levelChangeDb": -1.0918348917870686,
+      "brightnessRatio": 0.852697406448454
+    },
+    {
+      "midi": 53,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6923279320788902,
+      "brightnessRatio": 0.9910534821898475
+    },
+    {
+      "midi": 53,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6681992559970219,
+      "brightnessRatio": 0.9820478859273563
+    },
+    {
+      "midi": 53,
+      "velocity": 1,
+      "levelChangeDb": -0.5636295533735043,
+      "brightnessRatio": 0.9481824795504612
+    },
+    {
+      "midi": 54,
+      "velocity": 0.1,
+      "levelChangeDb": -1.271192147040584,
+      "brightnessRatio": 0.8664578645975224
+    },
+    {
+      "midi": 54,
+      "velocity": 0.3,
+      "levelChangeDb": -1.0600802026169878,
+      "brightnessRatio": 0.8681193541977253
+    },
+    {
+      "midi": 54,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6588136203987329,
+      "brightnessRatio": 1.0185303628593507
+    },
+    {
+      "midi": 54,
+      "velocity": 0.8,
+      "levelChangeDb": -0.619929752970916,
+      "brightnessRatio": 1.020846352038038
+    },
+    {
+      "midi": 54,
+      "velocity": 1,
+      "levelChangeDb": -0.49143582863502405,
+      "brightnessRatio": 1.0055020067721359
+    },
+    {
+      "midi": 55,
+      "velocity": 0.1,
+      "levelChangeDb": -1.3582946631440742,
+      "brightnessRatio": 0.8932152478481765
+    },
+    {
+      "midi": 55,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1284003957197744,
+      "brightnessRatio": 0.8837581437018129
+    },
+    {
+      "midi": 55,
+      "velocity": 0.6,
+      "levelChangeDb": -0.7487995155287247,
+      "brightnessRatio": 1.0147695732200837
+    },
+    {
+      "midi": 55,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7096741514734168,
+      "brightnessRatio": 1.0172575540474171
+    },
+    {
+      "midi": 55,
+      "velocity": 1,
+      "levelChangeDb": -0.5772618832117603,
+      "brightnessRatio": 1.0028286611787431
+    },
+    {
+      "midi": 56,
+      "velocity": 0.1,
+      "levelChangeDb": -1.3785874457551863,
+      "brightnessRatio": 0.9117665488954201
+    },
+    {
+      "midi": 56,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1111785760438841,
+      "brightnessRatio": 0.9168615255403283
+    },
+    {
+      "midi": 56,
+      "velocity": 0.6,
+      "levelChangeDb": -0.732480866243952,
+      "brightnessRatio": 1.0261608989020432
+    },
+    {
+      "midi": 56,
+      "velocity": 0.8,
+      "levelChangeDb": -0.686642556975521,
+      "brightnessRatio": 1.0297354934708014
+    },
+    {
+      "midi": 56,
+      "velocity": 1,
+      "levelChangeDb": -0.5550824594764738,
+      "brightnessRatio": 1.0193516276601302
+    },
+    {
+      "midi": 57,
+      "velocity": 0.1,
+      "levelChangeDb": -1.521839980662612,
+      "brightnessRatio": 0.9153219899723047
+    },
+    {
+      "midi": 57,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2539138152814697,
+      "brightnessRatio": 0.9197455241267807
+    },
+    {
+      "midi": 57,
+      "velocity": 0.6,
+      "levelChangeDb": -0.8155713728550161,
+      "brightnessRatio": 1.0292354567320896
+    },
+    {
+      "midi": 57,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7626308104914867,
+      "brightnessRatio": 1.0362001391981797
+    },
+    {
+      "midi": 57,
+      "velocity": 1,
+      "levelChangeDb": -0.6284413463032591,
+      "brightnessRatio": 1.0333908130375369
+    },
+    {
+      "midi": 58,
+      "velocity": 0.1,
+      "levelChangeDb": -1.560679371005146,
+      "brightnessRatio": 0.9324090986662451
+    },
+    {
+      "midi": 58,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2611086437755898,
+      "brightnessRatio": 0.9375478334791798
+    },
+    {
+      "midi": 58,
+      "velocity": 0.6,
+      "levelChangeDb": -0.8422839828403885,
+      "brightnessRatio": 1.0343359230582914
+    },
+    {
+      "midi": 58,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7818348856758757,
+      "brightnessRatio": 1.0422445341174011
+    },
+    {
+      "midi": 58,
+      "velocity": 1,
+      "levelChangeDb": -0.646467489401381,
+      "brightnessRatio": 1.0400074227140215
+    },
+    {
+      "midi": 59,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5276477255310645,
+      "brightnessRatio": 0.9546682678648681
+    },
+    {
+      "midi": 59,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2395707470451538,
+      "brightnessRatio": 0.9530393135938375
+    },
+    {
+      "midi": 59,
+      "velocity": 0.6,
+      "levelChangeDb": -0.8803044134178405,
+      "brightnessRatio": 1.0435608831971142
+    },
+    {
+      "midi": 59,
+      "velocity": 0.8,
+      "levelChangeDb": -0.8125947957497442,
+      "brightnessRatio": 1.0524966526596022
+    },
+    {
+      "midi": 59,
+      "velocity": 1,
+      "levelChangeDb": -0.6843734709678944,
+      "brightnessRatio": 1.0528566455227384
+    },
+    {
+      "midi": 60,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5204665186988189,
+      "brightnessRatio": 0.9702412813422026
+    },
+    {
+      "midi": 60,
+      "velocity": 0.3,
+      "levelChangeDb": -1.275216602902237,
+      "brightnessRatio": 0.9618607130442188
+    },
+    {
+      "midi": 60,
+      "velocity": 0.6,
+      "levelChangeDb": -0.9138732455725525,
+      "brightnessRatio": 1.0518382997680373
+    },
+    {
+      "midi": 60,
+      "velocity": 0.8,
+      "levelChangeDb": -0.8388139767988281,
+      "brightnessRatio": 1.0613497066376567
+    },
+    {
+      "midi": 60,
+      "velocity": 1,
+      "levelChangeDb": -0.7153042742388727,
+      "brightnessRatio": 1.0616064381835115
+    },
+    {
+      "midi": 61,
+      "velocity": 0.1,
+      "levelChangeDb": -1.49519285253298,
+      "brightnessRatio": 0.9721233815814875
+    },
+    {
+      "midi": 61,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2471933759380314,
+      "brightnessRatio": 0.9775706635166236
+    },
+    {
+      "midi": 61,
+      "velocity": 0.6,
+      "levelChangeDb": -0.8930126978939537,
+      "brightnessRatio": 1.0559554723638462
+    },
+    {
+      "midi": 61,
+      "velocity": 0.8,
+      "levelChangeDb": -0.8020249240536743,
+      "brightnessRatio": 1.0639769417956815
+    },
+    {
+      "midi": 61,
+      "velocity": 1,
+      "levelChangeDb": -0.658959943092971,
+      "brightnessRatio": 1.061355557195663
+    },
+    {
+      "midi": 62,
+      "velocity": 0.1,
+      "levelChangeDb": -1.597782949109069,
+      "brightnessRatio": 0.9692932063928157
+    },
+    {
+      "midi": 62,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2735146972879987,
+      "brightnessRatio": 0.9864107297689828
+    },
+    {
+      "midi": 62,
+      "velocity": 0.6,
+      "levelChangeDb": -0.9051841340463946,
+      "brightnessRatio": 1.0594171917604573
+    },
+    {
+      "midi": 62,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7928535265913738,
+      "brightnessRatio": 1.072865322388161
+    },
+    {
+      "midi": 62,
+      "velocity": 1,
+      "levelChangeDb": -0.617782745395617,
+      "brightnessRatio": 1.0723241859909924
+    },
+    {
+      "midi": 63,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5648959666931292,
+      "brightnessRatio": 0.9771835869262434
+    },
+    {
+      "midi": 63,
+      "velocity": 0.3,
+      "levelChangeDb": -1.28485431700279,
+      "brightnessRatio": 0.9906573689997946
+    },
+    {
+      "midi": 63,
+      "velocity": 0.6,
+      "levelChangeDb": -0.8982664678177764,
+      "brightnessRatio": 1.054784050243914
+    },
+    {
+      "midi": 63,
+      "velocity": 0.8,
+      "levelChangeDb": -0.7772602376996922,
+      "brightnessRatio": 1.064867709551297
+    },
+    {
+      "midi": 63,
+      "velocity": 1,
+      "levelChangeDb": -0.576200959648033,
+      "brightnessRatio": 1.0615701697583055
+    },
+    {
+      "midi": 64,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5584595238464714,
+      "brightnessRatio": 0.9795324044091988
+    },
+    {
+      "midi": 64,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3347872599884936,
+      "brightnessRatio": 0.991115851431005
+    },
+    {
+      "midi": 64,
+      "velocity": 0.6,
+      "levelChangeDb": -0.9327655206970729,
+      "brightnessRatio": 1.0482219856265398
+    },
+    {
+      "midi": 64,
+      "velocity": 0.8,
+      "levelChangeDb": -0.8070333478304021,
+      "brightnessRatio": 1.0559448609930453
+    },
+    {
+      "midi": 64,
+      "velocity": 1,
+      "levelChangeDb": -0.5625188184380492,
+      "brightnessRatio": 1.052986496890655
+    },
+    {
+      "midi": 65,
+      "velocity": 0.1,
+      "levelChangeDb": -1.6218649596040524,
+      "brightnessRatio": 0.9788529910111456
+    },
+    {
+      "midi": 65,
+      "velocity": 0.3,
+      "levelChangeDb": -1.36253586398039,
+      "brightnessRatio": 0.9944762651932081
+    },
+    {
+      "midi": 65,
+      "velocity": 0.6,
+      "levelChangeDb": -1.022809271438406,
+      "brightnessRatio": 1.0425340006278943
+    },
+    {
+      "midi": 65,
+      "velocity": 0.8,
+      "levelChangeDb": -0.9005806245716463,
+      "brightnessRatio": 1.0478603840380494
+    },
+    {
+      "midi": 65,
+      "velocity": 1,
+      "levelChangeDb": -0.6233041346055441,
+      "brightnessRatio": 1.046353767520878
+    },
+    {
+      "midi": 66,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5401730830597846,
+      "brightnessRatio": 0.9863778215906218
+    },
+    {
+      "midi": 66,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3782244580994176,
+      "brightnessRatio": 0.9944629544072788
+    },
+    {
+      "midi": 66,
+      "velocity": 0.6,
+      "levelChangeDb": -1.0729715503164694,
+      "brightnessRatio": 1.0576388546308664
+    },
+    {
+      "midi": 66,
+      "velocity": 0.8,
+      "levelChangeDb": -0.9529475832338772,
+      "brightnessRatio": 1.0646778394394798
+    },
+    {
+      "midi": 66,
+      "velocity": 1,
+      "levelChangeDb": -0.7244819080858691,
+      "brightnessRatio": 1.0664962560381612
+    },
+    {
+      "midi": 67,
+      "velocity": 0.1,
+      "levelChangeDb": -1.473386452246771,
+      "brightnessRatio": 0.9950936442567772
+    },
+    {
+      "midi": 67,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3241067086914726,
+      "brightnessRatio": 0.99793743586902
+    },
+    {
+      "midi": 67,
+      "velocity": 0.6,
+      "levelChangeDb": -1.061168619235123,
+      "brightnessRatio": 1.076700993549201
+    },
+    {
+      "midi": 67,
+      "velocity": 0.8,
+      "levelChangeDb": -0.95303814441548,
+      "brightnessRatio": 1.0918767830182652
+    },
+    {
+      "midi": 67,
+      "velocity": 1,
+      "levelChangeDb": -0.7429577069272189,
+      "brightnessRatio": 1.1045156262389881
+    },
+    {
+      "midi": 68,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5705662042928719,
+      "brightnessRatio": 0.9949839012615451
+    },
+    {
+      "midi": 68,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4097353428535588,
+      "brightnessRatio": 0.9959676477597051
+    },
+    {
+      "midi": 68,
+      "velocity": 0.6,
+      "levelChangeDb": -1.1468477882188524,
+      "brightnessRatio": 1.058148586388884
+    },
+    {
+      "midi": 68,
+      "velocity": 0.8,
+      "levelChangeDb": -1.0482872146195064,
+      "brightnessRatio": 1.071270024008679
+    },
+    {
+      "midi": 68,
+      "velocity": 1,
+      "levelChangeDb": -0.812809185033669,
+      "brightnessRatio": 1.0848866238751522
+    },
+    {
+      "midi": 69,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5954373147707566,
+      "brightnessRatio": 0.9953472728896311
+    },
+    {
+      "midi": 69,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4206180796450014,
+      "brightnessRatio": 0.997869920430707
+    },
+    {
+      "midi": 69,
+      "velocity": 0.6,
+      "levelChangeDb": -1.1566104980043084,
+      "brightnessRatio": 1.0389228646212239
+    },
+    {
+      "midi": 69,
+      "velocity": 0.8,
+      "levelChangeDb": -1.0637032871620038,
+      "brightnessRatio": 1.0451955940472262
+    },
+    {
+      "midi": 69,
+      "velocity": 1,
+      "levelChangeDb": -0.8088743452088352,
+      "brightnessRatio": 1.0449862134567176
+    },
+    {
+      "midi": 70,
+      "velocity": 0.1,
+      "levelChangeDb": -1.6253239283891756,
+      "brightnessRatio": 0.9981721465210518
+    },
+    {
+      "midi": 70,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4989089493079861,
+      "brightnessRatio": 0.996199684803709
+    },
+    {
+      "midi": 70,
+      "velocity": 0.6,
+      "levelChangeDb": -1.260008046185864,
+      "brightnessRatio": 1.0268127163635514
+    },
+    {
+      "midi": 70,
+      "velocity": 0.8,
+      "levelChangeDb": -1.1866076974680078,
+      "brightnessRatio": 1.0316411745456726
+    },
+    {
+      "midi": 70,
+      "velocity": 1,
+      "levelChangeDb": -0.948363333520408,
+      "brightnessRatio": 1.0303071443099254
+    },
+    {
+      "midi": 71,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5599385145311115,
+      "brightnessRatio": 0.9983262774918311
+    },
+    {
+      "midi": 71,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4334377142042507,
+      "brightnessRatio": 0.997191986223964
+    },
+    {
+      "midi": 71,
+      "velocity": 0.6,
+      "levelChangeDb": -1.1943848960575587,
+      "brightnessRatio": 1.0243998845389366
+    },
+    {
+      "midi": 71,
+      "velocity": 0.8,
+      "levelChangeDb": -1.1297215203710498,
+      "brightnessRatio": 1.029774100868689
+    },
+    {
+      "midi": 71,
+      "velocity": 1,
+      "levelChangeDb": -0.897204182335527,
+      "brightnessRatio": 1.0319333787271088
+    },
+    {
+      "midi": 72,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5960566389544608,
+      "brightnessRatio": 0.9970780971295836
+    },
+    {
+      "midi": 72,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4587358028834414,
+      "brightnessRatio": 0.9949405593940425
+    },
+    {
+      "midi": 72,
+      "velocity": 0.6,
+      "levelChangeDb": -1.254264105876497,
+      "brightnessRatio": 1.0086265697243106
+    },
+    {
+      "midi": 72,
+      "velocity": 0.8,
+      "levelChangeDb": -1.200256395069935,
+      "brightnessRatio": 1.0079283455356767
+    },
+    {
+      "midi": 72,
+      "velocity": 1,
+      "levelChangeDb": -0.9931327556186189,
+      "brightnessRatio": 0.9925770051646394
+    },
+    {
+      "midi": 73,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7033331216675611,
+      "brightnessRatio": 0.9969365595049295
+    },
+    {
+      "midi": 73,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5655925304366,
+      "brightnessRatio": 0.9940808551588374
+    },
+    {
+      "midi": 73,
+      "velocity": 0.6,
+      "levelChangeDb": -1.3468813077770223,
+      "brightnessRatio": 1.003071520843035
+    },
+    {
+      "midi": 73,
+      "velocity": 0.8,
+      "levelChangeDb": -1.295620243961265,
+      "brightnessRatio": 1.0000888739615095
+    },
+    {
+      "midi": 73,
+      "velocity": 1,
+      "levelChangeDb": -1.1054162171648338,
+      "brightnessRatio": 0.9813605882923481
+    },
+    {
+      "midi": 74,
+      "velocity": 0.1,
+      "levelChangeDb": -1.6911887265090453,
+      "brightnessRatio": 0.9974396427824588
+    },
+    {
+      "midi": 74,
+      "velocity": 0.3,
+      "levelChangeDb": -1.549576289599088,
+      "brightnessRatio": 0.9946117503501881
+    },
+    {
+      "midi": 74,
+      "velocity": 0.6,
+      "levelChangeDb": -1.3351479596204563,
+      "brightnessRatio": 0.9994820467984579
+    },
+    {
+      "midi": 74,
+      "velocity": 0.8,
+      "levelChangeDb": -1.2842732041527118,
+      "brightnessRatio": 0.9947789474528339
+    },
+    {
+      "midi": 74,
+      "velocity": 1,
+      "levelChangeDb": -1.1103706549939631,
+      "brightnessRatio": 0.9726634559506575
+    },
+    {
+      "midi": 75,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7347806961063674,
+      "brightnessRatio": 0.998786665568775
+    },
+    {
+      "midi": 75,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5769883046456477,
+      "brightnessRatio": 0.9953879748451968
+    },
+    {
+      "midi": 75,
+      "velocity": 0.6,
+      "levelChangeDb": -1.4031867653768195,
+      "brightnessRatio": 0.9925039907707127
+    },
+    {
+      "midi": 75,
+      "velocity": 0.8,
+      "levelChangeDb": -1.3491787828521804,
+      "brightnessRatio": 0.9833816951718769
+    },
+    {
+      "midi": 75,
+      "velocity": 1,
+      "levelChangeDb": -1.192143424067846,
+      "brightnessRatio": 0.9403134729462043
+    },
+    {
+      "midi": 76,
+      "velocity": 0.1,
+      "levelChangeDb": -1.8049295261466727,
+      "brightnessRatio": 0.9971802774086724
+    },
+    {
+      "midi": 76,
+      "velocity": 0.3,
+      "levelChangeDb": -1.647699201424736,
+      "brightnessRatio": 0.9942672909978825
+    },
+    {
+      "midi": 76,
+      "velocity": 0.6,
+      "levelChangeDb": -1.456818823544252,
+      "brightnessRatio": 0.9917115319724996
+    },
+    {
+      "midi": 76,
+      "velocity": 0.8,
+      "levelChangeDb": -1.3952531769890828,
+      "brightnessRatio": 0.9825618166313778
+    },
+    {
+      "midi": 76,
+      "velocity": 1,
+      "levelChangeDb": -1.2300439492530775,
+      "brightnessRatio": 0.9422809241737742
+    },
+    {
+      "midi": 77,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7686524860068695,
+      "brightnessRatio": 0.9990312071243918
+    },
+    {
+      "midi": 77,
+      "velocity": 0.3,
+      "levelChangeDb": -1.6016547835011166,
+      "brightnessRatio": 0.9961306043758975
+    },
+    {
+      "midi": 77,
+      "velocity": 0.6,
+      "levelChangeDb": -1.4113714755357636,
+      "brightnessRatio": 0.9924438088322217
+    },
+    {
+      "midi": 77,
+      "velocity": 0.8,
+      "levelChangeDb": -1.34295912276801,
+      "brightnessRatio": 0.9844204783003672
+    },
+    {
+      "midi": 77,
+      "velocity": 1,
+      "levelChangeDb": -1.1621069481485011,
+      "brightnessRatio": 0.9497649998949587
+    },
+    {
+      "midi": 78,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7650060987383105,
+      "brightnessRatio": 0.9974390849430738
+    },
+    {
+      "midi": 78,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5903269737343613,
+      "brightnessRatio": 0.9951480137929966
+    },
+    {
+      "midi": 78,
+      "velocity": 0.6,
+      "levelChangeDb": -1.3846726487761303,
+      "brightnessRatio": 0.9900574923561252
+    },
+    {
+      "midi": 78,
+      "velocity": 0.8,
+      "levelChangeDb": -1.3128074936187242,
+      "brightnessRatio": 0.9787929899773049
+    },
+    {
+      "midi": 78,
+      "velocity": 1,
+      "levelChangeDb": -1.119869979926669,
+      "brightnessRatio": 0.9446850047734157
+    },
+    {
+      "midi": 79,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5830412465830332,
+      "brightnessRatio": 0.9970364909746375
+    },
+    {
+      "midi": 79,
+      "velocity": 0.3,
+      "levelChangeDb": -1.547421672904771,
+      "brightnessRatio": 0.9943160751320841
+    },
+    {
+      "midi": 79,
+      "velocity": 0.6,
+      "levelChangeDb": -1.3521539063491994,
+      "brightnessRatio": 0.98697418933502
+    },
+    {
+      "midi": 79,
+      "velocity": 0.8,
+      "levelChangeDb": -1.276774908900393,
+      "brightnessRatio": 0.9761086355814668
+    },
+    {
+      "midi": 79,
+      "velocity": 1,
+      "levelChangeDb": -1.0703565270155133,
+      "brightnessRatio": 0.9491493908394618
+    },
+    {
+      "midi": 80,
+      "velocity": 0.1,
+      "levelChangeDb": -1.3891748836980176,
+      "brightnessRatio": 0.9981427515955994
+    },
+    {
+      "midi": 80,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3890439617913493,
+      "brightnessRatio": 0.9953470269252653
+    },
+    {
+      "midi": 80,
+      "velocity": 0.6,
+      "levelChangeDb": -1.1884594557063042,
+      "brightnessRatio": 0.9841536825942921
+    },
+    {
+      "midi": 80,
+      "velocity": 0.8,
+      "levelChangeDb": -1.1065996061914012,
+      "brightnessRatio": 0.9724265294691945
+    },
+    {
+      "midi": 80,
+      "velocity": 1,
+      "levelChangeDb": -0.8741842052962687,
+      "brightnessRatio": 0.9522323557364418
+    },
+    {
+      "midi": 81,
+      "velocity": 0.1,
+      "levelChangeDb": -1.621390129736497,
+      "brightnessRatio": 0.9972493016727876
+    },
+    {
+      "midi": 81,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5860189015722528,
+      "brightnessRatio": 0.9953567720272416
+    },
+    {
+      "midi": 81,
+      "velocity": 0.6,
+      "levelChangeDb": -1.390492491156325,
+      "brightnessRatio": 0.9785281191061577
+    },
+    {
+      "midi": 81,
+      "velocity": 0.8,
+      "levelChangeDb": -1.3074229339166203,
+      "brightnessRatio": 0.9659752705960644
+    },
+    {
+      "midi": 81,
+      "velocity": 1,
+      "levelChangeDb": -1.0524629067096405,
+      "brightnessRatio": 0.9460074744538047
+    },
+    {
+      "midi": 82,
+      "velocity": 0.1,
+      "levelChangeDb": -1.5635975333021732,
+      "brightnessRatio": 0.9966275936277819
+    },
+    {
+      "midi": 82,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5398775007198164,
+      "brightnessRatio": 0.9956137053184678
+    },
+    {
+      "midi": 82,
+      "velocity": 0.6,
+      "levelChangeDb": -1.356400852965468,
+      "brightnessRatio": 0.9757255042718999
+    },
+    {
+      "midi": 82,
+      "velocity": 0.8,
+      "levelChangeDb": -1.2678743294692885,
+      "brightnessRatio": 0.962609782759615
+    },
+    {
+      "midi": 82,
+      "velocity": 1,
+      "levelChangeDb": -0.9889895437600861,
+      "brightnessRatio": 0.9407291661770155
+    },
+    {
+      "midi": 83,
+      "velocity": 0.1,
+      "levelChangeDb": -1.661990152172292,
+      "brightnessRatio": 0.9935135248249855
+    },
+    {
+      "midi": 83,
+      "velocity": 0.3,
+      "levelChangeDb": -1.6785848250454274,
+      "brightnessRatio": 0.9947646834831734
+    },
+    {
+      "midi": 83,
+      "velocity": 0.6,
+      "levelChangeDb": -1.5082604063514837,
+      "brightnessRatio": 0.9779983259485233
+    },
+    {
+      "midi": 83,
+      "velocity": 0.8,
+      "levelChangeDb": -1.407044860205695,
+      "brightnessRatio": 0.9675289346927223
+    },
+    {
+      "midi": 83,
+      "velocity": 1,
+      "levelChangeDb": -1.0983052062425818,
+      "brightnessRatio": 0.9473680672609465
+    },
+    {
+      "midi": 84,
+      "velocity": 0.1,
+      "levelChangeDb": -1.3924633582649006,
+      "brightnessRatio": 0.9959179335650005
+    },
+    {
+      "midi": 84,
+      "velocity": 0.3,
+      "levelChangeDb": -1.4165458748374091,
+      "brightnessRatio": 0.996320555758071
+    },
+    {
+      "midi": 84,
+      "velocity": 0.6,
+      "levelChangeDb": -1.2394574919432757,
+      "brightnessRatio": 0.9792851337621443
+    },
+    {
+      "midi": 84,
+      "velocity": 0.8,
+      "levelChangeDb": -1.1208863583944062,
+      "brightnessRatio": 0.97147333721174
+    },
+    {
+      "midi": 84,
+      "velocity": 1,
+      "levelChangeDb": -0.7604727919946195,
+      "brightnessRatio": 0.9511659081401894
+    },
+    {
+      "midi": 85,
+      "velocity": 0.1,
+      "levelChangeDb": -1.377318905035155,
+      "brightnessRatio": 0.9975846892569524
+    },
+    {
+      "midi": 85,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2018213334349461,
+      "brightnessRatio": 0.9992185662296592
+    },
+    {
+      "midi": 85,
+      "velocity": 0.6,
+      "levelChangeDb": -1.2063158655942086,
+      "brightnessRatio": 0.9796845774024839
+    },
+    {
+      "midi": 85,
+      "velocity": 0.8,
+      "levelChangeDb": -1.0810851382355309,
+      "brightnessRatio": 0.9723894452478073
+    },
+    {
+      "midi": 85,
+      "velocity": 1,
+      "levelChangeDb": -0.5718393942413031,
+      "brightnessRatio": 0.9474770436855819
+    },
+    {
+      "midi": 86,
+      "velocity": 0.1,
+      "levelChangeDb": -1.4312001581754543,
+      "brightnessRatio": 0.995458383742707
+    },
+    {
+      "midi": 86,
+      "velocity": 0.3,
+      "levelChangeDb": -1.5076676687191772,
+      "brightnessRatio": 0.997274130146659
+    },
+    {
+      "midi": 86,
+      "velocity": 0.6,
+      "levelChangeDb": -1.5100413670264967,
+      "brightnessRatio": 0.9792957180304972
+    },
+    {
+      "midi": 86,
+      "velocity": 0.8,
+      "levelChangeDb": -1.390568984852777,
+      "brightnessRatio": 0.9719192408047451
+    },
+    {
+      "midi": 86,
+      "velocity": 1,
+      "levelChangeDb": -0.7651520784179418,
+      "brightnessRatio": 0.9414941304613608
+    },
+    {
+      "midi": 87,
+      "velocity": 0.1,
+      "levelChangeDb": -1.2764506239094084,
+      "brightnessRatio": 0.997475494596337
+    },
+    {
+      "midi": 87,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2762562689534835,
+      "brightnessRatio": 0.9967958052506588
+    },
+    {
+      "midi": 87,
+      "velocity": 0.6,
+      "levelChangeDb": -1.3421263834740649,
+      "brightnessRatio": 0.9787962376345466
+    },
+    {
+      "midi": 87,
+      "velocity": 0.8,
+      "levelChangeDb": -1.231956295162711,
+      "brightnessRatio": 0.9700085839293909
+    },
+    {
+      "midi": 87,
+      "velocity": 1,
+      "levelChangeDb": -0.621088498631003,
+      "brightnessRatio": 0.9355946670885863
+    },
+    {
+      "midi": 88,
+      "velocity": 0.1,
+      "levelChangeDb": -1.3096984415043398,
+      "brightnessRatio": 0.9988167116044954
+    },
+    {
+      "midi": 88,
+      "velocity": 0.3,
+      "levelChangeDb": -1.3594179305450846,
+      "brightnessRatio": 0.9975769697958918
+    },
+    {
+      "midi": 88,
+      "velocity": 0.6,
+      "levelChangeDb": -1.362724244923788,
+      "brightnessRatio": 0.9823581392104423
+    },
+    {
+      "midi": 88,
+      "velocity": 0.8,
+      "levelChangeDb": -1.2622481003292005,
+      "brightnessRatio": 0.9712848584251985
+    },
+    {
+      "midi": 88,
+      "velocity": 1,
+      "levelChangeDb": -0.7541555950914876,
+      "brightnessRatio": 0.9323371671241549
+    },
+    {
+      "midi": 89,
+      "velocity": 0.1,
+      "levelChangeDb": -1.4024725340296083,
+      "brightnessRatio": 0.9975442604285902
+    },
+    {
+      "midi": 89,
+      "velocity": 0.3,
+      "levelChangeDb": -1.499247937338111,
+      "brightnessRatio": 0.9970016243035742
+    },
+    {
+      "midi": 89,
+      "velocity": 0.6,
+      "levelChangeDb": -1.5569161467955541,
+      "brightnessRatio": 0.9886291016551167
+    },
+    {
+      "midi": 89,
+      "velocity": 0.8,
+      "levelChangeDb": -1.459537544654119,
+      "brightnessRatio": 0.9794831119478586
+    },
+    {
+      "midi": 89,
+      "velocity": 1,
+      "levelChangeDb": -1.1007580181665435,
+      "brightnessRatio": 0.946228742115256
+    },
+    {
+      "midi": 90,
+      "velocity": 0.1,
+      "levelChangeDb": -1.440397381466666,
+      "brightnessRatio": 0.9997491437965327
+    },
+    {
+      "midi": 90,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1163222171601739,
+      "brightnessRatio": 0.9995979968952999
+    },
+    {
+      "midi": 90,
+      "velocity": 0.6,
+      "levelChangeDb": -1.2607982914176015,
+      "brightnessRatio": 0.9955186998173208
+    },
+    {
+      "midi": 90,
+      "velocity": 0.8,
+      "levelChangeDb": -1.1742269996756514,
+      "brightnessRatio": 0.9900224154211847
+    },
+    {
+      "midi": 90,
+      "velocity": 1,
+      "levelChangeDb": -0.8201754368442494,
+      "brightnessRatio": 0.970151325343833
+    },
+    {
+      "midi": 91,
+      "velocity": 0.1,
+      "levelChangeDb": -1.213058661404255,
+      "brightnessRatio": 1.0006110537655821
+    },
+    {
+      "midi": 91,
+      "velocity": 0.3,
+      "levelChangeDb": -1.2754424526503685,
+      "brightnessRatio": 0.9992432401074801
+    },
+    {
+      "midi": 91,
+      "velocity": 0.6,
+      "levelChangeDb": -1.4309131683652798,
+      "brightnessRatio": 0.9965571765135574
+    },
+    {
+      "midi": 91,
+      "velocity": 0.8,
+      "levelChangeDb": -1.3581001394487944,
+      "brightnessRatio": 0.9924570053842405
+    },
+    {
+      "midi": 91,
+      "velocity": 1,
+      "levelChangeDb": -0.9921174398750245,
+      "brightnessRatio": 0.9750934692657548
+    },
+    {
+      "midi": 92,
+      "velocity": 0.1,
+      "levelChangeDb": -0.9599053657002975,
+      "brightnessRatio": 1.0014405210990476
+    },
+    {
+      "midi": 92,
+      "velocity": 0.3,
+      "levelChangeDb": -0.9342192791428592,
+      "brightnessRatio": 0.999952339739533
+    },
+    {
+      "midi": 92,
+      "velocity": 0.6,
+      "levelChangeDb": -1.0568945429774357,
+      "brightnessRatio": 0.9970064385662
+    },
+    {
+      "midi": 92,
+      "velocity": 0.8,
+      "levelChangeDb": -1.0586381520696981,
+      "brightnessRatio": 0.9928440317442369
+    },
+    {
+      "midi": 92,
+      "velocity": 1,
+      "levelChangeDb": -0.7080753764987648,
+      "brightnessRatio": 0.9759539642215426
+    },
+    {
+      "midi": 93,
+      "velocity": 0.1,
+      "levelChangeDb": -1.1059127684321595,
+      "brightnessRatio": 0.9993088894371884
+    },
+    {
+      "midi": 93,
+      "velocity": 0.3,
+      "levelChangeDb": -1.039524893410137,
+      "brightnessRatio": 0.9981171157299219
+    },
+    {
+      "midi": 93,
+      "velocity": 0.6,
+      "levelChangeDb": -1.1338438721191781,
+      "brightnessRatio": 0.9947757753382197
+    },
+    {
+      "midi": 93,
+      "velocity": 0.8,
+      "levelChangeDb": -1.123013034155222,
+      "brightnessRatio": 0.9899780925336715
+    },
+    {
+      "midi": 93,
+      "velocity": 1,
+      "levelChangeDb": -0.8293314323965771,
+      "brightnessRatio": 0.9734440354806678
+    },
+    {
+      "midi": 94,
+      "velocity": 0.1,
+      "levelChangeDb": -1.2847581362900344,
+      "brightnessRatio": 0.9981466008693288
+    },
+    {
+      "midi": 94,
+      "velocity": 0.3,
+      "levelChangeDb": -1.1796493009893596,
+      "brightnessRatio": 0.9971443633495883
+    },
+    {
+      "midi": 94,
+      "velocity": 0.6,
+      "levelChangeDb": -1.2416624979953081,
+      "brightnessRatio": 0.9942432589231296
+    },
+    {
+      "midi": 94,
+      "velocity": 0.8,
+      "levelChangeDb": -1.2434685207991945,
+      "brightnessRatio": 0.9898432575294351
+    },
+    {
+      "midi": 94,
+      "velocity": 1,
+      "levelChangeDb": -0.9919170072377435,
+      "brightnessRatio": 0.9767440393134837
+    },
+    {
+      "midi": 95,
+      "velocity": 0.1,
+      "levelChangeDb": -0.6125442698533524,
+      "brightnessRatio": 1.0003778318118084
+    },
+    {
+      "midi": 95,
+      "velocity": 0.3,
+      "levelChangeDb": -0.4759369307993031,
+      "brightnessRatio": 0.9977395074002338
+    },
+    {
+      "midi": 95,
+      "velocity": 0.6,
+      "levelChangeDb": -0.508580183245134,
+      "brightnessRatio": 0.9932302572737596
+    },
+    {
+      "midi": 95,
+      "velocity": 0.8,
+      "levelChangeDb": -0.5211433195930636,
+      "brightnessRatio": 0.9895637307021165
+    },
+    {
+      "midi": 95,
+      "velocity": 1,
+      "levelChangeDb": -0.34171078953992906,
+      "brightnessRatio": 0.9818261303800562
+    },
+    {
+      "midi": 96,
+      "velocity": 0.1,
+      "levelChangeDb": -0.7941724324257196,
+      "brightnessRatio": 1.0048693808342284
+    },
+    {
+      "midi": 96,
+      "velocity": 0.3,
+      "levelChangeDb": -0.6345097954244778,
+      "brightnessRatio": 1.0023498799241104
+    },
+    {
+      "midi": 96,
+      "velocity": 0.6,
+      "levelChangeDb": -0.6576670038831245,
+      "brightnessRatio": 0.9980168274996692
+    },
+    {
+      "midi": 96,
+      "velocity": 0.8,
+      "levelChangeDb": -0.6805429133019769,
+      "brightnessRatio": 0.9956790939181615
+    },
+    {
+      "midi": 96,
+      "velocity": 1,
+      "levelChangeDb": -0.49150399161922975,
+      "brightnessRatio": 0.9911080494705112
+    },
+    {
+      "midi": 97,
+      "velocity": 0.1,
+      "levelChangeDb": -0.7873957531438526,
+      "brightnessRatio": 1.010911105568676
+    },
+    {
+      "midi": 97,
+      "velocity": 0.3,
+      "levelChangeDb": -0.5480836499932952,
+      "brightnessRatio": 1.0048320020267443
+    },
+    {
+      "midi": 97,
+      "velocity": 0.6,
+      "levelChangeDb": -0.5151376014528806,
+      "brightnessRatio": 1.0006762544853007
+    },
+    {
+      "midi": 97,
+      "velocity": 0.8,
+      "levelChangeDb": -0.5188568611442472,
+      "brightnessRatio": 0.999295359506377
+    },
+    {
+      "midi": 97,
+      "velocity": 1,
+      "levelChangeDb": -0.3581945824297061,
+      "brightnessRatio": 0.9970318852177192
+    },
+    {
+      "midi": 98,
+      "velocity": 0.1,
+      "levelChangeDb": -0.6888674700729479,
+      "brightnessRatio": 1.0146804651785373
+    },
+    {
+      "midi": 98,
+      "velocity": 0.3,
+      "levelChangeDb": -0.38108627047597515,
+      "brightnessRatio": 1.0052667813605392
+    },
+    {
+      "midi": 98,
+      "velocity": 0.6,
+      "levelChangeDb": -0.2901704534837881,
+      "brightnessRatio": 1.0020970966007017
+    },
+    {
+      "midi": 98,
+      "velocity": 0.8,
+      "levelChangeDb": -0.2905845278635906,
+      "brightnessRatio": 1.0012463121476693
+    },
+    {
+      "midi": 98,
+      "velocity": 1,
+      "levelChangeDb": -0.14227455267677383,
+      "brightnessRatio": 0.9992304748171856
+    },
+    {
+      "midi": 99,
+      "velocity": 0.1,
+      "levelChangeDb": -0.7602544386438769,
+      "brightnessRatio": 1.0148285423996162
+    },
+    {
+      "midi": 99,
+      "velocity": 0.3,
+      "levelChangeDb": -0.4200628522752732,
+      "brightnessRatio": 1.003110931895958
+    },
+    {
+      "midi": 99,
+      "velocity": 0.6,
+      "levelChangeDb": -0.33355576820365934,
+      "brightnessRatio": 1.0006396952386605
+    },
+    {
+      "midi": 99,
+      "velocity": 0.8,
+      "levelChangeDb": -0.334515416019519,
+      "brightnessRatio": 1.00008469550731
+    },
+    {
+      "midi": 99,
+      "velocity": 1,
+      "levelChangeDb": -0.1812131355654167,
+      "brightnessRatio": 0.9982715260365687
+    },
+    {
+      "midi": 100,
+      "velocity": 0.1,
+      "levelChangeDb": -0.1798751687229614,
+      "brightnessRatio": 1.0325664256602007
+    },
+    {
+      "midi": 100,
+      "velocity": 0.3,
+      "levelChangeDb": 0.280616797724494,
+      "brightnessRatio": 1.0053453995257764
+    },
+    {
+      "midi": 100,
+      "velocity": 0.6,
+      "levelChangeDb": 0.4003915224519464,
+      "brightnessRatio": 1.0019026983257568
+    },
+    {
+      "midi": 100,
+      "velocity": 0.8,
+      "levelChangeDb": 0.4073580475529182,
+      "brightnessRatio": 1.001272379098336
+    },
+    {
+      "midi": 100,
+      "velocity": 1,
+      "levelChangeDb": 0.5246342684984804,
+      "brightnessRatio": 0.9983532546638038
+    },
+    {
+      "midi": 101,
+      "velocity": 0.1,
+      "levelChangeDb": -0.6522057185611483,
+      "brightnessRatio": 1.075243098645742
+    },
+    {
+      "midi": 101,
+      "velocity": 0.3,
+      "levelChangeDb": 0.18186327909333996,
+      "brightnessRatio": 1.0155309351091224
+    },
+    {
+      "midi": 101,
+      "velocity": 0.6,
+      "levelChangeDb": 0.3750798004294038,
+      "brightnessRatio": 1.0077742796186178
+    },
+    {
+      "midi": 101,
+      "velocity": 0.8,
+      "levelChangeDb": 0.40978833623111033,
+      "brightnessRatio": 1.005876530528358
+    },
+    {
+      "midi": 101,
+      "velocity": 1,
+      "levelChangeDb": 0.517880063979659,
+      "brightnessRatio": 0.999883147421848
+    },
+    {
+      "midi": 102,
+      "velocity": 0.1,
+      "levelChangeDb": -1.2801113685513994,
+      "brightnessRatio": 1.0991986998356151
+    },
+    {
+      "midi": 102,
+      "velocity": 0.3,
+      "levelChangeDb": -0.11458627608272548,
+      "brightnessRatio": 1.0311053845745741
+    },
+    {
+      "midi": 102,
+      "velocity": 0.6,
+      "levelChangeDb": 0.2775894302737152,
+      "brightnessRatio": 1.015648278868563
+    },
+    {
+      "midi": 102,
+      "velocity": 0.8,
+      "levelChangeDb": 0.33232342000518367,
+      "brightnessRatio": 1.010778996931269
+    },
+    {
+      "midi": 102,
+      "velocity": 1,
+      "levelChangeDb": 0.47956563018294424,
+      "brightnessRatio": 0.9973926157477189
+    },
+    {
+      "midi": 103,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7665663253208377,
+      "brightnessRatio": 1.0389979186925649
+    },
+    {
+      "midi": 103,
+      "velocity": 0.3,
+      "levelChangeDb": -0.6715536940698273,
+      "brightnessRatio": 1.0348532682593192
+    },
+    {
+      "midi": 103,
+      "velocity": 0.6,
+      "levelChangeDb": -0.05597373918419718,
+      "brightnessRatio": 1.0266933410417676
+    },
+    {
+      "midi": 103,
+      "velocity": 0.8,
+      "levelChangeDb": 0.07142905545739725,
+      "brightnessRatio": 1.019640820508695
+    },
+    {
+      "midi": 103,
+      "velocity": 1,
+      "levelChangeDb": 0.3274368653395664,
+      "brightnessRatio": 0.999147347721258
+    },
+    {
+      "midi": 104,
+      "velocity": 0.1,
+      "levelChangeDb": -1.7953934036576513,
+      "brightnessRatio": 1.051711304362263
+    },
+    {
+      "midi": 104,
+      "velocity": 0.3,
+      "levelChangeDb": -0.4295129902251363,
+      "brightnessRatio": 1.0418624308871052
+    },
+    {
+      "midi": 104,
+      "velocity": 0.6,
+      "levelChangeDb": 0.26206699687474916,
+      "brightnessRatio": 1.0238056413498429
+    },
+    {
+      "midi": 104,
+      "velocity": 0.8,
+      "levelChangeDb": 0.522849485753608,
+      "brightnessRatio": 1.0169704800318307
+    },
+    {
+      "midi": 104,
+      "velocity": 1,
+      "levelChangeDb": 0.8443806129289521,
+      "brightnessRatio": 0.9991359693541368
+    },
+    {
+      "midi": 105,
+      "velocity": 0.1,
+      "levelChangeDb": -1.691253459652865,
+      "brightnessRatio": 1.1057312074726429
+    },
+    {
+      "midi": 105,
+      "velocity": 0.3,
+      "levelChangeDb": -0.24576244907569975,
+      "brightnessRatio": 1.0208797957646343
+    },
+    {
+      "midi": 105,
+      "velocity": 0.6,
+      "levelChangeDb": 0.2920549285330892,
+      "brightnessRatio": 1.0123339360520562
+    },
+    {
+      "midi": 105,
+      "velocity": 0.8,
+      "levelChangeDb": 0.523663432962503,
+      "brightnessRatio": 1.0071119964031656
+    },
+    {
+      "midi": 105,
+      "velocity": 1,
+      "levelChangeDb": 0.7304974236421115,
+      "brightnessRatio": 1.0014224140752792
+    },
+    {
+      "midi": 106,
+      "velocity": 0.1,
+      "levelChangeDb": -1.431595827146824,
+      "brightnessRatio": 1.0903802644583989
+    },
+    {
+      "midi": 106,
+      "velocity": 0.3,
+      "levelChangeDb": -0.1974864440300403,
+      "brightnessRatio": 1.0118787738129358
+    },
+    {
+      "midi": 106,
+      "velocity": 0.6,
+      "levelChangeDb": 0.4080392067734822,
+      "brightnessRatio": 1.0035257898355803
+    },
+    {
+      "midi": 106,
+      "velocity": 0.8,
+      "levelChangeDb": 0.671190499748545,
+      "brightnessRatio": 1.0021857205254394
+    },
+    {
+      "midi": 106,
+      "velocity": 1,
+      "levelChangeDb": 0.8695716320168525,
+      "brightnessRatio": 1.0022045904675367
+    },
+    {
+      "midi": 107,
+      "velocity": 0.1,
+      "levelChangeDb": -1.635557560090013,
+      "brightnessRatio": 1.088414563931599
+    },
+    {
+      "midi": 107,
+      "velocity": 0.3,
+      "levelChangeDb": -0.41311193872747476,
+      "brightnessRatio": 1.0151668953462103
+    },
+    {
+      "midi": 107,
+      "velocity": 0.6,
+      "levelChangeDb": 0.35809952056471106,
+      "brightnessRatio": 1.003341117398969
+    },
+    {
+      "midi": 107,
+      "velocity": 0.8,
+      "levelChangeDb": 0.7005042933632983,
+      "brightnessRatio": 1.002988690580874
+    },
+    {
+      "midi": 107,
+      "velocity": 1,
+      "levelChangeDb": 0.9879604819939733,
+      "brightnessRatio": 1.002664740003613
+    },
+    {
+      "midi": 108,
+      "velocity": 0.1,
+      "levelChangeDb": -1.8473621301674452,
+      "brightnessRatio": 1.067693883195905
+    },
+    {
+      "midi": 108,
+      "velocity": 0.3,
+      "levelChangeDb": -0.869747846515141,
+      "brightnessRatio": 1.0243017755326285
+    },
+    {
+      "midi": 108,
+      "velocity": 0.6,
+      "levelChangeDb": -0.23458147008716396,
+      "brightnessRatio": 1.0293971932009747
+    },
+    {
+      "midi": 108,
+      "velocity": 0.8,
+      "levelChangeDb": 0.13222226323778324,
+      "brightnessRatio": 1.0264723965626918
+    },
+    {
+      "midi": 108,
+      "velocity": 1,
+      "levelChangeDb": 0.3828049420685197,
+      "brightnessRatio": 1.0343304293790663
+    }
+  ]
+}

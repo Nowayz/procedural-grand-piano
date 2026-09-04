@@ -9,8 +9,8 @@ import {
   synthesizeGrandPianoInto,
 } from '../src/grand-piano.js';
 
-// Deterministic optimized-waveform oracles. Perceptual equivalence to the recorded
-// piano is enforced separately by the full strict reference comparisons.
+// Deterministic waveform oracles, refreshed for the September 2026 pedal and
+// unison-mechanics change. Acoustic quality is evaluated by reference comparisons.
 function pcmHash(pcm) {
   return createHash('sha256')
     .update(new Uint8Array(pcm.buffer, pcm.byteOffset, pcm.byteLength))
@@ -21,17 +21,17 @@ const REFERENCE_RENDERS = [
   {
     name: 'A0 soft',
     arguments: [27.5, 0.3, 0.06],
-    sha256: '2064d633a56b0df0b3b3370dbc5db24922e10f24c926f3cb1e15f10bb178d52a',
+    sha256: '52eb0850c21a7cda4ffb0a0b9264d8c6cfed9c1c455b360d1947a2eadd0d339d',
   },
   {
     name: 'A4 medium-long render',
     arguments: [440, 0.731, 0.45],
-    sha256: '51249b1940579db2fe8081f53eda55221d625aecfebbe8c35508dc8dcb090da8',
+    sha256: '740046cc7c7220266316b031ee750e57c8320c607e1f8bb3ca1a819ee519e7f9',
   },
   {
     name: 'C8 maximum velocity',
     arguments: [4_186.009_044_809_578, 1, 0.06],
-    sha256: 'a42085f0ce4144355a5ee2105d94ec6731ea96cf18e10fb19df00b0a73916066',
+    sha256: 'c040bb365ec1946e9ebc46c17092371f28bcc99500dc092ae5900e77acb00a71',
   },
   {
     name: 'one-sample render',
@@ -41,22 +41,22 @@ const REFERENCE_RENDERS = [
   {
     name: 'fade length minus one',
     arguments: [440, 0.731, 255 / SAMPLE_RATE],
-    sha256: 'baef142bcc4278a00614842b71cf586e4cd910f6dd311adf3f4c58b13dc03f59',
+    sha256: '75511efe0def1ebc919ad882960bac894acc98f41cd017b80ebabf28d9cbacb4',
   },
   {
     name: 'exact fade length',
     arguments: [440, 0.731, 256 / SAMPLE_RATE],
-    sha256: '7ddc07ade9b29eae17b5d6c232a14cae2e7f66d33c13c9efa9e524509c1c25ea',
+    sha256: 'edd050df121514880631fbe36dfc435d6a79c215ecde5efba1b61e7af5640a81',
   },
   {
     name: 'fade length plus one',
     arguments: [440, 0.731, 257 / SAMPLE_RATE],
-    sha256: '240f52d1ef055c4ba90c0f0c80d29b01d3408bfc3371d068c0cd03805dafad18',
+    sha256: '52f871588d2dcb066ec69cfdb2b7a171943b91690c3f9cc86751405eee4f06bc',
   },
   {
     name: 'near-zero nonzero velocity',
     arguments: [440, 0.000_001, 0.03],
-    sha256: '921004e759eb68d080bfcd328e7d0e000be1162901a796b740891dca11d58ab0',
+    sha256: 'aa8a7224430a5867f85435acbe8d1f984f744b39123922841903be3a8de0ba4c',
   },
   {
     name: 'frequency clamped below A0',
@@ -66,12 +66,12 @@ const REFERENCE_RENDERS = [
   {
     name: 'frequency clamped above C8',
     arguments: [99_999, 0.7, 0.025],
-    sha256: 'eb7f219f5026ce84a9fa3c8f9aa9f72b99dd366536f25a3d294e4c5bbc4aee73',
+    sha256: '8d2f70ca731246594ca2b218c3ffe3fb54454c37ecda408a1a30894b98d7095a',
   },
   {
     name: 'velocity clamped above one',
     arguments: [440, 7, 0.025],
-    sha256: '719b7d308ebe2fb22f9e9507a978ee0570b910f33d8798627c4f24e69a71f7ba',
+    sha256: '0b00df7e0a2e1472f99110fcda6345960ecac5388e6148c3fe5260484b7ba07f',
   },
 ];
 
@@ -93,7 +93,7 @@ test('all 88 keys remain deterministic at soft, medium, and hard velocities', ()
   }
   assert.equal(
     aggregate.digest('hex'),
-    'b61d5b3a38f0941d0177c1af578f8130be1d90750030115416fc79dac88f2a92',
+    '6ade46679ca78a093074f962f0deac21bc16edc193c93f33ca77a7583c060bf8',
   );
 });
 

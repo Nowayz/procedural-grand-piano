@@ -86,7 +86,11 @@ continue beyond this scoped pass.
   differs from the linear sum of isolated notes by 2.8% RMS, while all
   offline single-note waveforms remain bit-identical. Strict fidelity stayed
   88.53, focused validation stayed 97/100, and 73/73 runtime tests pass.
-- Item 7: retained the existing continuous half-pedal/felt-separation model
+- Item 7 update (September 2026): finite pedal travel, contact-derived soft-pedal
+  scaling, passive unison excitation, and CC67 routing supersede the original
+  static multipliers. See [PEDAL_PHYSICS.md](PEDAL_PHYSICS.md) and the current
+  [validation sweep](pedal-validation.json).
+- Original item 7 calibration (historical): retained the existing continuous half-pedal/felt-separation model
   and added sample-scheduled continuous una-corda and key-position controls.
   Una-corda shifts the hammer contact across one-, two-, and three-string
   unisons and lowers the hammer/string brightness continuously. Explicit key

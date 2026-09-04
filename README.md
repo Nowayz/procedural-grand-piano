@@ -125,7 +125,7 @@ piano.sustain(true);
 piano.sustain(false, context.currentTime + 2);
 ```
 
-`id` identifies one physical key press. Different IDs may describe successive strikes, but all strikes whose frequencies map to the same one of the piano's 88 keys reuse that key's single string voice. A restrike transfers ownership to its newest ID, injects a fresh hammer excitation into the existing modal state, and makes a later stale note-off for the prior ID harmless. `noteOn`, `noteOff`, and `sustain` accept absolute `AudioContext` times. An omitted time means “the next available render quantum,” which minimizes interactive latency but depends on main-thread and `MessagePort` scheduling. Sequencers should submit events at least `REALTIME_SCHEDULING_LEAD_SECONDS` (20 ms) ahead for stable sample placement. DOM events and `EventTarget` may be used by the interface, but they are deliberately absent from the DSP callback.
+`id` identifies one physical key press. Different IDs may describe successive strikes, but all strikes whose frequencies map to the same one of the piano's 88 keys reuse that key's single string voice. A restrike transfers ownership to its newest ID, injects a fresh hammer excitation into the existing modal state, and makes a later stale note-off for the prior ID harmless. `noteOn`, `noteOff`, `sustain`, `unaCorda`, and `keyPosition` accept absolute `AudioContext` times. An omitted time means “the next available render quantum,” which minimizes interactive latency but depends on main-thread and `MessagePort` scheduling. Sequencers should submit events at least `REALTIME_SCHEDULING_LEAD_SECONDS` (20 ms) ahead for stable sample placement. DOM events and `EventTarget` may be used by the interface, but they are deliberately absent from the DSP callback.
 
 `release_velocity` is a normalized key-return speed, clamped to `0..1`: `0`
 gives the slowest return, `1` the fastest, and omission uses `64 / 127`. It
@@ -135,19 +135,37 @@ damper contact is scheduled 45–85 ms after key-up and cannot precede 50 ms aft
 the strike. Consequently, even a 13 ms key gate produces a finite piano tone
 rather than a 13 ms sample cut.
 
-`sustain()` accepts either a Boolean or normalized pedal lift from `0` (felt
-fully down) to `1` (felt clear). Intermediate values drive the narrow
-part-pedal interaction regime. The model begins with free key-return travel,
-applies nonlinear partial felt contact, then leaves a quieter free residual
-when string motion falls below the remaining felt gap. Re-pedaling during key
-return or damping catches the string at its current energy: future attenuation
-stops, but energy already absorbed by the felt is not restored.
+`sustain()` accepts a Boolean or normalized target pedal lift, from `0` (felt
+fully down) to `1` (felt clear). `unaCorda()` accepts the same range for the
+left soft pedal. Targets move through critically damped mechanics: the default
+full-step response reaches 95% in 120 ms for sustain and 160 ms for una corda.
+These are tunable response defaults, not universal human speed measurements.
+A target and a note at the same time use the pedal's current position; schedule
+the pedal earlier when the strike should receive the fully engaged effect.
 
-All voices mix inside one Wasm engine and one mono `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices and supports up to 256 slots, although the one-resonator-per-key rule limits a piano performance to 88 active physical voices. When a smaller configured pool fills, it deterministically steals the quietest released voice, then the quietest key-up/pedal-held voice, then the quietest held voice. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
+Intermediate sustain positions produce partial felt interaction and a quieter
+free residual. Key return proceeds while sustain is down, so releasing the
+pedal does not repeat the key-return delay. Re-pedaling catches remaining
+vibration only when actual lift clears the felt; absorbed energy is not restored.
 
-Realtime coefficients and timing follow the actual `AudioContext.sampleRate`; rates from 32 to 96 kHz are supported. Sustained 32-voice rendering at 48 kHz measured 1.37 ms median and 1.62 ms p95 per 2.67 ms quantum on the development machine. Starting many voices is more expensive because each strike constructs its modal state: an artificial simultaneous 32-note onset took 5.75 ms, while ordinary one-to-ten-finger keyboard attacks stay within a quantum on that machine.
+Una corda clears one contact in a two- or three-string note. The other strings'
+impulse and contact duration follow a nonlinear spring and effective-mass
+reduction; the unstruck string receives passive bridge excitation. Single-string
+bass notes retain contact and use softer felt. Existing ringing notes keep their
+vibration when the pedal moves. See [pedal equations, research, calibration
+choices, and verification](reports/PEDAL_PHYSICS.md).
 
-Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and continuous CC64 pedal values; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 30). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the bundled Small Hall convolution reverb.
+All voices mix inside one Wasm engine and one stereo `AudioWorkletNode`; do not create an audio node per note. Connect that node to the optional `ConvolverNode` reverb as shown above. The fixed pool defaults to 32 voices and supports up to 256 slots, although the one-resonator-per-key rule limits a piano performance to 88 active physical voices. When a smaller configured pool fills, it deterministically steals the quietest released voice, then the quietest key-up/pedal-held voice, then the quietest held voice. `reset()` immediately clears voices and pending controls, while `destroy()` resets, disconnects, and closes the control port.
+
+Realtime coefficients and timing follow the actual `AudioContext.sampleRate`;
+rates from 32 to 96 kHz are supported. Pedals advance even during silence, and
+render-block partitioning does not change their timing or the resulting audio.
+Current development-machine onset and sustained-render measurements are in
+[`reports/pedal-validation.json`](reports/pedal-validation.json). Performance
+limits depend on the host; large simultaneous onsets cost more than sustained
+rendering because each note constructs a modal bank.
+
+Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and continuous CC64 sustain and CC67 soft-pedal values; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 30). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the bundled Small Hall convolution reverb.
 
 ## Compact runtime
 
@@ -408,15 +426,16 @@ and SHA-256 are recorded in
 [`reports/public-domain-track.json`](reports/public-domain-track.json); the
 checked-in audio files are described in [`demos/README.md`](demos/README.md).
 
-This small reduced model does not reproduce a specific concert grand. The
-offline single-note API is stateless and mono; the realtime engine adds key
-identity and binary sustain, but not continuous key displacement, half-pedaling,
-una-corda, duplex-scale state, true inter-note sympathetic coupling,
-room/microphone simulation, or mechanical repetition. Release velocity is a
-proxy for return kinematics, and the C1-derived damper footprint is blended
-across the bass rather than using measured geometry for every key. The separate
-full-track renderer supplies score-level overlap, keyboard-width panning, and
-synthetic delay-line ambience, but summed notes still do not exchange energy.
+This reduced model does not reproduce a specific concert grand. The realtime
+engine includes continuous pedal and key-position controls, mechanical return,
+duplex resonances, stereo radiation, and reduced string coupling. The nominal
+hammer pulse and radiation remain calibrated approximations. The first-mode
+contact mass, felt stiffness ratio, pedal response times, and C1-derived damper
+footprint are not measured parameters of every key on one instrument. The
+inter-note bridge approximation is disabled above four active voices; unison
+coupling within each note remains active. Full felt hysteresis, a complete
+bridge mobility matrix, sostenuto, and an upright's practice-muffler mechanism
+are not modeled. The separate offline single-note API remains stateless and mono.
 Extreme bass and treble remain the hardest registers, and the modal spectrum is
 smoother than a real instrument's irregular coupled modes.
 

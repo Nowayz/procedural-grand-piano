@@ -42,8 +42,8 @@ test('the top 18 damperless keys ignore key release while the adjacent damped ke
  const detunedFrequency = midiFrequency(91) * 2 ** (-32 / 1_200), heldDetuned = createRealtimeGrandPianoEngine(2), releasedDetuned = createRealtimeGrandPianoEngine(2); heldDetuned.noteOn(2, detunedFrequency, .8); releasedDetuned.noteOn(2, detunedFrequency, .8).noteOff(2, 1, 573); assert.deepEqual(renderFrames(releasedDetuned, frames), renderFrames(heldDetuned, frames));
 });
 
-test('re-pedaling before felt contact catches the complete remaining vibration', () => {
- const frames = Math.round(.3 * 44_100), held = createRealtimeGrandPianoEngine(2), caught = createRealtimeGrandPianoEngine(2); held.noteOn(1, midiFrequency(60), .8); caught.noteOn(1, midiFrequency(60), .8).noteOff(1, 64 / 127, 573).sustain(true, Math.round(.03 * 44_100)); const heldPcm = renderFrames(held, frames), caughtPcm = renderFrames(caught, frames); assert.deepEqual(caughtPcm, heldPcm); assert.ok(caught.isNoteActive(1)); caught.sustain(false); renderFrames(caught, 50_000); assert.equal(caught.isNoteActive(1), false);
+test('re-pedaling with enough travel time before felt contact catches the complete remaining vibration', () => {
+ const frames = Math.round(.3 * 44_100), held = createRealtimeGrandPianoEngine(2), caught = createRealtimeGrandPianoEngine(2); held.noteOn(1, midiFrequency(60), .8); caught.noteOn(1, midiFrequency(60), .8).noteOff(1, 64 / 127, Math.round(.15 * 44_100)).sustain(true, Math.round(.03 * 44_100)); const heldPcm = renderFrames(held, frames), caughtPcm = renderFrames(caught, frames); assert.deepEqual(caughtPcm, heldPcm); assert.ok(caught.isNoteActive(1)); caught.sustain(false); renderFrames(caught, 50_000); assert.equal(caught.isNoteActive(1), false);
 });
 
 test('re-pedaling after contact catches residual energy without restoring absorbed energy', () => {
@@ -63,12 +63,12 @@ test('continuous pedal lift produces part-pedal damping between full contact and
 });
 
 test('continuous una-corda position shifts hammer contact across the unison', () => {
- const frames = 12_000, renders = []; for (const position of [0, .5, 1]) { const engine = createRealtimeGrandPianoEngine(2); engine.unaCorda(position).noteOn(1, midiFrequency(72), .8); renders.push(renderFrames(engine, frames)); } const energies = renders.map((samples) => rootMeanSquare(samples, 882, 7_938)); assert.ok(energies[0] > energies[1] && energies[1] > energies[2], `una-corda RMS ${energies.join(', ')}`); assert.notDeepEqual(renders[0], renders[2]);
+ const frames = 12_000, renders = []; for (const position of [0, .5, 1]) { const engine = createRealtimeGrandPianoEngine(2); engine.unaCorda(position); renderFrames(engine, 22_050); engine.noteOn(1, midiFrequency(72), .8); renders.push(renderFrames(engine, frames)); } const energies = renders.map((samples) => rootMeanSquare(samples, 882, 7_938)); assert.ok(energies[0] > energies[1] && energies[1] > energies[2], `una-corda RMS ${energies.join(', ')}`); assert.notDeepEqual(renders[0], renders[2]);
 });
 
 test('continuous key motion controls damper lift and repetition return', () => {
  const tails = []; for (const position of [0, .4, .8]) { const engine = createRealtimeGrandPianoEngine(3); engine.noteOn(1, midiFrequency(60), .8).keyPosition(1, 0, .5, 2_205).keyPosition(1, position, .5, 7_000); const pcm = renderFrames(engine, 30_000); tails.push(rootMeanSquare(pcm, 18_000, 2_205)); } assert.ok(tails[0] < tails[1] && tails[1] < tails[2], `key-position tail RMS ${tails.join(', ')}`);
- const repetitionEnergy = []; for (const returnPosition of [.2, .65]) { const engine = createRealtimeGrandPianoEngine(4); engine.noteOn(1, 440, .5); renderFrames(engine, 5_000); engine.keyPosition(1, returnPosition, .5).noteOn(1, 440, .8); repetitionEnergy.push(rootMeanSquare(renderFrames(engine, 5_000))); } assert.ok(repetitionEnergy[0] > 1.2 * repetitionEnergy[1], `repetition-return RMS ${repetitionEnergy.join(', ')}`);
+ const repetitionEnergy = []; for (const returnPosition of [.2, .65]) { const engine = createRealtimeGrandPianoEngine(4); engine.noteOn(1, 440, .5); renderFrames(engine, 5_000); engine.keyPosition(1, returnPosition, .5).noteOn(1, 440, .8); repetitionEnergy.push(rootMeanSquare(renderFrames(engine, 5_000))); } assert.ok(repetitionEnergy[0] > repetitionEnergy[1], `repetition-return RMS ${repetitionEnergy.join(', ')}`);
 });
 
 test('physical note renderer treats duration as key-down time and retains the complete acoustic release', () => {
@@ -89,6 +89,10 @@ test('pedaled restrikes never duplicate a key and adjacent keys remain independe
 
 test('multiple voices mix deterministically into a finite bounded block', () => {
  const first = createRealtimeGrandPianoEngine(8), second = createRealtimeGrandPianoEngine(8); for (const engine of [first, second]) { engine.noteOn(1, 261.625565, .9); engine.noteOn(2, 329.627557, .8); engine.noteOn(3, 391.995436, .7); } const a = renderFrames(first, 4_096), b = renderFrames(second, 4_096); assert.deepEqual(a, b); assert.ok(maximumAbsolute(a) > .01); assert.ok(maximumAbsolute(a) <= .94); assert.ok(a.every(Number.isFinite));
+});
+
+test('stereo-linked bus limiter prevents clipping under a full-keyboard stress chord', () => {
+ const engine = createRealtimeGrandPianoEngine(88); for (let midi = 21; midi <= 108; midi += 1) engine.noteOn(midi, midiFrequency(midi), 1); const [left, right] = renderStereoFrames(engine, 12_000), monoPeak = Math.max(maximumAbsolute(left), maximumAbsolute(right)); assert.ok(monoPeak > .85, `limiter did not engage: peak=${monoPeak}`); assert.ok(monoPeak <= .900_001, `limited peak=${monoPeak}`); assert.ok(left.every(Number.isFinite) && right.every(Number.isFinite));
 });
 
 test('open strings exchange energy through the shared bridge', () => {

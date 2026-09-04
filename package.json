@@ -15,6 +15,7 @@
     "README.md",
     "tools/grand-piano-wasm.c",
     "tools/high-resolution-radiation-fit.h",
+    "tools/piano-mechanics.h",
     "tools/build-wasm.mjs"
   ],
   "sideEffects": [
@@ -38,7 +39,8 @@
     "track:bumblebee": "node tools/generate-bumblebee.mjs",
     "tracks:lemmings": "node tools/generate-lemmings-classics.mjs",
     "validate:track": "node tools/validate-track.mjs",
-    "validate": "npm run test && npm run analyze:references && npm run analyze && npm run analyze:grid && npm run analyze:fidelity:report && npm run validate:track"
+    "validate": "npm run test && npm run analyze:references && npm run analyze && npm run analyze:grid && npm run analyze:fidelity:report && npm run validate:track",
+    "verify:pedals": "node tools/verify-pedals.mjs --write-report"
   },
   "keywords": [
     "audio",

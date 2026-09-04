@@ -12,6 +12,24 @@ test('continuous MIDI CC64 values are preserved as normalized pedal lift', () =>
  const bytes = midiFile([0, 0xb0, 64, 32, 0, 0xb0, 64, 64, 0, 0xb0, 64, 96, 0, 0xb0, 64, 127, 0, 0xff, 0x2f, 0]), parsed = parseStandardMidi(bytes); assert.deepEqual(parsed.controls.map(({ position }) => position), [32 / 127, 64 / 127, 96 / 127, 1]);
 });
 
+test('MIDI CC67 stays continuous, ordered, and independent of sustain across channels', () => {
+ const bytes = midiFile([0, 0xb0, 64, 127, 0, 67, 32, 0, 0xb1, 67, 96, 0, 0xb0, 67, 0, 0, 0xb1, 67, 0, 0, 0xb0, 64, 0, 0, 0xff, 0x2f, 0]);
+ const { controls } = parseStandardMidi(bytes);
+ assert.deepEqual(controls.map(({ type, position }) => [type, position]), [
+  ['sustain', 1], ['unaCorda', 32 / 127], ['unaCorda', 96 / 127], ['unaCorda', 0], ['sustain', 0],
+ ]);
+});
+
+test('MIDI soft pedal reaches the engine without changing sustain cleanup', () => {
+ const notes = [{ type: 'noteOn', seconds: .5, id: 1, frequency: 523.251131, velocity: .8 }, { type: 'noteOff', seconds: .7, id: 1, velocity: .5 }];
+ const make = (position) => ({ durationSeconds: .75, controls: [{ type: 'sustain', seconds: 0, position: 1 }, { type: 'unaCorda', seconds: 0, position }, ...notes, { type: 'unaCorda', seconds: .72, position: 0 }] });
+ const normal = renderMidiPerformance(make(0), { tailSeconds: 0, maximumTailSeconds: 3, polyphony: 2 });
+ const soft = renderMidiPerformance(make(1), { tailSeconds: 0, maximumTailSeconds: 3, polyphony: 2 });
+ const energy = (samples) => samples.subarray(24000, 29000).reduce((sum, x) => sum + x * x, 0);
+ assert.ok(energy(soft.mono) < energy(normal.mono));
+ assert.equal(normal.truncatedVoices, 0); assert.equal(soft.truncatedVoices, 0);
+});
+
 test('equal-tick note controls retain source order and pair overlapping strikes', () => {
  const bytes = midiFile([0x00, 0x90, 60, 100, 0x83, 0x60, 0x90, 60, 90, 0x00, 0x80, 60, 20, 0x00, 0x80, 60, 30, 0x00, 0xff, 0x2f, 0]), parsed = parseStandardMidi(bytes); assert.deepEqual(parsed.controls.map(({ type, id, seconds }) => [type, id, seconds]), [['noteOn', 1, 0], ['noteOn', 2, .5], ['noteOff', 1, .5], ['noteOff', 2, .5]]); assert.deepEqual(parsed.controls.slice(2).map(({ velocity }) => velocity), [20 / 127, 30 / 127]);
 });

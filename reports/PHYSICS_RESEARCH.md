@@ -4,6 +4,10 @@ This note records the physical hypotheses used to tune the procedural model.
 The reference recordings informed scalar targets only. No reference waveform,
 impulse response, or resampled PCM is present in the runtime.
 
+The current pedal-motion and una-corda equations, calibration assumptions, and
+verification are documented in [PEDAL_PHYSICS.md](PEDAL_PHYSICS.md). That note
+supersedes the older instantaneous pedal-control descriptions below.
+
 ## Primary sources and reduced equations
 
 - Bank's *Physics-Based Sound Synthesis of the Piano* derives an efficient
@@ -136,8 +140,8 @@ peak-relative vibration drops below `0.2 smoothstep(...)^3`. This produces the
 measured initial free vibration, finite nonlinear damper interaction, and
 quieter final free-vibration stage without restoring energy. The normalized
 pedal thresholds are a reduced control mapping, not dimensions measured on a
-specific pedal linkage. Fully raised pedal cancels pending contact or catches
-an already damped voice without restoring lost modal gain. MIDI 91–108 bypass
+specific pedal linkage. Actual moving pedal lift gates contact without resetting
+key-return travel or restoring lost modal gain. MIDI 91–108 bypass
 damper attenuation and retire through natural modal loss. Other voices retire
 only after the expected −80 dB damping span and a peak-relative envelope below
 −80 dB for 20 ms.

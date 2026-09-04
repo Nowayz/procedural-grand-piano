@@ -156,6 +156,10 @@ test('polyphonic mixing does not change master gain with retained voice count', 
   assert.doesNotMatch(cSource, /mix_scale|sqrt\([^;]*active_voices/);
   assert.match(cSource, /realtime_mix\[frame\] \+= sample;/);
   assert.match(cSource, /realtime_side\[frame\] \+= target->stereo_side;/);
+  assert.match(cSource, /#define REALTIME_BUS_LIMIT \.9/);
+  assert.match(cSource, /target_gain = bus_peak > REALTIME_BUS_LIMIT \? REALTIME_BUS_LIMIT \/ bus_peak : 1/);
+  assert.match(cSource, /realtime_output\[frame\] = mid \* realtime_limiter_gain/);
+  assert.doesNotMatch(cSource, /realtime_output\[frame\] = fmin\(\.94, fmax\(-\.94, mid\)\)/);
 });
 
 test('middle C retains broadband bridge presence without a fitted spectral target', () => {
