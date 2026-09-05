@@ -1,0 +1,15 @@
+{
+  "name": "Bricasti M7 Boston Hall A",
+  "captureBy": "Samplicity",
+  "archiveVersion": "2023-10",
+  "sourcePage": "https://samplicity.com/downloads/",
+  "archiveUrl": "https://cdn.samplicity.com/downloads/Samplicity%20-%20Bricasti%20IRs%20version%202023-10.zip",
+  "leftInputFile": "bricasti-m7-boston-hall-a-L.wav",
+  "rightInputFile": "bricasti-m7-boston-hall-a-R.wav",
+  "archiveDirectory": "Samplicity - Bricasti IRs version 2023-10, left-right files, 44.1 Khz",
+  "archiveLeftInputFile": "1 Halls 18 Boston Hall A, 44K L.wav",
+  "archiveRightInputFile": "1 Halls 18 Boston Hall A, 44K R.wav",
+  "wet": 0.28,
+  "routing": "For the mono source, average the two input-to-left responses and the two input-to-right responses before stereo convolution; preserve both output channels.",
+  "processing": "Native 44.1 kHz float32 captures. No resampling, EQ, tail truncation, or added predelay. RMS-normalized parallel reverb send."
+}

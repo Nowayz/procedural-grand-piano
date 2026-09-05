@@ -1,0 +1,32 @@
+{
+  "name": "lemmings-rondo-alla-turca-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "https://www.mutopiaproject.org/ftp/MozartWA/KV331/KV331_3_RondoAllaTurca/KV331_3_RondoAllaTurca.mid",
+  "notes": 1614,
+  "seconds": 130.50195011337868,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -5.58,
+    "source": {
+      "lufs": -12.42,
+      "truePeakDbTP": -3.75,
+      "loudnessRangeLU": 2.9,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -9.33,
+      "loudnessRangeLU": 2.9,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.26,
+      "truePeakDbTP": -9.61,
+      "loudnessRangeLU": 2.9,
+      "completeDecode": true
+    }
+  }
+}

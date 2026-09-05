@@ -1,0 +1,26 @@
+{
+  "title": "Row, Row, Row Your Boat - Riverlight",
+  "key": "D major",
+  "meter": "6/8",
+  "structure": "4-bar introduction, 8-bar theme, 12-bar four-bar round, 8-bar reprise, ritardando coda",
+  "notes": 318,
+  "unmatchedNotes": 0,
+  "midiFormat": 0,
+  "ppq": 480,
+  "durationSeconds": 69.768231292517,
+  "maximumVoices": 15,
+  "sourceClippedFrames": 0,
+  "truncatedVoices": 0,
+  "reverb": "16% Small Hall with full padded tail",
+  "mastering": {
+    "gainDb": -2.33,
+    "wavIntegratedLufs": -18,
+    "wavTruePeakDbtp": -3.05,
+    "mp3IntegratedLufs": -18.26,
+    "mp3TruePeakDbtp": -3.32,
+    "lastSecondPeak": 0,
+    "mp3FullDecode": "passed",
+    "wav": "44.1 kHz stereo 24-bit PCM",
+    "mp3": "192 kbps stereo"
+  }
+}

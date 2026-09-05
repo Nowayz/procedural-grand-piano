@@ -1,0 +1,28 @@
+{
+  "name": "A6v16-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "generate-demos.mjs (no effects)",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 2.04,
+    "source": {
+      "lufs": -24.56,
+      "truePeakDbTP": -4.04,
+      "loudnessRangeLU": 0,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -22.46,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 0,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -22.76,
+      "truePeakDbTP": -2.27,
+      "loudnessRangeLU": 0,
+      "completeDecode": true
+    }
+  }
+}

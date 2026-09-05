@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { applyConvolverReverb, applyStereoLoudnessCeiling } from '../tools/convolution-reverb.mjs';
+import { DEFAULT_REVERB_WET } from '../src/reverb.js';
+
+test('offline convolution uses the same default send as the browser helper', () => {
+  const left = new Float32Array([1, 0, 0, 0]), right = left.slice();
+  applyConvolverReverb(left, right, new Float32Array([1]), new Float32Array([1]), { normalize: false, master: false, blockSize: 2 });
+  assert.ok(Math.abs(left[0] - (1 + DEFAULT_REVERB_WET)) < 1e-6);
+  assert.deepEqual(left, right);
+});
 
 test('partitioned offline convolution matches direct stereo convolution', () => {
   const left = new Float32Array([1, 2, 0, 0, 0, 0, 0, 0]);

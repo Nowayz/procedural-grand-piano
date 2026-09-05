@@ -1,0 +1,28 @@
+{
+  "name": "C4-medium",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "generate-demos.mjs (no effects)",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 4.95,
+    "source": {
+      "lufs": -26.88,
+      "truePeakDbTP": -6.95,
+      "loudnessRangeLU": 2.6,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -21.92,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 2.7,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -22.18,
+      "truePeakDbTP": -2.26,
+      "loudnessRangeLU": 2.6,
+      "completeDecode": true
+    }
+  }
+}

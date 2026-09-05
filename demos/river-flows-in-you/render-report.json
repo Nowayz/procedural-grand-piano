@@ -1,0 +1,54 @@
+{
+  "title": "River Flows in You",
+  "composer": "Yiruma",
+  "midiSourcePage": "https://bitmidi.com/yiruma-rivers-flow-in-you-mid",
+  "midiSourceUrl": "https://bitmidi.com/uploads/112145.mid",
+  "midiSha256": "7692d6a1e53d9afc3b8e86b134329f1dfdf50fe9c04c4854e7343eb7bf3d70fa",
+  "runtimeSha256": "276da8a7abaabdc2c08f589b2813df53a19b8c199b76a1efbc6675fd589ce023",
+  "engine": "Procedural grand piano with continuous radiation, string-mass, and felt curves",
+  "noteCount": 800,
+  "midiTrackCount": 2,
+  "midiDurationSeconds": 164.76853599999913,
+  "renderedDurationSeconds": 171.66555555555556,
+  "sampleRate": 44100,
+  "maximumVoices": 8,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "sustainEvents": 0,
+  "performance": "Original MIDI timing, velocity, and articulation retained; no pedal events added",
+  "reverb": {
+    "name": "Bricasti M7 Boston Hall A",
+    "captureBy": "Samplicity",
+    "archiveVersion": "2023-10",
+    "sourcePage": "https://samplicity.com/downloads/",
+    "archiveUrl": "https://cdn.samplicity.com/downloads/Samplicity%20-%20Bricasti%20IRs%20version%202023-10.zip",
+    "archiveFiles": [
+      "Samplicity - Bricasti IRs version 2023-10, left-right files, 44.1 Khz/1 Halls 18 Boston Hall A, 44K L.wav",
+      "Samplicity - Bricasti IRs version 2023-10, left-right files, 44.1 Khz/1 Halls 18 Boston Hall A, 44K R.wav"
+    ],
+    "sourceSha256": [
+      "26b6686e68f4cec44a6462cbcda4dc2a65aaede930e4cf248130abea413dad08",
+      "4ec456016c4bd88352130254197f40cacf694740ecbe7003dda9da002e2c151b"
+    ],
+    "sha256": "2c3c5b57354f65e489cf2a37843c5e003c7035d58d4e2a9bfef942e940093d5d",
+    "sampleRate": 44100,
+    "channels": 2,
+    "format": "float32",
+    "frames": 171796,
+    "durationSeconds": 3.8956009070294786,
+    "processing": "Average corresponding output channels of the left-input and right-input captures. No resampling, EQ, normalization, predelay, or tail truncation.",
+    "wet": 0.28,
+    "fullTail": true,
+    "impulseDurationSeconds": 3.8956009070294786,
+    "wetToDryRmsDb": -9.635993608094445,
+    "preparedSha256": "2c3c5b57354f65e489cf2a37843c5e003c7035d58d4e2a9bfef942e940093d5d",
+    "normalizationScale": 0.10476766618264031,
+    "masteringGain": 1
+  },
+  "mastering": {
+    "method": "Constant gain only",
+    "gainDb": 1.29128746480456,
+    "samplePeakDbFS": -1.5
+  },
+  "renderingSeconds": 9.5252911
+}

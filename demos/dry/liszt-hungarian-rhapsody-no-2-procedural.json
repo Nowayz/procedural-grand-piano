@@ -1,0 +1,32 @@
+{
+  "name": "liszt-hungarian-rhapsody-no-2-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "scores/liszt-hungarian-rhapsody-no-2.mid",
+  "notes": 6765,
+  "seconds": 543.6546031746032,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -2.08,
+    "source": {
+      "lufs": -15.92,
+      "truePeakDbTP": -3.74,
+      "loudnessRangeLU": 11.7,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -5.82,
+      "loudnessRangeLU": 11.6,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.26,
+      "truePeakDbTP": -6.09,
+      "loudnessRangeLU": 11.6,
+      "completeDecode": true
+    }
+  }
+}

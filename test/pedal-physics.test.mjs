@@ -1,9 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { fileURLToPath } from 'node:url';
+import { runC } from '../tools/run-c-check.mjs';
 import { createGrandPianoProcessorOptions, createRealtimeGrandPianoEngine } from '../src/grand-piano.js';
 
 const rates = [32000, 44100, 48000, 96000];
@@ -114,10 +111,7 @@ test('nonlinear contact duration changes with felt and contact count; passive st
 });
 
 test('contact scaling agrees with an independently integrated power-law collision; unison mixing is contractive', (t) => {
- const directory = mkdtempSync(`${tmpdir()}/piano-mechanics-`);
- try {
-  const source = `${directory}/check.c`, binary = `${directory}/check`;
-  writeFileSync(source, `#include <assert.h>
+ const output = runC(`#include <assert.h>
 #include <stdio.h>
 #include "piano-mechanics.h"
 static double acceleration(double x,double mass,double k,double p) { return -k*pow(fmax(0,x),p)/mass; }
@@ -138,7 +132,7 @@ int main(void) {
  for(int midi=24;midi<=108;midi+=12) for(int position=1;position<=4;++position) {
   int n=1+(midi>=31)+(midi>=49);double shift=position/4.;
   PianoContact normal=piano_soft_contact(midi,n,0),soft=piano_soft_contact(midi,n,shift);
-  double p=2.3+.2*fmin(1,fmax(0,(midi-36)/24.))+.5*fmin(1,fmax(0,(midi-60)/36.));
+  double p=piano_felt_exponent(midi);
   double felt=1-.45*shift*shift*(3-2*shift),j0,j1;
   double t0=collision(normal.reduced_mass,n*1e9,p,&j0),t1=collision(soft.reduced_mass,soft.contact_count*felt*1e9,p,&j1);
   double error=fabs(t1/t0-soft.duration_ratio);worst=fmax(worst,error);assert(error<2e-6);
@@ -154,9 +148,5 @@ int main(void) {
  }
  printf("maximum contact-duration ratio error vs RK4: %.3g\\n",worst);
 }`);
-  const include = fileURLToPath(new URL('../tools', import.meta.url));
-  execFileSync('cc', ['-O2', '-std=c99', '-I', include, source, '-lm', '-o', binary]);
-  const output = execFileSync(binary, { encoding: 'utf8' });
-  assert.match(output, /maximum contact-duration ratio error vs RK4:/); t.diagnostic(output.trim());
- } finally { rmSync(directory, { recursive: true, force: true }); }
+ assert.match(output, /maximum contact-duration ratio error vs RK4:/); t.diagnostic(output.trim());
 });

@@ -5,7 +5,7 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRealtimeGrandPianoEngine, REALTIME_BLOCK_SIZE, SAMPLE_RATE } from '../src/grand-piano.js';
-import { DEFAULT_REVERB_IR_URL, DEFAULT_REVERB_WET } from '../src/reverb.js';
+import { DEFAULT_REVERB_IR_URL, DEFAULT_REVERB_WET, DEFAULT_REVERB_NAME } from '../src/reverb.js';
 import { readWav, writeStereoPcm16Wav } from './audio-analysis.mjs';
 import { buildBwv846Performance, SCORE_PROVENANCE, TRACK_TITLE } from './bwv846-performance.mjs';
 import { applyConvolverReverb } from './convolution-reverb.mjs';
@@ -31,7 +31,7 @@ for (let blockStart = 0; blockStart < frameCount; blockStart += REALTIME_BLOCK_S
 const renderSeconds = (clock.now() - renderStarted) / 1000;
 
 const impulse = await readWav(fileURLToPath(DEFAULT_REVERB_IR_URL), { preserveChannels: true });
-console.log(`applying Small Hall convolution reverb (${Math.round(DEFAULT_REVERB_WET * 100)}% wet)`);
+console.log(`applying ${DEFAULT_REVERB_NAME} convolution reverb (${Math.round(DEFAULT_REVERB_WET * 100)}% wet)`);
 const reverb = applyConvolverReverb(left, right, impulse.channelSamples[0], impulse.channelSamples[1], { wet: DEFAULT_REVERB_WET, normalize: true, sampleRate: SAMPLE_RATE });
 await mkdir(path.dirname(destination), { recursive: true });
 await writeStereoPcm16Wav(destination, left, right, SAMPLE_RATE);

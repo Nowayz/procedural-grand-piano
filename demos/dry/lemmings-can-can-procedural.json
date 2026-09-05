@@ -1,0 +1,32 @@
+{
+  "name": "lemmings-can-can-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "https://abcnotation.com/getResource/downloads/media/the-galop.mid?a=trillian.mit.edu%2F~jc%2Fmusic%2Fabc%2Fclassical%2FOffenbach_Jacques%2FGalop%2F0000",
+  "notes": 243,
+  "seconds": 53.057596371882084,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -1.1999999999999993,
+    "source": {
+      "lufs": -16.8,
+      "truePeakDbTP": -4.13,
+      "loudnessRangeLU": 2.7,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -5.33,
+      "loudnessRangeLU": 2.7,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.27,
+      "truePeakDbTP": -5.6,
+      "loudnessRangeLU": 2.7,
+      "completeDecode": true
+    }
+  }
+}

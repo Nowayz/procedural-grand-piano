@@ -1,0 +1,28 @@
+{
+  "name": "short-phrase",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "generate-demos.mjs (no effects)",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -0.32000000000000006,
+    "source": {
+      "lufs": -23.03,
+      "truePeakDbTP": -1.68,
+      "loudnessRangeLU": 2.8,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -23.34,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 2.8,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -23.61,
+      "truePeakDbTP": -2.26,
+      "loudnessRangeLU": 2.8,
+      "completeDecode": true
+    }
+  }
+}

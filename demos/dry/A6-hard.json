@@ -1,0 +1,28 @@
+{
+  "name": "A6-hard",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "generate-demos.mjs (no effects)",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 3.66,
+    "source": {
+      "lufs": -23.14,
+      "truePeakDbTP": -5.66,
+      "loudnessRangeLU": 0,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -19.53,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 0,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -19.74,
+      "truePeakDbTP": -2.26,
+      "loudnessRangeLU": 0,
+      "completeDecode": true
+    }
+  }
+}

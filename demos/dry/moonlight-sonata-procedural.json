@@ -1,0 +1,28 @@
+{
+  "name": "moonlight-sonata-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "Concatenated dry movements 1, 2 and 3",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 0,
+    "source": {
+      "lufs": -18,
+      "truePeakDbTP": -8.34,
+      "loudnessRangeLU": 2.1,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -8.34,
+      "loudnessRangeLU": 2.1,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.26,
+      "truePeakDbTP": -8.61,
+      "loudnessRangeLU": 2,
+      "completeDecode": true
+    }
+  }
+}

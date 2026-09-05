@@ -1,0 +1,28 @@
+{
+  "name": "A1-soft",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "generate-demos.mjs (no effects)",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 7.869999999999999,
+    "source": {
+      "lufs": -27.52,
+      "truePeakDbTP": -9.87,
+      "loudnessRangeLU": 0.7,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -19.64,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 0.7,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -19.91,
+      "truePeakDbTP": -2.26,
+      "loudnessRangeLU": 0.7,
+      "completeDecode": true
+    }
+  }
+}

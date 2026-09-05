@@ -1,0 +1,29 @@
+{
+  "model": "global degree-64 Chebyshev polynomial in smoothly bounded log frequency",
+  "baseline": "legacy quantized 14-band Hermite radiation model, reconstructed from the development NPZ",
+  "calibrationPolicy": "4096 fit observations per latent component; legacy samples and interpolation are development-only",
+  "frequencyRangeHz": [
+    20,
+    45600
+  ],
+  "pitchCount": 175,
+  "velocityCount": 65,
+  "frequencyCount": 4286,
+  "comparisons": 48753250,
+  "anchoredErrorDb": {
+    "rms": 0.014067033148886025,
+    "maximum": 0.18500942163114473
+  },
+  "worstCase": {
+    "midi": 26.5,
+    "velocity": 0.0,
+    "frequencyHz": 1303.9645680138417
+  },
+  "limitsDb": {
+    "rms": 0.025,
+    "maximum": 0.25
+  },
+  "quantizationIncluded": true,
+  "endpointSmoothingIncluded": true,
+  "passed": true
+}

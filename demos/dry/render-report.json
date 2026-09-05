@@ -1,0 +1,678 @@
+{
+  "impulseResponse": false,
+  "addedReverb": false,
+  "tracks": [
+    {
+      "name": "A1-soft",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "generate-demos.mjs (no effects)",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 7.869999999999999,
+        "source": {
+          "lufs": -27.52,
+          "truePeakDbTP": -9.87,
+          "loudnessRangeLU": 0.7,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -19.64,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 0.7,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -19.91,
+          "truePeakDbTP": -2.26,
+          "loudnessRangeLU": 0.7,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "C4-medium",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "generate-demos.mjs (no effects)",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 4.95,
+        "source": {
+          "lufs": -26.88,
+          "truePeakDbTP": -6.95,
+          "loudnessRangeLU": 2.6,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -21.92,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 2.7,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -22.18,
+          "truePeakDbTP": -2.26,
+          "loudnessRangeLU": 2.6,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "A6-hard",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "generate-demos.mjs (no effects)",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 3.66,
+        "source": {
+          "lufs": -23.14,
+          "truePeakDbTP": -5.66,
+          "loudnessRangeLU": 0,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -19.53,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 0,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -19.74,
+          "truePeakDbTP": -2.26,
+          "loudnessRangeLU": 0,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "A6v16-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "generate-demos.mjs (no effects)",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 2.04,
+        "source": {
+          "lufs": -24.56,
+          "truePeakDbTP": -4.04,
+          "loudnessRangeLU": 0,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -22.46,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 0,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -22.76,
+          "truePeakDbTP": -2.27,
+          "loudnessRangeLU": 0,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "C-major-chord",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "generate-demos.mjs (no effects)",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 6.039999999999999,
+        "source": {
+          "lufs": -31.37,
+          "truePeakDbTP": -8.04,
+          "loudnessRangeLU": 10.5,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -25.35,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 10.6,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -25.59,
+          "truePeakDbTP": -2.27,
+          "loudnessRangeLU": 10.6,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "short-phrase",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "generate-demos.mjs (no effects)",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -0.32000000000000006,
+        "source": {
+          "lufs": -23.03,
+          "truePeakDbTP": -1.68,
+          "loudnessRangeLU": 2.8,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -23.34,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 2.8,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -23.61,
+          "truePeakDbTP": -2.26,
+          "loudnessRangeLU": 2.8,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "bach-bwv846-prelude-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "bach",
+      "seconds": 157.06684807256235,
+      "proceduralRoom": false,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -1.4100000000000001,
+        "source": {
+          "lufs": -16.59,
+          "truePeakDbTP": -0.72,
+          "loudnessRangeLU": 4.8,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -2.13,
+          "loudnessRangeLU": 4.8,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -2.39,
+          "loudnessRangeLU": 4.8,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "flight-of-the-bumblebee-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "bumblebee",
+      "seconds": 71.51362811791383,
+      "proceduralRoom": false,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -1.28,
+        "source": {
+          "lufs": -18.59,
+          "truePeakDbTP": -0.72,
+          "loudnessRangeLU": 6.9,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -19.87,
+          "truePeakDbTP": -2,
+          "loudnessRangeLU": 6.9,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -20.13,
+          "truePeakDbTP": -2.27,
+          "loudnessRangeLU": 6.8,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "lemmings-can-can-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "https://abcnotation.com/getResource/downloads/media/the-galop.mid?a=trillian.mit.edu%2F~jc%2Fmusic%2Fabc%2Fclassical%2FOffenbach_Jacques%2FGalop%2F0000",
+      "notes": 243,
+      "seconds": 53.057596371882084,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -1.1999999999999993,
+        "source": {
+          "lufs": -16.8,
+          "truePeakDbTP": -4.13,
+          "loudnessRangeLU": 2.7,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -5.33,
+          "loudnessRangeLU": 2.7,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.27,
+          "truePeakDbTP": -5.6,
+          "loudnessRangeLU": 2.7,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "lemmings-rondo-alla-turca-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "https://www.mutopiaproject.org/ftp/MozartWA/KV331/KV331_3_RondoAllaTurca/KV331_3_RondoAllaTurca.mid",
+      "notes": 1614,
+      "seconds": 130.50195011337868,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -5.58,
+        "source": {
+          "lufs": -12.42,
+          "truePeakDbTP": -3.75,
+          "loudnessRangeLU": 2.9,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -9.33,
+          "loudnessRangeLU": 2.9,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -9.61,
+          "loudnessRangeLU": 2.9,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "lemmings-dance-of-the-reed-flutes-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "https://www.flutetunes.com/tunes/tchaikovsky-the-nutcracker-dance-of-the-mirlitons.mid",
+      "notes": 515,
+      "seconds": 86.22149659863946,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -7.279999999999999,
+        "source": {
+          "lufs": -10.72,
+          "truePeakDbTP": -3.76,
+          "loudnessRangeLU": 2.4,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -11.04,
+          "loudnessRangeLU": 2.5,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.27,
+          "truePeakDbTP": -11.29,
+          "loudnessRangeLU": 2.5,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "liszt-hungarian-rhapsody-no-2-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "scores/liszt-hungarian-rhapsody-no-2.mid",
+      "notes": 6765,
+      "seconds": 543.6546031746032,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -2.08,
+        "source": {
+          "lufs": -15.92,
+          "truePeakDbTP": -3.74,
+          "loudnessRangeLU": 11.7,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -5.82,
+          "loudnessRangeLU": 11.6,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -6.09,
+          "loudnessRangeLU": 11.6,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "moonlight1-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "scores/moonlight-sonata/moonlight1.mid",
+      "notes": 1142,
+      "seconds": 279.00226757369614,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -7.15,
+        "source": {
+          "lufs": -10.85,
+          "truePeakDbTP": -3.61,
+          "loudnessRangeLU": 1.5,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -10.76,
+          "loudnessRangeLU": 1.4,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.27,
+          "truePeakDbTP": -11.04,
+          "loudnessRangeLU": 1.5,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "moonlight2-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "scores/moonlight-sonata/moonlight2.mid",
+      "notes": 373,
+      "seconds": 182.00090702947847,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -4.73,
+        "source": {
+          "lufs": -13.27,
+          "truePeakDbTP": -3.62,
+          "loudnessRangeLU": 3,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -8.35,
+          "loudnessRangeLU": 3,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -8.63,
+          "loudnessRangeLU": 3,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "moonlight3-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "scores/moonlight-sonata/moonlight3.mid",
+      "notes": 4863,
+      "seconds": 804.7136507936508,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -7.289999999999999,
+        "source": {
+          "lufs": -10.71,
+          "truePeakDbTP": -3.41,
+          "loudnessRangeLU": 1.8,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -10.7,
+          "loudnessRangeLU": 1.8,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.27,
+          "truePeakDbTP": -10.98,
+          "loudnessRangeLU": 1.8,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "twinkle-starlight-variations",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "demos/twinkle-starlight-variations.mid",
+      "notes": 343,
+      "seconds": 95.29469387755103,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 1.6700000000000017,
+        "source": {
+          "lufs": -19.67,
+          "truePeakDbTP": -4.37,
+          "loudnessRangeLU": 6.2,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -2.7,
+          "loudnessRangeLU": 6.2,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.27,
+          "truePeakDbTP": -2.97,
+          "loudnessRangeLU": 6.2,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "twinkle-in-canon",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "demos/twinkle-in-canon.mid",
+      "notes": 913,
+      "seconds": 88.81922902494331,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -3.0500000000000007,
+        "source": {
+          "lufs": -14.95,
+          "truePeakDbTP": -3.9,
+          "loudnessRangeLU": 4,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -6.95,
+          "loudnessRangeLU": 4.1,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -7.21,
+          "loudnessRangeLU": 4,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "wheels-on-the-bus",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "demos/wheels-on-the-bus/wheels-on-the-bus.mid",
+      "notes": 336,
+      "seconds": 71.1285260770975,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 0.5799999999999983,
+        "source": {
+          "lufs": -18.58,
+          "truePeakDbTP": -3.92,
+          "loudnessRangeLU": 3.9,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -3.34,
+          "loudnessRangeLU": 3.8,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.27,
+          "truePeakDbTP": -3.6,
+          "loudnessRangeLU": 3.8,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "row-row-row-your-boat",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "demos/row-row-row-your-boat/row-row-row-your-boat.mid",
+      "notes": 318,
+      "seconds": 68.4088888888889,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 0.3999999999999986,
+        "source": {
+          "lufs": -18.4,
+          "truePeakDbTP": -3.92,
+          "loudnessRangeLU": 4.9,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -3.52,
+          "loudnessRangeLU": 4.9,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -3.78,
+          "loudnessRangeLU": 5,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "river-road-duet",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "demos/river-road-duet/river-road-duet.mid",
+      "notes": 382,
+      "seconds": 70.41160997732426,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 0.21000000000000085,
+        "source": {
+          "lufs": -18.21,
+          "truePeakDbTP": -3.91,
+          "loudnessRangeLU": 4.8,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -3.7,
+          "loudnessRangeLU": 4.7,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -3.97,
+          "loudnessRangeLU": 4.8,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "codex-lanterns-at-midnight",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "demos/codex-lanterns-at-midnight/codex-lanterns-at-midnight.mid",
+      "notes": 2145,
+      "seconds": 231.73804988662133,
+      "clippedSourceFrames": 0,
+      "truncatedVoices": 0,
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": -2.4399999999999995,
+        "source": {
+          "lufs": -15.56,
+          "truePeakDbTP": -3.85,
+          "loudnessRangeLU": 9.1,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -17.99,
+          "truePeakDbTP": -6.29,
+          "loudnessRangeLU": 9.1,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -6.56,
+          "loudnessRangeLU": 9.1,
+          "completeDecode": true
+        }
+      }
+    },
+    {
+      "name": "moonlight-sonata-procedural",
+      "impulseResponse": false,
+      "addedReverb": false,
+      "source": "Concatenated dry movements 1, 2 and 3",
+      "mastering": {
+        "method": "Constant gain; no compression or limiting",
+        "gainDb": 0,
+        "source": {
+          "lufs": -18,
+          "truePeakDbTP": -8.34,
+          "loudnessRangeLU": 2.1,
+          "completeDecode": true
+        },
+        "wav": {
+          "lufs": -18,
+          "truePeakDbTP": -8.34,
+          "loudnessRangeLU": 2.1,
+          "completeDecode": true
+        },
+        "mp3": {
+          "lufs": -18.26,
+          "truePeakDbTP": -8.61,
+          "loudnessRangeLU": 2,
+          "completeDecode": true
+        }
+      }
+    }
+  ]
+}

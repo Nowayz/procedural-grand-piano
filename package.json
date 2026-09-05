@@ -8,6 +8,7 @@
     ".": "./src/grand-piano.js",
     "./realtime": "./src/realtime.js",
     "./reverb": "./src/reverb.js",
+    "./default-ir": "./src/impulse-responses/bricasti-m7-boston-hall-a.wav",
     "./small-hall-ir": "./src/impulse-responses/small-hall-tail.wav"
   },
   "files": [
@@ -15,6 +16,7 @@
     "README.md",
     "tools/grand-piano-wasm.c",
     "tools/high-resolution-radiation-fit.h",
+    "tools/continuous-piano-curves.h",
     "tools/piano-mechanics.h",
     "tools/build-wasm.mjs"
   ],
@@ -25,6 +27,10 @@
     "test": "node --test",
     "wasm:build": "node tools/build-wasm.mjs",
     "wasm:check": "node tools/build-wasm.mjs --check",
+    "synth:debug": "node tools/build-synth-debug.mjs",
+    "synth:audit": "node tools/audit-synth-contributions.mjs",
+    "reverb:prepare": "node tools/prepare-default-reverb.mjs",
+    "curves:check": "python tools/check-continuous-curves.py",
     "analyze": "node tools/score-synth.mjs --write-report",
     "analyze:references": "node tools/analyze-references.mjs --write-report",
     "analyze:grid": "node tools/compare-reference-grid.mjs --write-report",

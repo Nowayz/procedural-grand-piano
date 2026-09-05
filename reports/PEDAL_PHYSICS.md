@@ -76,11 +76,15 @@ dimensions. A one-string bass note keeps its only contact. Unlike the former
 8%/32% residual excitation, a cleared string receives **zero direct impulse**.
 
 Let `N_eff = Σa_i`. The contact law is `F = K δ^p` for positive compression.
-The exponent is interpolated from the published C2/C4/C7 values 2.3/2.5/3.0.
-Per-string masses and estimated hammer masses use the C1–C8 anchors in
+The exponent follows a smooth analytic fit to the published C2/C4/C7 values
+2.3/2.5/3.0. Per-string mass follows an exponential curve with two smooth changes
+of slope; estimated hammer mass remains an affine function of register. Their
+calibration uses the C1–C8 anchors in
 [Wood's piano simulation parameter tables](https://euphonics.org/12-2-1-parameter-values-for-piano-simulations/).
-Those describe one Broadwood instrument and literature estimates; interpolating
-them does not measure this virtual grand's exact geometry.
+Those describe one Broadwood instrument and literature estimates; fitting
+them does not measure this virtual grand's exact geometry. The runtime has no
+mass lookup table. The [continuous-curve regression](CONTINUOUS_CURVES.md)
+measures the effect of these approximations on contact duration.
 
 For the first string mode, point effective mass at strike ratio `a` is
 `M_s / (2 sin²(πa))`. With total participating string mass `M` and hammer mass

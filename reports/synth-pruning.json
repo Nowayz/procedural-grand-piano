@@ -1,0 +1,1095 @@
+{
+  "beforeWasmSha256": "c82849ca89111662117e975b06fcd8c05659e4e60e1809191ad860237a3330f2",
+  "afterWasmSha256": "a5a22abe81f6099adfa8d6486a4914c352071aec795b8087475dc4d880e0b401",
+  "afterSourceSha256": "d0f5cd9f3985695d8d06d33e6d497df8910a20f1f34aa99add881646db18eaf6",
+  "scenarios": 709,
+  "samples": 91659372,
+  "changedSamples": 2989,
+  "peak": 2.9802322387695312e-8,
+  "peakDbFS": -150.5149978319906,
+  "max20msRms": 9.618658190487366e-10,
+  "max20msDbFS": -180.3377101623863,
+  "worst": "extended-48000-21",
+  "differences": [
+    {
+      "scenario": "pedal-restrike-chord",
+      "peak": 7.450580596923828e-9,
+      "rms": 1.055749917659324e-11,
+      "relativeRms": 1.8986629001955623e-10,
+      "max20msRms": 2.508740982791311e-10,
+      "changedSamples": 14
+    },
+    {
+      "scenario": "key-30-v0.5",
+      "peak": 9.094947017729282e-13,
+      "rms": 4.330927151299659e-15,
+      "relativeRms": 5.0104340868060575e-14,
+      "max20msRms": 3.062427957508925e-14,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "key-30-v1",
+      "peak": 5.820766091346741e-11,
+      "rms": 3.098959205089777e-13,
+      "relativeRms": 1.835812505256575e-12,
+      "max20msRms": 1.959953892805712e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "key-31-v0.5",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.3858966884158908e-13,
+      "relativeRms": 1.2488995448690905e-12,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "key-48-v0.125",
+      "peak": 1.4551915228366852e-11,
+      "rms": 6.94300439823798e-14,
+      "relativeRms": 3.5880147846440443e-12,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "long-free-decay",
+      "peak": 7.450580596923828e-9,
+      "rms": 7.0269158383626946e-12,
+      "relativeRms": 2.1370862821807745e-10,
+      "max20msRms": 2.5087601228930323e-10,
+      "changedSamples": 306
+    },
+    {
+      "scenario": "pedals-rate-32000",
+      "peak": 4.547473508864641e-13,
+      "rms": 8.477853123686639e-16,
+      "relativeRms": 1.3018400721213786e-14,
+      "max20msRms": 1.797546735911271e-14,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "pedals-rate-48000",
+      "peak": 9.313225746154785e-10,
+      "rms": 1.9126903890294596e-12,
+      "relativeRms": 2.981613591971306e-11,
+      "max20msRms": 3.005830684527302e-11,
+      "changedSamples": 28
+    },
+    {
+      "scenario": "pedals-rate-96000",
+      "peak": 3.725290298461914e-9,
+      "rms": 4.504672851020253e-12,
+      "relativeRms": 6.972709490571133e-11,
+      "max20msRms": 8.518361881730453e-11,
+      "changedSamples": 81
+    },
+    {
+      "scenario": "sweep-21-v0.125",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.8509652743602437e-14,
+      "relativeRms": 1.490590125845318e-12,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-23-v0.125",
+      "peak": 4.656612873077393e-10,
+      "rms": 1.825498223276447e-12,
+      "relativeRms": 6.612054470176076e-11,
+      "max20msRms": 1.5679631142445695e-11,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "sweep-23-v0.5",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.1315799076106328e-13,
+      "relativeRms": 1.217697379910683e-12,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-23-v1",
+      "peak": 1.4901161193847656e-8,
+      "rms": 5.79368912696644e-11,
+      "relativeRms": 1.9608115626281728e-10,
+      "max20msRms": 5.017481965582622e-10,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-24-v0.007874015748031496",
+      "peak": 9.094947017729282e-13,
+      "rms": 3.955121557489221e-15,
+      "relativeRms": 9.082362224854279e-14,
+      "max20msRms": 3.062427957508925e-14,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-24-v0.125",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.2652683711201686e-13,
+      "relativeRms": 4.682190894483519e-12,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "sweep-25-v0.007874015748031496",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.828949769026582e-14,
+      "relativeRms": 1.2690180250013963e-12,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-25-v0.125",
+      "peak": 5.684341886080802e-14,
+      "rms": 2.2101170070520172e-16,
+      "relativeRms": 9.530574389604262e-15,
+      "max20msRms": 1.914017473443078e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-25-v1",
+      "peak": 9.313225746154785e-10,
+      "rms": 3.6210644455289027e-12,
+      "relativeRms": 1.624933237093815e-11,
+      "max20msRms": 3.135926228489139e-11,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "sweep-26-v0.5",
+      "peak": 1.862645149230957e-9,
+      "rms": 7.519687775136004e-12,
+      "relativeRms": 1.3665700841056495e-10,
+      "max20msRms": 6.271852456978278e-11,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "sweep-26-v1",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.1315799076106328e-13,
+      "relativeRms": 6.325575878391601e-13,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-27-v0.007874015748031496",
+      "peak": 1.8189894035458565e-12,
+      "rms": 8.293830327767678e-15,
+      "relativeRms": 1.309258095362476e-12,
+      "max20msRms": 6.12485591501785e-14,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "sweep-27-v0.125",
+      "peak": 9.313225746154785e-10,
+      "rms": 4.049237497082704e-12,
+      "relativeRms": 2.3521393958248315e-10,
+      "max20msRms": 3.135926602320655e-11,
+      "changedSamples": 16
+    },
+    {
+      "scenario": "sweep-27-v0.5",
+      "peak": 3.552713678800501e-15,
+      "rms": 1.3813231294075107e-17,
+      "relativeRms": 2.7927461283217553e-16,
+      "max20msRms": 1.1962609209019238e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-28-v0.007874015748031496",
+      "peak": 5.820766091346741e-11,
+      "rms": 2.534240329898474e-13,
+      "relativeRms": 6.207050170001903e-11,
+      "max20msRms": 1.959953892805712e-12,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "sweep-28-v0.5",
+      "peak": 1.8189894035458565e-12,
+      "rms": 7.13083900353938e-15,
+      "relativeRms": 1.39266392754126e-13,
+      "max20msRms": 6.12485591501785e-14,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-28-v1",
+      "peak": 9.313225746154785e-10,
+      "rms": 3.621499858833089e-12,
+      "relativeRms": 2.7028007878689462e-11,
+      "max20msRms": 3.135926228489139e-11,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "sweep-29-v0.007874015748031496",
+      "peak": 5.820766091346741e-11,
+      "rms": 2.2631598152212656e-13,
+      "relativeRms": 7.229108858723667e-11,
+      "max20msRms": 1.959953892805712e-12,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-29-v0.5",
+      "peak": 3.725290298461914e-9,
+      "rms": 1.4484222817844232e-11,
+      "relativeRms": 2.394395673113731e-10,
+      "max20msRms": 1.2543704913956556e-10,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-29-v1",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.828949769026582e-14,
+      "relativeRms": 2.090838098362157e-13,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-30-v0.5",
+      "peak": 9.094947017729282e-13,
+      "rms": 3.5361872112832275e-15,
+      "relativeRms": 4.533966963939878e-14,
+      "max20msRms": 3.062427957508925e-14,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-30-v1",
+      "peak": 5.820766091346741e-11,
+      "rms": 2.5302895953903065e-13,
+      "relativeRms": 1.662045921272421e-12,
+      "max20msRms": 1.959953892805712e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-31-v0.007874015748031496",
+      "peak": 1.4551915228366852e-11,
+      "rms": 5.657910329629821e-14,
+      "relativeRms": 2.1418200227023965e-11,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-31-v0.125",
+      "peak": 5.684341886080802e-14,
+      "rms": 2.2101170070520172e-16,
+      "relativeRms": 8.723205231416775e-15,
+      "max20msRms": 1.914017473443078e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-31-v0.5",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.1315799076106328e-13,
+      "relativeRms": 1.1414012785678724e-12,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-31-v1",
+      "peak": 1.862645149230957e-9,
+      "rms": 7.24211140870805e-12,
+      "relativeRms": 4.252947506261424e-11,
+      "max20msRms": 6.271852456978278e-11,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-32-v0.007874015748031496",
+      "peak": 5.820766091346741e-11,
+      "rms": 2.2631598152212656e-13,
+      "relativeRms": 7.468722156900437e-11,
+      "max20msRms": 1.959953892805712e-12,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-32-v0.5",
+      "peak": 5.684341886080802e-14,
+      "rms": 2.2273166205939404e-16,
+      "relativeRms": 1.813366739506554e-15,
+      "max20msRms": 1.914017473443078e-15,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-33-v0.007874015748031496",
+      "peak": 2.3283064365386963e-10,
+      "rms": 9.052639328348947e-13,
+      "relativeRms": 2.4848109935540813e-10,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-33-v0.125",
+      "peak": 2.3283064365386963e-10,
+      "rms": 1.0121159603178953e-12,
+      "relativeRms": 3.247558783122515e-11,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "sweep-34-v0.125",
+      "peak": 6.661338147750939e-16,
+      "rms": 2.5899808676390826e-18,
+      "relativeRms": 8.355092479194501e-17,
+      "max20msRms": 2.242989226691107e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-35-v0.125",
+      "peak": 2.3283064365386963e-10,
+      "rms": 9.12308887795278e-13,
+      "relativeRms": 3.141871852650358e-11,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-35-v0.5",
+      "peak": 4.656612873077393e-10,
+      "rms": 1.8149461484352779e-12,
+      "relativeRms": 1.4032056861710867e-11,
+      "max20msRms": 1.5679631142445695e-11,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "sweep-36-v0.5",
+      "peak": 4.656612873077393e-10,
+      "rms": 1.8105278521770125e-12,
+      "relativeRms": 1.5838355097415556e-11,
+      "max20msRms": 1.5679631142445695e-11,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-36-v1",
+      "peak": 1.1368683772161603e-13,
+      "rms": 4.454633241187881e-16,
+      "relativeRms": 1.9953239154339255e-15,
+      "max20msRms": 3.828034946886156e-15,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-37-v0.007874015748031496",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.5814309971189416e-14,
+      "relativeRms": 1.8840652205078367e-12,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-37-v0.5",
+      "peak": 1.862645149230957e-9,
+      "rms": 7.298471102362224e-12,
+      "relativeRms": 7.424814717772298e-11,
+      "max20msRms": 6.271852456978278e-11,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-37-v1",
+      "peak": 1.862645149230957e-9,
+      "rms": 7.242111626436744e-12,
+      "relativeRms": 3.6031146481278353e-11,
+      "max20msRms": 6.271852456978278e-11,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-38-v0.007874015748031496",
+      "peak": 1.1641532182693481e-10,
+      "rms": 4.5264583086413227e-13,
+      "relativeRms": 4.697506957289168e-11,
+      "max20msRms": 3.919907785611424e-12,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "sweep-38-v0.125",
+      "peak": 1.1641532182693481e-10,
+      "rms": 4.5264577606478045e-13,
+      "relativeRms": 2.1775951194664466e-11,
+      "max20msRms": 3.919907785611424e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-38-v0.5",
+      "peak": 9.313225746154785e-10,
+      "rms": 3.732605991206622e-12,
+      "relativeRms": 4.440788698686533e-11,
+      "max20msRms": 3.135926228489139e-11,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-39-v0.125",
+      "peak": 1.4551915228366852e-11,
+      "rms": 5.657899538053164e-14,
+      "relativeRms": 2.9527693098121325e-12,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-40-v0.007874015748031496",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.1425770552984926e-13,
+      "relativeRms": 1.0568123636169478e-11,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-40-v0.5",
+      "peak": 1.1641532182693481e-10,
+      "rms": 6.401184135168083e-13,
+      "relativeRms": 9.667660672938115e-12,
+      "max20msRms": 3.919907785611424e-12,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-41-v0.125",
+      "peak": 3.552713678800501e-15,
+      "rms": 1.3813231294075107e-17,
+      "relativeRms": 7.884822008010132e-16,
+      "max20msRms": 1.1962609209019238e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-41-v0.5",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.4263818468152374e-14,
+      "relativeRms": 2.3232006825074395e-13,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "sweep-42-v1",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.4151653775417318e-14,
+      "relativeRms": 1.1033577854672553e-13,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-43-v0.125",
+      "peak": 2.3283064365386963e-10,
+      "rms": 9.331246965810625e-13,
+      "relativeRms": 5.44972657391487e-11,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-43-v0.5",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.828949769026582e-14,
+      "relativeRms": 4.93057926453827e-13,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-44-v0.125",
+      "peak": 2.2737367544323206e-13,
+      "rms": 8.840468028208069e-16,
+      "relativeRms": 5.1863460653181286e-14,
+      "max20msRms": 7.656069893772312e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-44-v0.5",
+      "peak": 4.656612873077393e-10,
+      "rms": 1.810527854073971e-12,
+      "relativeRms": 3.1945427966915284e-11,
+      "max20msRms": 1.5679631142445695e-11,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-46-v0.007874015748031496",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.828949769026582e-14,
+      "relativeRms": 2.8469251520811447e-12,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-46-v0.125",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.417234838131869e-14,
+      "relativeRms": 8.223200959365702e-13,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-47-v0.5",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.828949769026582e-14,
+      "relativeRms": 4.844974555642094e-13,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-47-v1",
+      "peak": 1.4551915228366852e-11,
+      "rms": 5.657899538053164e-14,
+      "relativeRms": 4.04123236455734e-13,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-48-v0.007874015748031496",
+      "peak": 1.4551915228366852e-11,
+      "rms": 5.6579022359492576e-14,
+      "relativeRms": 5.663396349775952e-12,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-48-v0.125",
+      "peak": 1.4551915228366852e-11,
+      "rms": 5.657899538053164e-14,
+      "relativeRms": 3.3482641726650562e-12,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-50-v0.007874015748031496",
+      "peak": 2.842170943040401e-14,
+      "rms": 1.1050585035260086e-16,
+      "relativeRms": 1.1618280386437252e-14,
+      "max20msRms": 9.57008736721539e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-50-v0.125",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.6002956522518508e-13,
+      "relativeRms": 1.009556973352117e-11,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-50-v0.5",
+      "peak": 8.881784197001252e-16,
+      "rms": 3.453307823518777e-18,
+      "relativeRms": 5.97464868793786e-17,
+      "max20msRms": 2.9906523022548094e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-52-v0.007874015748031496",
+      "peak": 4.440892098500626e-16,
+      "rms": 1.7266539117593884e-18,
+      "relativeRms": 1.8800280208208662e-16,
+      "max20msRms": 1.4953261511274047e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-52-v1",
+      "peak": 2.3283064365386963e-10,
+      "rms": 9.052639534890195e-13,
+      "relativeRms": 5.254147822467205e-12,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "sweep-53-v0.007874015748031496",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.414474884513291e-14,
+      "relativeRms": 1.5716510336568961e-12,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-53-v1",
+      "peak": 2.3283064365386963e-10,
+      "rms": 9.052639260885062e-13,
+      "relativeRms": 5.276324171245605e-12,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-54-v0.007874015748031496",
+      "peak": 7.105427357601002e-15,
+      "rms": 2.7626462588150215e-17,
+      "relativeRms": 3.189986384627458e-15,
+      "max20msRms": 2.3925218418038475e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-54-v1",
+      "peak": 1.7763568394002505e-15,
+      "rms": 6.906615647037554e-18,
+      "relativeRms": 4.2190703817370463e-17,
+      "max20msRms": 5.981304604509619e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-55-v0.125",
+      "peak": 8.881784197001252e-16,
+      "rms": 3.453307823518777e-18,
+      "relativeRms": 2.4189444728549093e-16,
+      "max20msRms": 2.9906523022548094e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-56-v0.007874015748031496",
+      "peak": 4.547473508864641e-13,
+      "rms": 1.7680936056416137e-15,
+      "relativeRms": 2.157619199408912e-13,
+      "max20msRms": 1.5312139787544624e-14,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-58-v0.5",
+      "peak": 2.842170943040401e-14,
+      "rms": 1.1050585035260086e-16,
+      "relativeRms": 2.0938439555326687e-15,
+      "max20msRms": 9.57008736721539e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-60-v0.125",
+      "peak": 2.9103830456733704e-11,
+      "rms": 1.1315799076106328e-13,
+      "relativeRms": 8.313566357495255e-12,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-61-v0.125",
+      "peak": 1.1641532182693481e-10,
+      "rms": 4.526319630969464e-13,
+      "relativeRms": 3.3396587182335665e-11,
+      "max20msRms": 3.919907785611424e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-61-v0.5",
+      "peak": 1.4551915228366852e-11,
+      "rms": 5.657899538053164e-14,
+      "relativeRms": 1.0445359263156748e-12,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-62-v0.125",
+      "peak": 3.552713678800501e-15,
+      "rms": 1.3813231294075107e-17,
+      "relativeRms": 1.020740250195319e-15,
+      "max20msRms": 1.1962609209019238e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-63-v0.007874015748031496",
+      "peak": 4.547473508864641e-13,
+      "rms": 1.7680936056416137e-15,
+      "relativeRms": 1.6858682426047373e-13,
+      "max20msRms": 1.5312139787544624e-14,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-63-v0.5",
+      "peak": 9.313225746154785e-10,
+      "rms": 3.621055704354025e-12,
+      "relativeRms": 6.239256198506772e-11,
+      "max20msRms": 3.135926228489139e-11,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-64-v0.5",
+      "peak": 1.3877787807814457e-17,
+      "rms": 5.395793474248089e-20,
+      "relativeRms": 9.253404767483183e-19,
+      "max20msRms": 4.67289422227314e-19,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-65-v0.5",
+      "peak": 1.1368683772161603e-13,
+      "rms": 4.4202340141040344e-16,
+      "relativeRms": 7.799176425877164e-15,
+      "max20msRms": 3.828034946886156e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-66-v0.007874015748031496",
+      "peak": 7.105427357601002e-15,
+      "rms": 2.7626462588150215e-17,
+      "relativeRms": 3.021881049933066e-15,
+      "max20msRms": 2.3925218418038475e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-69-v0.007874015748031496",
+      "peak": 2.2737367544323206e-13,
+      "rms": 8.840468028208069e-16,
+      "relativeRms": 1.0578132315751116e-13,
+      "max20msRms": 7.656069893772312e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-70-v0.5",
+      "peak": 1.4210854715202004e-14,
+      "rms": 5.525292517630043e-17,
+      "relativeRms": 1.205248725607528e-15,
+      "max20msRms": 4.785043683607695e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-71-v0.5",
+      "peak": 1.1368683772161603e-13,
+      "rms": 4.4202340141040344e-16,
+      "relativeRms": 1.0328752785076234e-14,
+      "max20msRms": 3.828034946886156e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-76-v1",
+      "peak": 8.881784197001252e-16,
+      "rms": 3.453307823518777e-18,
+      "relativeRms": 3.2021497692250384e-17,
+      "max20msRms": 2.9906523022548094e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-82-v0.125",
+      "peak": 1.1102230246251565e-16,
+      "rms": 4.316634779398471e-19,
+      "relativeRms": 6.445893647959784e-17,
+      "max20msRms": 3.738315377818512e-18,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-82-v1",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.414474884513291e-14,
+      "relativeRms": 1.403911514232643e-13,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-83-v0.007874015748031496",
+      "peak": 7.105427357601002e-15,
+      "rms": 2.7626462588150215e-17,
+      "relativeRms": 7.071180113571103e-15,
+      "max20msRms": 2.3925218418038475e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-85-v0.125",
+      "peak": 7.105427357601002e-15,
+      "rms": 2.8476705828279494e-17,
+      "relativeRms": 4.5422221743069915e-15,
+      "max20msRms": 2.3925218418038475e-16,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-86-v0.125",
+      "peak": 1.7763568394002505e-15,
+      "rms": 6.906615647037554e-18,
+      "relativeRms": 1.1604347356398825e-15,
+      "max20msRms": 5.981304604509619e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-88-v1",
+      "peak": 2.2737367544323206e-13,
+      "rms": 8.840737813765243e-16,
+      "relativeRms": 9.158021057495596e-15,
+      "max20msRms": 7.656069893772312e-15,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-94-v0.007874015748031496",
+      "peak": 1.7763568394002505e-15,
+      "rms": 6.906615647037554e-18,
+      "relativeRms": 4.692591254321501e-15,
+      "max20msRms": 5.981304604509619e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-94-v1",
+      "peak": 3.637978807091713e-12,
+      "rms": 1.45800733840791e-14,
+      "relativeRms": 2.0328254545404467e-13,
+      "max20msRms": 1.22497118300357e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-98-v0.5",
+      "peak": 1.1368683772161603e-13,
+      "rms": 4.4202340141040344e-16,
+      "relativeRms": 4.367231446514576e-14,
+      "max20msRms": 3.828034946886156e-15,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-99-v0.5",
+      "peak": 2.3283064365386963e-10,
+      "rms": 9.052640340043693e-13,
+      "relativeRms": 9.44905798999182e-11,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-103-v0.125",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.8289511179746288e-14,
+      "relativeRms": 1.365880889833655e-11,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "sweep-103-v1",
+      "peak": 7.275957614183426e-12,
+      "rms": 2.828949769026582e-14,
+      "relativeRms": 6.671435048130187e-13,
+      "max20msRms": 2.44994236600714e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-104-v0.125",
+      "peak": 5.551115123125783e-17,
+      "rms": 2.1583173896992355e-19,
+      "relativeRms": 9.983841313155535e-17,
+      "max20msRms": 1.869157688909256e-18,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "sweep-104-v0.5",
+      "peak": 2.842170943040401e-14,
+      "rms": 1.1050585035260086e-16,
+      "relativeRms": 1.5455081387712684e-14,
+      "max20msRms": 9.57008736721539e-16,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "oracle-62-0.13",
+      "peak": 2.3283064365386963e-10,
+      "rms": 6.4011826090074034e-12,
+      "relativeRms": 1.7711308667038585e-10,
+      "max20msRms": 7.839815571222848e-12,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "extended-32000-21",
+      "peak": 1.4901161193847656e-8,
+      "rms": 1.960510184047996e-11,
+      "relativeRms": 1.6733531444062558e-10,
+      "max20msRms": 5.890201144234053e-10,
+      "changedSamples": 10
+    },
+    {
+      "scenario": "extended-32000-30",
+      "peak": 7.275957614183426e-12,
+      "rms": 8.302512734874443e-15,
+      "relativeRms": 1.32611766584848e-13,
+      "max20msRms": 2.8760747774580335e-13,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "extended-32000-31",
+      "peak": 3.725290298461914e-9,
+      "rms": 4.251016751767452e-12,
+      "relativeRms": 5.6060587169763474e-11,
+      "max20msRms": 1.4725502860585132e-10,
+      "changedSamples": 3
+    },
+    {
+      "scenario": "extended-32000-49",
+      "peak": 4.656612873077393e-10,
+      "rms": 7.51472003956495e-13,
+      "relativeRms": 1.4305019078383185e-11,
+      "max20msRms": 1.8406878575731415e-11,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "extended-32000-60",
+      "peak": 7.275957614183426e-12,
+      "rms": 9.282491429618473e-15,
+      "relativeRms": 2.1989093313817568e-13,
+      "max20msRms": 2.8760747774580335e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "extended-32000-84",
+      "peak": 2.9103830456733704e-11,
+      "rms": 3.321005093949777e-14,
+      "relativeRms": 1.058688444640164e-12,
+      "max20msRms": 1.1504299109832134e-12,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "extended-32000-105",
+      "peak": 1.4551915228366852e-11,
+      "rms": 2.0933815606989834e-14,
+      "relativeRms": 2.9390279323081684e-12,
+      "max20msRms": 5.752149554916067e-13,
+      "changedSamples": 143
+    },
+    {
+      "scenario": "extended-44100-21",
+      "peak": 7.450580596923828e-9,
+      "rms": 9.231972639265748e-12,
+      "relativeRms": 7.844189528131811e-11,
+      "max20msRms": 2.508740982791311e-10,
+      "changedSamples": 19
+    },
+    {
+      "scenario": "extended-44100-30",
+      "peak": 1.4551915228366852e-11,
+      "rms": 1.4144775824074552e-14,
+      "relativeRms": 2.2600288537709927e-13,
+      "max20msRms": 4.89988473201428e-13,
+      "changedSamples": 2
+    },
+    {
+      "scenario": "extended-44100-49",
+      "peak": 3.725290298461914e-9,
+      "rms": 3.649262964310768e-12,
+      "relativeRms": 6.954537856853038e-11,
+      "max20msRms": 1.2543704913956556e-10,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "extended-44100-60",
+      "peak": 4.656612873077393e-10,
+      "rms": 4.5266304554137024e-13,
+      "relativeRms": 1.0691536278255122e-11,
+      "max20msRms": 1.5679631142445695e-11,
+      "changedSamples": 9
+    },
+    {
+      "scenario": "extended-44100-91",
+      "peak": 4.440892098500626e-16,
+      "rms": 4.316634779398471e-19,
+      "relativeRms": 1.9238448820716306e-17,
+      "max20msRms": 1.4953261511274047e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "extended-44100-105",
+      "peak": 2.9103830456733704e-11,
+      "rms": 3.392475320828156e-14,
+      "relativeRms": 4.142039559518373e-12,
+      "max20msRms": 9.79976946402856e-13,
+      "changedSamples": 46
+    },
+    {
+      "scenario": "extended-48000-21",
+      "peak": 2.9802322387695312e-8,
+      "rms": 3.275094415031195e-11,
+      "relativeRms": 2.7680140944322255e-10,
+      "max20msRms": 9.618658190487366e-10,
+      "changedSamples": 54
+    },
+    {
+      "scenario": "extended-48000-31",
+      "peak": 3.725290298461914e-9,
+      "rms": 4.908800535517719e-12,
+      "relativeRms": 6.486131932779806e-11,
+      "max20msRms": 1.2023322738109208e-10,
+      "changedSamples": 5
+    },
+    {
+      "scenario": "extended-48000-48",
+      "peak": 3.725290298461914e-9,
+      "rms": 3.47083430970055e-12,
+      "relativeRms": 6.355371971663652e-11,
+      "max20msRms": 1.2023322738109208e-10,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "extended-48000-49",
+      "peak": 9.313225746154785e-10,
+      "rms": 8.832784156397355e-13,
+      "relativeRms": 1.6825537420139706e-11,
+      "max20msRms": 3.005830684527302e-11,
+      "changedSamples": 11
+    },
+    {
+      "scenario": "extended-48000-60",
+      "peak": 1.1641532182693481e-10,
+      "rms": 1.084768802345686e-13,
+      "relativeRms": 2.5634047766911547e-12,
+      "max20msRms": 3.757288355659127e-12,
+      "changedSamples": 7
+    },
+    {
+      "scenario": "extended-48000-91",
+      "peak": 4.440892098500626e-16,
+      "rms": 4.137556922078788e-19,
+      "relativeRms": 1.8186859983280183e-17,
+      "max20msRms": 1.4332917616497526e-17,
+      "changedSamples": 1
+    },
+    {
+      "scenario": "extended-48000-105",
+      "peak": 2.9103830456733704e-11,
+      "rms": 3.2756381153818573e-14,
+      "relativeRms": 3.840583420339246e-12,
+      "max20msRms": 9.393220889147818e-13,
+      "changedSamples": 103
+    },
+    {
+      "scenario": "extended-96000-21",
+      "peak": 1.4901161193847656e-8,
+      "rms": 1.4376657885871885e-11,
+      "relativeRms": 1.195147380180436e-10,
+      "max20msRms": 3.4007092162045717e-10,
+      "changedSamples": 58
+    },
+    {
+      "scenario": "extended-96000-30",
+      "peak": 1.862645149230957e-9,
+      "rms": 1.2271261208045375e-12,
+      "relativeRms": 1.9685691494756382e-11,
+      "max20msRms": 4.2508865202557146e-11,
+      "changedSamples": 8
+    },
+    {
+      "scenario": "extended-96000-31",
+      "peak": 7.450580596923828e-9,
+      "rms": 5.251851798986152e-12,
+      "relativeRms": 6.953331679647127e-11,
+      "max20msRms": 1.7003546081022858e-10,
+      "changedSamples": 16
+    },
+    {
+      "scenario": "extended-96000-48",
+      "peak": 9.313225746154785e-10,
+      "rms": 6.860530085020205e-13,
+      "relativeRms": 1.2574876463124134e-11,
+      "max20msRms": 2.1254432601278573e-11,
+      "changedSamples": 9
+    },
+    {
+      "scenario": "extended-96000-49",
+      "peak": 3.725290298461914e-9,
+      "rms": 2.540628685664715e-12,
+      "relativeRms": 4.848832530841371e-11,
+      "max20msRms": 8.501773040511429e-11,
+      "changedSamples": 30
+    },
+    {
+      "scenario": "extended-96000-60",
+      "peak": 4.656612873077393e-10,
+      "rms": 4.4270056971135295e-13,
+      "relativeRms": 1.0483568669024328e-11,
+      "max20msRms": 1.0627217567502117e-11,
+      "changedSamples": 43
+    },
+    {
+      "scenario": "extended-96000-91",
+      "peak": 2.3283064365386963e-10,
+      "rms": 1.5339182964694744e-13,
+      "relativeRms": 6.761501855975048e-12,
+      "max20msRms": 5.313608150319643e-12,
+      "changedSamples": 4
+    },
+    {
+      "scenario": "extended-96000-105",
+      "peak": 1.1641532182693481e-10,
+      "rms": 1.1207300087110309e-13,
+      "relativeRms": 1.3204781023768436e-11,
+      "max20msRms": 2.657128372271211e-12,
+      "changedSamples": 1668
+    },
+    {
+      "scenario": "30-second-held-bass",
+      "peak": 7.450580596923828e-9,
+      "rms": 4.437678760671455e-12,
+      "relativeRms": 3.198346540647561e-11,
+      "max20msRms": 2.508740982791311e-10,
+      "changedSamples": 98
+    }
+  ]
+}

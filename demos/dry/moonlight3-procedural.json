@@ -1,0 +1,32 @@
+{
+  "name": "moonlight3-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "scores/moonlight-sonata/moonlight3.mid",
+  "notes": 4863,
+  "seconds": 804.7136507936508,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -7.289999999999999,
+    "source": {
+      "lufs": -10.71,
+      "truePeakDbTP": -3.41,
+      "loudnessRangeLU": 1.8,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -10.7,
+      "loudnessRangeLU": 1.8,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.27,
+      "truePeakDbTP": -10.98,
+      "loudnessRangeLU": 1.8,
+      "completeDecode": true
+    }
+  }
+}

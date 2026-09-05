@@ -2,6 +2,7 @@
 #define PIANO_MECHANICS_H
 
 #include <math.h>
+#include "continuous-piano-curves.h"
 
 /* Reduced mechanics, with units and derivations in reports/PEDAL_PHYSICS.md.
  * These response times are voicing defaults, not measured human speed limits.
@@ -43,22 +44,39 @@ static inline double piano_contact_overlap(double shift, int count, int string) 
 
 typedef struct { double reduced_mass, contact_count, duration_ratio, impulse_ratio; } PianoContact;
 
+/* Global fit to log per-string mass (kg), using two smooth changes of slope.
+ * Worst relative error against Wood's octave anchors is 4.9%; dense error and
+ * monotonicity checks are in test/continuous-curves.test.mjs. No mass table or
+ * octave interval selection is used by the instrument. */
+static inline double piano_string_mass(double midi) {
+ double octave = piano_smooth_limit((midi - 24) / 12, 0, 7, .01);
+ double log_mass = -1.6697008333648564 - .9385620387478938 * octave
+  - .5983554303175826 * piano_softplus(16 * (octave - .9710894497511856)) / 16
+  + .7785601956951861 * piano_softplus(3.8063898424014604 * (octave - 2.866423152754841)) / 3.8063898424014604;
+ return exp(log_mass);
+}
+
+/* Smoothly joined felt-hardness ramps through the C2/C4/C7 measurements.
+ * Half-semitone rounding changes the former segmented law by less than .005. */
+static inline double piano_felt_exponent(double midi) {
+ return 2.3 + (.2 / 24) * piano_smooth_limit(midi - 36, 0, 24, .5)
+  + (.5 / 36) * piano_smooth_limit(midi - 60, 0, 36, .5);
+}
+
 /* Two-body reduction at the hammer contact. The point effective mass of the
  * first string mode is M/(2 sin^2(pi a)), a being the strike position / length.
  * Wood's Broadwood parameter table supplies per-string and hammer mass anchors.
  * Felt exponent follows measured C2/C4/C7 values (Hall & Askenfelt).
  * The 0.55 fresh-felt stiffness ratio and edge overlap are calibration choices. */
 static inline PianoContact piano_soft_contact(double midi, int strings, double shift) {
- const double masses[8] = {.189,.073,.0307/2,.0117/3,.0053/3,.0024/3,.00115/3,.00054/3};
- double octave = fmin(7, fmax(0, (midi - 24)/12)); int lower = (int)fmin(6, floor(octave));
- double fraction = octave - lower, string_mass = exp(log(masses[lower]) + fraction * log(masses[lower+1]/masses[lower]));
+ double octave = fmin(7, fmax(0, (midi - 24)/12)), string_mass = piano_string_mass(midi);
  double hammer_mass = .012 - .001 * octave, a = .135 - .055 * octave / 7;
  double phi = sin(3.14159265358979323846 * a), point_mass = string_mass / (2 * phi * phi);
  double contacts = 0; for (int i=0;i<strings;++i) contacts += piano_contact_overlap(shift,strings,i);
  double normal_load = point_mass * strings, shifted_load = point_mass * contacts;
  double normal_mass = hammer_mass * normal_load / (hammer_mass + normal_load);
  double shifted_mass = hammer_mass * shifted_load / (hammer_mass + shifted_load);
- double p = 2.3 + .2*fmin(1,fmax(0,(midi-36)/24)) + .5*fmin(1,fmax(0,(midi-60)/36));
+ double p = piano_felt_exponent(midi);
  double felt = 1 - .45 * shift * shift * (3 - 2 * shift), mass_ratio = shifted_mass / normal_mass;
  /* F=K delta^p -> T proportional to (mu/K)^(1/(p+1));
   * impulse J=2 mu v for the elastic reference. Any unchanged restitution

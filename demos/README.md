@@ -1,5 +1,13 @@
 # Procedural demonstrations
 
+New convolution renders use the shared Bricasti M7 Boston Hall A response at a
+28% parallel send. Older saved renders retain the reverb described below.
+
+Run `node tools/render-dry-demos.mjs` to regenerate all distinct demo
+performances without impulse-response convolution or added room reverb.
+The dry WAVs, MP3s, and verification reports are saved in `demos/dry/`;
+existing versions remain available for comparison. See [the dry collection](dry/README.md).
+
 Run `npm run demos` to deterministically regenerate the WAV files in this
 directory. Every sound is rendered by `synthesizeGrandPiano`; no reference
 recording is copied, decoded, resampled, convolved, or mixed into these files.

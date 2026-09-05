@@ -1,0 +1,35 @@
+{
+  "title": "River Road Duet",
+  "themes": [
+    "Row, Row, Row Your Boat",
+    "The Wheels on the Bus"
+  ],
+  "key": "D major",
+  "meter": "6/8",
+  "structure": "4-bar intertwined introduction, 8-bar Boat with Bus responses, 8-bar Bus with Boat countermelody, 8-bar phrase exchange, 8-bar simultaneous themes, 4-bar slowing coda",
+  "notes": 382,
+  "unmatchedNotes": 0,
+  "midiFormat": 0,
+  "ppq": 480,
+  "durationSeconds": 71.77095238095238,
+  "maximumVoices": 17,
+  "sourceClippedFrames": 0,
+  "truncatedVoices": 0,
+  "reverb": "15% Small Hall with full padded tail",
+  "mastering": {
+    "gainDb": -2.98,
+    "wav": {
+      "integratedLUFS": -18,
+      "truePeakDbTP": -3.7,
+      "completeDecode": true,
+      "format": "24-bit PCM stereo 44100 Hz"
+    },
+    "mp3": {
+      "integratedLUFS": -18.26,
+      "truePeakDbTP": -3.95,
+      "completeDecode": true,
+      "bitrateKbps": 192
+    },
+    "loudnessRangeLU": 5
+  }
+}

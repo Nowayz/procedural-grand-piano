@@ -1,0 +1,46 @@
+{
+  "title": "River Flows in You",
+  "composer": "Yiruma",
+  "midiSourcePage": "https://bitmidi.com/yiruma-rivers-flow-in-you-mid",
+  "midiSourceUrl": "https://bitmidi.com/uploads/112145.mid",
+  "midiSha256": "7692d6a1e53d9afc3b8e86b134329f1dfdf50fe9c04c4854e7343eb7bf3d70fa",
+  "runtimeSha256": "276da8a7abaabdc2c08f589b2813df53a19b8c199b76a1efbc6675fd589ce023",
+  "engine": "Procedural grand piano with continuous radiation, string-mass, and felt curves",
+  "noteCount": 800,
+  "midiTrackCount": 2,
+  "midiDurationSeconds": 164.76853599999913,
+  "renderedDurationSeconds": 169.1292970521542,
+  "sampleRate": 44100,
+  "maximumVoices": 8,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "sustainEvents": 0,
+  "performance": "Original MIDI timing, velocity, and articulation retained; no pedal events added",
+  "reverb": {
+    "name": "Small Hall",
+    "wet": 0.18,
+    "fullTail": true,
+    "normalizationScale": 0.014503404193711942,
+    "masteringGain": 1
+  },
+  "mastering": {
+    "method": "Constant gain only",
+    "gainDb": 2.061027991672453,
+    "samplePeakDbFS": -1.5
+  },
+  "renderingSeconds": 9.194762700000002,
+  "audioValidation": {
+    "river-flows-in-you.wav": {
+      "completeDecode": true,
+      "integratedLUFS": -15.01,
+      "truePeakDbTP": -1.5,
+      "loudnessRangeLU": 3.3
+    },
+    "river-flows-in-you.mp3": {
+      "completeDecode": true,
+      "integratedLUFS": -15.01,
+      "truePeakDbTP": -1.49,
+      "loudnessRangeLU": 3.3
+    }
+  }
+}

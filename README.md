@@ -5,6 +5,19 @@ recognizably grand-piano-like note entirely from math at call time. The runtime
 module has no dependencies, files, encoded audio, network access, sample
 decoder, or playback code.
 
+All runtime calibration responses use continuous equations. The remaining
+frequency-band and octave-mass interpolation has been replaced by fitted
+curves, including smooth felt-hardness and calibration-endpoint transitions.
+See [curve-fit accuracy and regression checks](reports/CONTINUOUS_CURVES.md).
+
+To inspect equation contributions, run `npm run synth:debug` to generate an
+instrumented C/Wasm copy in `build/synth-debug`, or `npm run synth:audit` to
+build it and compare independently disabled terms against the final audio.
+The audit writes JSONL debug logs, a probe manifest, numerical results, and
+selected unnormalized listening comparisons. It requires Emscripten (`emcc`
+on PATH, or `EMSDK` pointing at the SDK). See the
+[contribution audit and removal evidence](reports/SYNTH_CONTRIBUTIONS.md).
+
 The focused behavior suite scores **97/100 PASS**. The direct 480-recording
 suites score **90/100 PASS** (wide) and **88.15/100** (strict). The strict command
 still reports `FAIL` because several category gates remain outside its stretch
@@ -84,25 +97,27 @@ source.connect(context.destination);
 source.start();
 ```
 
-For a GarageBand-style **Small Hall** master reverb, use the optional Web Audio
-helper. It loads and decodes the bundled stereo IR once during setup; the
-instrument's render path remains sample-free and allocation-free when a caller
-supplies its output buffer.
+The default convolution reverb is **Bricasti M7 Boston Hall A**, captured by
+[Samplicity](https://samplicity.com/downloads/). The optional Web Audio helper
+loads the bundled stereo IR during setup:
 
 ```js
-import { createGarageBandStyleReverb } from './src/reverb.js';
+import { createPianoReverb } from './src/reverb.js';
 
 const context = new AudioContext();
-const reverb = await createGarageBandStyleReverb(context);
+const reverb = await createPianoReverb(context);
 source.connect(reverb.input);
 reverb.connect(context.destination);
 ```
 
-The default wet send is 18%; call `reverb.setWet(0..1)` to change it. The
-1.359-second stereo response is derived from the MIT-licensed [Conner IR
-Library](https://github.com/itsmusician/IR-Library). GarageBand's acoustic
-piano reverb varies by patch, so this targets its documented **Small Hall**
-master preset rather than claiming to copy an Apple impulse response.
+The default parallel wet send is 28%; call `reverb.setWet(0..1)` to change it.
+The 3.896-second response retains the native 44.1 kHz float32 capture, combining
+the corresponding output channels from its two input captures. The browser
+helper and offline renderers share these defaults. See the
+[IR provenance and preparation details](src/impulse-responses/bricasti-m7-boston-hall-a.NOTICE.md).
+The old `createGarageBandStyleReverb` function name remains an alias for
+compatibility; `./default-ir` exports the current response, while `./small-hall-ir`
+still explicitly selects the previous Small Hall asset.
 
 ## Realtime keyboard API
 
@@ -110,11 +125,11 @@ The realtime API keeps each note alive while it remains acoustically audible and
 
 ```js
 import { createRealtimeGrandPiano, REALTIME_SCHEDULING_LEAD_SECONDS } from 'procedural-grand-piano/realtime';
-import { createGarageBandStyleReverb } from 'procedural-grand-piano/reverb';
+import { createPianoReverb } from 'procedural-grand-piano/reverb';
 
 const context = new AudioContext();
 const piano = await createRealtimeGrandPiano(context, { polyphony: 32 });
-const reverb = await createGarageBandStyleReverb(context);
+const reverb = await createPianoReverb(context);
 piano.connect(reverb.input);
 reverb.connect(context.destination);
 
@@ -165,7 +180,7 @@ Current development-machine onset and sustained-render measurements are in
 limits depend on the host; large simultaneous onsets cost more than sustained
 rendering because each note constructs a modal bank.
 
-Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and continuous CC64 sustain and CC67 soft-pedal values; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 30). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the bundled Small Hall convolution reverb.
+Standard MIDI files can be rendered through the same persistent voice engine with `npm run track:midi -- score.mid output.wav`. The importer supports format 0/1 files, tempo changes, running status, overlapping notes, and continuous CC64 sustain and CC67 soft-pedal values; equal-tick controls retain file order. A zero MIDI Note Off velocity is treated as unspecified and mapped to `64 / 127`. `renderMidiPerformance()` treats `tailSeconds` (default 3) as a minimum, renders until all physical voices retire, and caps the search with `maximumTailSeconds` (default 30). It returns `truncatedVoices`; a nonzero value means the cap forced a 50 ms output fade. Missing final note-offs and a pedal left down are released at the performance end. The command-line output receives the default Boston Hall A convolution reverb.
 
 ## Compact runtime
 
@@ -213,6 +228,11 @@ than an oscillator bank under one shared envelope:
 - A sixth-order function of log-frequency supplies the mean bridge-mobility
   envelope across the homogeneous-plate to inter-rib transition. It has no
   per-key or per-velocity interpolation and never replays a spectral frame.
+- The finer radiation correction uses a single degree-64 Chebyshev polynomial
+  in log-frequency, with coefficients set by continuous pitch/velocity surfaces.
+  The runtime stores polynomial coefficients and evaluates no sampled-point
+  curves. Its error relative to the former band response is below 0.19 dB on
+  the dense regression grid, including fundamental normalization.
 - Separate deterministic felt, mechanical, presence, air, and diffuse-board
   bands model non-periodic energy. They have independent rise/decay constants;
   the hammer bands stay local to the collision while the board microstructure

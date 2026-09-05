@@ -1,0 +1,32 @@
+{
+  "name": "twinkle-starlight-variations",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "demos/twinkle-starlight-variations.mid",
+  "notes": 343,
+  "seconds": 95.29469387755103,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 1.6700000000000017,
+    "source": {
+      "lufs": -19.67,
+      "truePeakDbTP": -4.37,
+      "loudnessRangeLU": 6.2,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -2.7,
+      "loudnessRangeLU": 6.2,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.27,
+      "truePeakDbTP": -2.97,
+      "loudnessRangeLU": 6.2,
+      "completeDecode": true
+    }
+  }
+}

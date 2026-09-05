@@ -1,0 +1,110 @@
+{
+  "title": "Lanterns at Midnight — an Original Codex Rhapsody",
+  "original": true,
+  "sections": [
+    {
+      "name": "I. The empty square - declamando",
+      "beat": 0,
+      "meter": [
+        4,
+        4
+      ],
+      "bpm": 58
+    },
+    {
+      "name": "II. A lantern song - cantabile",
+      "beat": 32,
+      "meter": [
+        3,
+        4
+      ],
+      "bpm": 78
+    },
+    {
+      "name": "III. Mischief in the square - scherzando",
+      "beat": 80,
+      "meter": [
+        2,
+        4
+      ],
+      "bpm": 128
+    },
+    {
+      "name": "IV. Behind the windows - sotto voce",
+      "beat": 128,
+      "meter": [
+        6,
+        8
+      ],
+      "bpm": 84
+    },
+    {
+      "name": "V. Wind and sparks - agitato",
+      "beat": 176,
+      "meter": [
+        4,
+        4
+      ],
+      "bpm": 116
+    },
+    {
+      "name": "VI. The lantern song remembered",
+      "beat": 272,
+      "meter": [
+        3,
+        4
+      ],
+      "bpm": 76
+    },
+    {
+      "name": "VII. Daybreak carnival - vivo",
+      "beat": 296,
+      "meter": [
+        2,
+        4
+      ],
+      "bpm": 148
+    },
+    {
+      "name": "VIII. Coda - tutta forza",
+      "beat": 360,
+      "meter": [
+        4,
+        4
+      ],
+      "bpm": 168
+    }
+  ],
+  "notes": 2145,
+  "unmatchedNotes": 0,
+  "midiFormat": 0,
+  "ppq": 480,
+  "durationSeconds": 233.09739229024945,
+  "maximumVoices": 28,
+  "sourceClippedFrames": 0,
+  "truncatedVoices": 0,
+  "reverb": "14% Small Hall, full padded tail",
+  "preMasterPeak": 0.9200000166893005,
+  "mastering": {
+    "method": "Constant gain only; no dynamic compression or limiting",
+    "gainDb": -4.94,
+    "source": {
+      "integratedLUFS": -13.06,
+      "truePeakDbTP": -0.7,
+      "loudnessRangeLU": 9,
+      "completeDecode": true
+    },
+    "wav": {
+      "integratedLUFS": -18,
+      "truePeakDbTP": -5.64,
+      "loudnessRangeLU": 9.1,
+      "completeDecode": true
+    },
+    "mp3": {
+      "integratedLUFS": -18.27,
+      "truePeakDbTP": -5.88,
+      "loudnessRangeLU": 9,
+      "completeDecode": true
+    }
+  }
+}

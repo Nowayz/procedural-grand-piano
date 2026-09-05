@@ -1,0 +1,30 @@
+{
+  "name": "flight-of-the-bumblebee-procedural",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "bumblebee",
+  "seconds": 71.51362811791383,
+  "proceduralRoom": false,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -1.28,
+    "source": {
+      "lufs": -18.59,
+      "truePeakDbTP": -0.72,
+      "loudnessRangeLU": 6.9,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -19.87,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 6.9,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -20.13,
+      "truePeakDbTP": -2.27,
+      "loudnessRangeLU": 6.8,
+      "completeDecode": true
+    }
+  }
+}

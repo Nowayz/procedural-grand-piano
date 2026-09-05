@@ -9,8 +9,9 @@ import {
   synthesizeGrandPianoInto,
 } from '../src/grand-piano.js';
 
-// Deterministic waveform oracles, refreshed for the September 2026 pedal and
-// unison-mechanics change. Acoustic quality is evaluated by reference comparisons.
+// Deterministic waveform oracles, refreshed for the September 2026 continuous
+// radiation, string-mass, and felt fits. Acoustic quality is evaluated by
+// reference comparisons.
 function pcmHash(pcm) {
   return createHash('sha256')
     .update(new Uint8Array(pcm.buffer, pcm.byteOffset, pcm.byteLength))
@@ -21,17 +22,17 @@ const REFERENCE_RENDERS = [
   {
     name: 'A0 soft',
     arguments: [27.5, 0.3, 0.06],
-    sha256: '52eb0850c21a7cda4ffb0a0b9264d8c6cfed9c1c455b360d1947a2eadd0d339d',
+    sha256: 'afebba37a86a0bc9a7c522938c883271839bef37f95e333fa50c3009eacef58a',
   },
   {
     name: 'A4 medium-long render',
     arguments: [440, 0.731, 0.45],
-    sha256: '740046cc7c7220266316b031ee750e57c8320c607e1f8bb3ca1a819ee519e7f9',
+    sha256: '69aea608734943118e564815be2e63a5d06c20c0455e60140908530af76589f5',
   },
   {
     name: 'C8 maximum velocity',
     arguments: [4_186.009_044_809_578, 1, 0.06],
-    sha256: 'c040bb365ec1946e9ebc46c17092371f28bcc99500dc092ae5900e77acb00a71',
+    sha256: '8ae00e334f0d3513299d47c09058e67ec3fb39c642851c68c3dfbb69c6f788f7',
   },
   {
     name: 'one-sample render',
@@ -41,37 +42,37 @@ const REFERENCE_RENDERS = [
   {
     name: 'fade length minus one',
     arguments: [440, 0.731, 255 / SAMPLE_RATE],
-    sha256: '75511efe0def1ebc919ad882960bac894acc98f41cd017b80ebabf28d9cbacb4',
+    sha256: 'a46c39d0636d7692c4ceb36421694a4e85cfc956c048c33500509cc4ecd52d1b',
   },
   {
     name: 'exact fade length',
     arguments: [440, 0.731, 256 / SAMPLE_RATE],
-    sha256: 'edd050df121514880631fbe36dfc435d6a79c215ecde5efba1b61e7af5640a81',
+    sha256: '185ba01c9b62d66e9be856a171c87d384701a7be19cb6ca464371c5925716a38',
   },
   {
     name: 'fade length plus one',
     arguments: [440, 0.731, 257 / SAMPLE_RATE],
-    sha256: '52f871588d2dcb066ec69cfdb2b7a171943b91690c3f9cc86751405eee4f06bc',
+    sha256: '2fb3f22ae67f9e90e692fcafbd08810c967e78817b37068774bbef49f83439c4',
   },
   {
     name: 'near-zero nonzero velocity',
     arguments: [440, 0.000_001, 0.03],
-    sha256: 'aa8a7224430a5867f85435acbe8d1f984f744b39123922841903be3a8de0ba4c',
+    sha256: '7330ddc306f4cc4caf3435b4f1fced7574397de78cea762920e5d62980d0a1c5',
   },
   {
     name: 'frequency clamped below A0',
     arguments: [-1, 0.7, 0.025],
-    sha256: '47014b16d51bd18490f9e7749201f370b84786f7d2bff2dd94ebf44931f87a2b',
+    sha256: '27686bb832a423241305bec7cb6b0cabd33c83ae27c2a30874e04a8445c9097f',
   },
   {
     name: 'frequency clamped above C8',
     arguments: [99_999, 0.7, 0.025],
-    sha256: '8d2f70ca731246594ca2b218c3ffe3fb54454c37ecda408a1a30894b98d7095a',
+    sha256: 'fa8a90325af7ab47a0141a43c6c84f6f468f8c61549808af551d749edeb8baec',
   },
   {
     name: 'velocity clamped above one',
     arguments: [440, 7, 0.025],
-    sha256: '0b00df7e0a2e1472f99110fcda6345960ecac5388e6148c3fe5260484b7ba07f',
+    sha256: 'c2285f1dcbe449a997d937d1af10de9ac3fbabff865e670f296370d4f33c3d9e',
   },
 ];
 
@@ -93,7 +94,9 @@ test('all 88 keys remain deterministic at soft, medium, and hard velocities', ()
   }
   assert.equal(
     aggregate.digest('hex'),
-    '6ade46679ca78a093074f962f0deac21bc16edc193c93f33ca77a7583c060bf8',
+    // Removing the cancelling radiation constant changes a few rounding bits.
+    // The independent 709-scenario old/new check is in reports/synth-pruning.json.
+    '9d96ea192f31ad9b1db0f09ef7d87778ad96b9c79e27a6db96dced4c794f8199',
   );
 });
 

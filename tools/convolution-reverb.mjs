@@ -1,3 +1,5 @@
+import { DEFAULT_REVERB_WET } from '../src/reverb.js';
+
 const GAIN_CALIBRATION = 0.00125;
 const GAIN_CALIBRATION_SAMPLE_RATE = 44_100;
 const MIN_POWER = 0.000125;
@@ -129,7 +131,7 @@ export function applyStereoLoudnessCeiling(left, right, { ceilingDb = -26, detec
   return { minimumGain, maximumReductionDb: -20 * Math.log10(minimumGain) };
 }
 
-export function applyConvolverReverb(left, right, impulseLeft, impulseRight, { wet = 0.18, normalize = true, master = true, sampleRate = 44_100, blockSize = 16_384 } = {}) {
+export function applyConvolverReverb(left, right, impulseLeft, impulseRight, { wet = DEFAULT_REVERB_WET, normalize = true, master = true, sampleRate = 44_100, blockSize = 16_384 } = {}) {
   if (left.length !== right.length || impulseLeft.length !== impulseRight.length || impulseLeft.length === 0) throw new RangeError('stereo channel lengths must match and the impulse response must not be empty');
   if (blockSize < 2 || blockSize & blockSize - 1) throw new RangeError('blockSize must be a power of two');
   const wetGain = clamp(wet, 0, 1);

@@ -1,0 +1,22 @@
+{
+  "title": "The Wheels on the Bus - A Little Town Ride",
+  "notes": 336,
+  "durationSeconds": 71.1285260770975,
+  "sourceClippedFrames": 0,
+  "truncatedVoices": 0,
+  "maximumVoices": 9,
+  "midiFormat": 0,
+  "ppq": 480,
+  "key": "F major",
+  "structure": "4-bar introduction, three 8-bar variations, 4-bar ritardando coda",
+  "instrument": "Repository procedural grand piano persistent MIDI engine; 14% bundled Small Hall reverb",
+  "mastering": {
+    "verification": "Full WAV and MP3 decoded through ffmpeg loudnorm; source engine reports zero clipped frames and zero truncated voices",
+    "wavIntegratedLufs": -18.0,
+    "mp3BitrateKbps": 192,
+    "wavTruePeakDbtp": -3.16,
+    "gainDb": -2.44,
+    "mp3IntegratedLufs": -18.26,
+    "mp3TruePeakDbtp": -3.42
+  }
+}

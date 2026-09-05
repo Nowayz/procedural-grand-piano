@@ -1,0 +1,32 @@
+{
+  "name": "codex-lanterns-at-midnight",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "demos/codex-lanterns-at-midnight/codex-lanterns-at-midnight.mid",
+  "notes": 2145,
+  "seconds": 231.73804988662133,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": -2.4399999999999995,
+    "source": {
+      "lufs": -15.56,
+      "truePeakDbTP": -3.85,
+      "loudnessRangeLU": 9.1,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -17.99,
+      "truePeakDbTP": -6.29,
+      "loudnessRangeLU": 9.1,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.26,
+      "truePeakDbTP": -6.56,
+      "loudnessRangeLU": 9.1,
+      "completeDecode": true
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "wheels-on-the-bus",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "demos/wheels-on-the-bus/wheels-on-the-bus.mid",
+  "notes": 336,
+  "seconds": 71.1285260770975,
+  "clippedSourceFrames": 0,
+  "truncatedVoices": 0,
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 0.5799999999999983,
+    "source": {
+      "lufs": -18.58,
+      "truePeakDbTP": -3.92,
+      "loudnessRangeLU": 3.9,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -18,
+      "truePeakDbTP": -3.34,
+      "loudnessRangeLU": 3.8,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -18.27,
+      "truePeakDbTP": -3.6,
+      "loudnessRangeLU": 3.8,
+      "completeDecode": true
+    }
+  }
+}

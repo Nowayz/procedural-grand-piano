@@ -4,16 +4,13 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readWav, writeStereoPcm16Wav } from './audio-analysis.mjs';
+import { DEFAULT_REVERB_IR_URL, DEFAULT_REVERB_WET } from '../src/reverb.js';
 import { applyConvolverReverb } from './convolution-reverb.mjs';
 import { parseStandardMidi, renderMidiPerformance } from './midi-performance.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const demoRoot = path.join(root, 'demos');
-const STUDIO_ROOM_IR_URL = new URL(
-  '../src/impulse-responses/genesis-6-studio-room.wav',
-  import.meta.url,
-);
-const STUDIO_ROOM_WET = 0.18;
+
 
 export const LEMMINGS_CLASSICS = Object.freeze([
   Object.freeze({
@@ -79,7 +76,7 @@ async function renderTrack(track, impulse) {
     right,
     impulse.channelSamples[0],
     impulse.channelSamples[1],
-    { wet: STUDIO_ROOM_WET, normalize: true, sampleRate: rendered.sampleRate },
+    { wet: DEFAULT_REVERB_WET, normalize: true, sampleRate: rendered.sampleRate },
   );
   const destination = path.join(demoRoot, track.output);
   await writeStereoPcm16Wav(destination, left, right, rendered.sampleRate);
@@ -92,6 +89,6 @@ async function renderTrack(track, impulse) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   await mkdir(demoRoot, { recursive: true });
-  const impulse = await readWav(fileURLToPath(STUDIO_ROOM_IR_URL), { preserveChannels: true });
+  const impulse = await readWav(fileURLToPath(DEFAULT_REVERB_IR_URL), { preserveChannels: true });
   for (const track of LEMMINGS_CLASSICS) await renderTrack(track, impulse);
 }

@@ -1,5 +1,8 @@
 node_modules/
+build/synth-debug/
+build/ir-downloads/
 *.tgz
 *.wav
 !src/impulse-responses/genesis-6-studio-room.wav
+!src/impulse-responses/bricasti-m7-boston-hall-a.wav
 .DS_Store

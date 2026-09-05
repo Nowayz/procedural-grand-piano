@@ -181,7 +181,7 @@
 #define PIANO_RADIATION_003 -1.79719518807
 #endif
 typedef struct {
- double state[STATE_COUNT], modes[MODE_ROWS][MAX_MODES], impact_state[17][IMPACT_COUNT], duplex[2][5], hammer_gains[10], radiation_state[3], radiation_step[3], radiation_gain[4], radiation_pole[4], output_eq_state[6], output_eq_step[6], output_eq_gain[7], output_eq_weight[6], highres_band[14], output_eq_normalization, highres_anchor;
+ double state[STATE_COUNT], modes[MODE_ROWS][MAX_MODES], impact_state[17][IMPACT_COUNT], duplex[2][5], hammer_gains[10], radiation_state[3], radiation_step[3], radiation_gain[4], radiation_pole[4], output_eq_state[6], output_eq_step[6], output_eq_gain[7], output_eq_weight[6], highres_coefficients[HIGHRES_SPECTRAL_TERMS], output_eq_normalization, highres_anchor;
  double phase_drive[3][MAX_MODES];
  double unison_inverse[MAX_MODES];
  double contact_weights[3], contact_gains[3], unison_weights[MAX_MODES], unison_shares[MAX_MODES], hammer_impulse, hammer_contact_seconds;
@@ -204,7 +204,8 @@ static Voice offline_voice, strike_template, voices[MAX_VOICES], *voice = &offli
 static Event events[EVENT_COUNT];
 /* Structure-of-arrays layout lets one SIMD lane pair advance two independent
  * quadrature sections without changing the underlying transfer function. */
-static double soundboard_filters[6][SOUND_FILTER_COUNT];
+/* Bandpass b1 is identically zero; retain only b0, b2, a1, a2 and gain. */
+static double soundboard_filters[5][SOUND_FILTER_COUNT];
 static double noise_filters[NOISE_FILTER_COUNT][9];
 static int filters_ready;
 static double filters_rate;
@@ -378,16 +379,19 @@ static double output_eq_residual_db(double midi, double velocity, double frequen
  return df1 * (-2 * y - .25 * x + x2) - .25 * x * df2;
 }
 
+/* One global log-frequency polynomial, with analytic saturation outside the
+ * calibrated frequency range. There are no bands, knots, or interval searches. */
 static double highres_radiation_db(Voice *target, double frequency) {
- static const double position[14] = {.0405683813627,.868244295669,1.52920834311,2.20153242881,2.86249647625,3.52346052369,4.19017239056,4.851136438,5.52346052369,6.18442457114,6.84538861858,7.51210048544,8.17306453289,8.84538861858}; double x = log2(clamp(frequency, 28.2842712475, 12649.1106407) / 27.5); int index = 0; while (index < 12 && x > position[index + 1]) index += 1; double x0 = position[index], x1 = position[index + 1], width = x1 - x0, amount = clamp((x - x0) / width, 0, 1), amount2 = amount * amount, amount3 = amount2 * amount, y0 = target->highres_band[index], y1 = target->highres_band[index + 1], slope0 = index ? (target->highres_band[index + 1] - target->highres_band[index - 1]) / (position[index + 1] - position[index - 1]) : (y1 - y0) / width, slope1 = index < 12 ? (target->highres_band[index + 2] - target->highres_band[index]) / (position[index + 2] - position[index]) : (y1 - y0) / width;
- return (2 * amount3 - 3 * amount2 + 1) * y0 + (amount3 - 2 * amount2 + amount) * width * slope0 + (-2 * amount3 + 3 * amount2) * y1 + (amount3 - amount2) * width * slope1;
+ return piano_chebyshev(target->highres_coefficients, HIGHRES_SPECTRAL_TERMS, highres_frequency_coordinate(frequency));
 }
 
 static void initialize_highres_radiation(Voice *target) {
  if (PIANO_HIGHRES_RADIATION_SCALE == 0) return; double x = (target->midi - 64.5) / 43.5, y = 2 * target->strike_velocity - 1, tx[15] = {1,x}, ty[8] = {1,y}, latent[HIGHRES_RANK];
  for (int degree = 2; degree < 15; degree += 1) tx[degree] = 2 * x * tx[degree - 1] - tx[degree - 2]; for (int degree = 2; degree < 8; degree += 1) ty[degree] = 2 * y * ty[degree - 1] - ty[degree - 2];
  for (int component = 0; component < HIGHRES_RANK; component += 1) { double value = 0; int term = 0; for (int i = 0; i < 15; i += 1) for (int j = 0; j < 8; j += 1) value += highres_spatial[term++][component] * tx[i] * ty[j]; latent[component] = value; }
- for (int band = 0; band < 14; band += 1) { double value = 0; for (int component = 0; component < HIGHRES_RANK; component += 1) value += highres_scale[component] * latent[component] * highres_spectral[band][component]; target->highres_band[band] = value; }
+ /* The constant cancels in every use: response(f) - response(fundamental).
+  * start_voice clears coefficient zero; do not reconstruct this silent term. */
+ for (int degree = 1; degree < HIGHRES_SPECTRAL_TERMS; degree += 1) { double value = 0; for (int component = 0; component < HIGHRES_RANK; component += 1) value += highres_scale[component] * latent[component] * highres_spectral[degree][component]; target->highres_coefficients[degree] = value; }
  target->highres_anchor = highres_radiation_db(target, target->frequency);
 }
 
@@ -443,7 +447,7 @@ static void initialize_noise_filter(int index, double cutoff, int highpass, doub
 
 static void initialize_filters(double sample_rate) {
  if (filters_ready && filters_rate == sample_rate) return;
- for (int index = 0; index < SOUND_FILTER_COUNT; index += 1) { double frequency, q, gain; soundboard_profile(index, &frequency, &q, &gain); double omega = TWO_PI * frequency / sample_rate, alpha = sin(omega) / (2 * q), inverse_a0 = 1 / (1 + alpha); soundboard_filters[0][index] = alpha * inverse_a0; soundboard_filters[1][index] = 0; soundboard_filters[2][index] = -alpha * inverse_a0; soundboard_filters[3][index] = -2 * cos(omega) * inverse_a0; soundboard_filters[4][index] = (1 - alpha) * inverse_a0; soundboard_filters[5][index] = gain; }
+ for (int index = 0; index < SOUND_FILTER_COUNT; index += 1) { double frequency, q, gain; soundboard_profile(index, &frequency, &q, &gain); double omega = TWO_PI * frequency / sample_rate, alpha = sin(omega) / (2 * q), inverse_a0 = 1 / (1 + alpha); soundboard_filters[0][index] = alpha * inverse_a0; soundboard_filters[1][index] = -alpha * inverse_a0; soundboard_filters[2][index] = -2 * cos(omega) * inverse_a0; soundboard_filters[3][index] = (1 - alpha) * inverse_a0; soundboard_filters[4][index] = gain; }
  /* Named stochastic-contact bands: felt, presence, air, body, diffuse body, plate. */
  initialize_noise_filter(0, 6500, 0, sample_rate); initialize_noise_filter(1, 6500, 0, sample_rate); initialize_noise_filter(2, 6500, 0, sample_rate); initialize_noise_filter(3, 1800, 1, sample_rate);
  initialize_noise_filter(4, 7500, 1, sample_rate); initialize_noise_filter(5, 15500, 0, sample_rate);
@@ -640,9 +644,9 @@ static double filter_soundboard(double input) {
  v128_t sum = wasm_f64x2_splat(0), current_input = wasm_f64x2_splat(input);
  for (int index = 0; index < SOUND_FILTER_COUNT; index += 2) {
   v128_t x1 = wasm_v128_load(state + SOUND_O + index), x2 = wasm_v128_load(state + SOUND_O + SOUND_FILTER_COUNT + index), y1 = wasm_v128_load(state + SOUND_O + 2 * SOUND_FILTER_COUNT + index), y2 = wasm_v128_load(state + SOUND_O + 3 * SOUND_FILTER_COUNT + index);
-  v128_t result = wasm_f64x2_sub(wasm_f64x2_add(wasm_f64x2_add(wasm_f64x2_mul(wasm_v128_load(soundboard_filters[0] + index), current_input), wasm_f64x2_mul(wasm_v128_load(soundboard_filters[1] + index), x1)), wasm_f64x2_mul(wasm_v128_load(soundboard_filters[2] + index), x2)), wasm_f64x2_add(wasm_f64x2_mul(wasm_v128_load(soundboard_filters[3] + index), y1), wasm_f64x2_mul(wasm_v128_load(soundboard_filters[4] + index), y2)));
+  v128_t result = wasm_f64x2_sub(wasm_f64x2_add(wasm_f64x2_mul(wasm_v128_load(soundboard_filters[0] + index), current_input), wasm_f64x2_mul(wasm_v128_load(soundboard_filters[1] + index), x2)), wasm_f64x2_add(wasm_f64x2_mul(wasm_v128_load(soundboard_filters[2] + index), y1), wasm_f64x2_mul(wasm_v128_load(soundboard_filters[3] + index), y2)));
   wasm_v128_store(state + SOUND_O + SOUND_FILTER_COUNT + index, x1); wasm_v128_store(state + SOUND_O + index, current_input); wasm_v128_store(state + SOUND_O + 3 * SOUND_FILTER_COUNT + index, y1); wasm_v128_store(state + SOUND_O + 2 * SOUND_FILTER_COUNT + index, result);
-  sum = wasm_f64x2_add(sum, wasm_f64x2_mul(wasm_v128_load(soundboard_filters[5] + index), result));
+  sum = wasm_f64x2_add(sum, wasm_f64x2_mul(wasm_v128_load(soundboard_filters[4] + index), result));
  }
  double lanes[2]; wasm_v128_store(lanes, sum); return lanes[0] + lanes[1];
 }

@@ -1,0 +1,28 @@
+{
+  "name": "C-major-chord",
+  "impulseResponse": false,
+  "addedReverb": false,
+  "source": "generate-demos.mjs (no effects)",
+  "mastering": {
+    "method": "Constant gain; no compression or limiting",
+    "gainDb": 6.039999999999999,
+    "source": {
+      "lufs": -31.37,
+      "truePeakDbTP": -8.04,
+      "loudnessRangeLU": 10.5,
+      "completeDecode": true
+    },
+    "wav": {
+      "lufs": -25.35,
+      "truePeakDbTP": -2,
+      "loudnessRangeLU": 10.6,
+      "completeDecode": true
+    },
+    "mp3": {
+      "lufs": -25.59,
+      "truePeakDbTP": -2.27,
+      "loudnessRangeLU": 10.6,
+      "completeDecode": true
+    }
+  }
+}

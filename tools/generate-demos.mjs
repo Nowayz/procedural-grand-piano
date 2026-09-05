@@ -7,7 +7,7 @@ import { SAMPLE_RATE, synthesizeGrandPiano } from '../src/grand-piano.js';
 import { writeMonoPcm16Wav } from './audio-analysis.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const demoRoot = path.join(root, 'demos');
+const demoRoot = process.argv[2] ? path.resolve(process.argv[2]) : path.join(root, 'demos');
 
 function mixEvents(events, durationSeconds) {
   const output = new Float32Array(Math.round(durationSeconds * SAMPLE_RATE));
