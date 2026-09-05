@@ -1,0 +1,22 @@
+{
+  "name": "Bricasti M7 Boston Hall B",
+  "captureBy": "Samplicity",
+  "archiveVersion": "2023-10",
+  "sourcePage": "https://samplicity.com/downloads/",
+  "archiveUrl": "https://cdn.samplicity.com/downloads/Samplicity%20-%20Bricasti%20IRs%20version%202023-10.zip",
+  "archiveFiles": [
+    "Samplicity - Bricasti IRs version 2023-10, left-right files, 44.1 Khz/1 Halls 19 Boston Hall B, 44K L.wav",
+    "Samplicity - Bricasti IRs version 2023-10, left-right files, 44.1 Khz/1 Halls 19 Boston Hall B, 44K R.wav"
+  ],
+  "sourceSha256": [
+    "934e96077d8d131309b7fd7b3c05c7497f70e72e634b511e0c62c142fca31e9d",
+    "3447c237af2ed3c240de5d67a3ef0699419edda4d09bab3ce16f255517d7cc7d"
+  ],
+  "sha256": "a4daab115b6c4f755fbd7eb80b61c8ef948e0d57bdc26d8613f95ba84cc9770f",
+  "sampleRate": 44100,
+  "channels": 2,
+  "format": "float32",
+  "frames": 126522,
+  "durationSeconds": 2.8689795918367347,
+  "processing": "Average corresponding output channels of the left-input and right-input captures. No resampling, EQ, normalization, predelay, or tail truncation."
+}

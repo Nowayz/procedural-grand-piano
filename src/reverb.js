@@ -1,5 +1,6 @@
 export const DEFAULT_REVERB_NAME = 'Bricasti M7 Boston Hall A';
 export const DEFAULT_REVERB_IR_URL = new URL('./impulse-responses/bricasti-m7-boston-hall-a.wav', import.meta.url);
+export const BOSTON_HALL_B_IR_URL = new URL('./impulse-responses/bricasti-m7-boston-hall-b.wav', import.meta.url);
 export const DEFAULT_REVERB_WET = 0.28;
 
 function clamp(value, minimum, maximum) {

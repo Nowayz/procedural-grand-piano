@@ -119,6 +119,13 @@ The old `createGarageBandStyleReverb` function name remains an alias for
 compatibility; `./default-ir` exports the current response, while `./small-hall-ir`
 still explicitly selects the previous Small Hall asset.
 
+Boston Hall B is also bundled as `./boston-hall-b-ir`. To select it explicitly:
+
+```js
+import { createPianoReverb, BOSTON_HALL_B_IR_URL } from 'procedural-grand-piano/reverb';
+const reverbB = await createPianoReverb(context, { impulseUrl: BOSTON_HALL_B_IR_URL });
+```
+
 ## Realtime keyboard API
 
 The realtime API keeps each note alive while it remains acoustically audible and uses an `AudioWorklet` as the audio clock. A matching key-up controls the damper, but a voice whose radiated output and bridge energy have both fallen below the hearing threshold retires even if its key or the sustain pedal remains down. Wasm owns the fixed voice pool, note state, sustain state, and mono mix; JavaScript only forwards controls and copies the finished block into the browser-provided output channel. No objects, arrays, or views are created inside the worklet's `process()` callback.

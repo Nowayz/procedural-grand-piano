@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { createPianoReverb, createGarageBandStyleReverb, DEFAULT_REVERB_IR_URL, DEFAULT_REVERB_WET } from '../src/reverb.js';
+import { createPianoReverb, createGarageBandStyleReverb, DEFAULT_REVERB_IR_URL, DEFAULT_REVERB_WET, BOSTON_HALL_B_IR_URL } from '../src/reverb.js';
 import { createHash } from 'node:crypto';
 import { readWav } from '../tools/audio-analysis.mjs';
 
@@ -11,6 +11,23 @@ class FakeNode {
   connect(target) { this.connections.push(target); return target; }
   disconnect() { this.connections.length = 0; }
 }
+
+test('Boston Hall B is a distinct optional native-rate stereo IR', async () => {
+  const wav = await readFile(BOSTON_HALL_B_IR_URL);
+  const metadata = JSON.parse(await readFile(new URL('../src/impulse-responses/bricasti-m7-boston-hall-b.json', import.meta.url), 'utf8'));
+  const impulse = await readWav(BOSTON_HALL_B_IR_URL, { preserveChannels: true });
+  assert.equal(createHash('sha256').update(wav).digest('hex'), metadata.sha256);
+  assert.notDeepEqual(wav, await readFile(DEFAULT_REVERB_IR_URL));
+  assert.equal(impulse.sampleRate, 44100);
+  assert.equal(impulse.channels, 2);
+  assert.equal(impulse.bitsPerSample, 32);
+  assert.equal(impulse.audioFormat, 3);
+  assert.equal(impulse.samples.length, metadata.frames);
+  assert.ok(metadata.durationSeconds > 1 && metadata.durationSeconds < 10);
+  assert.ok(impulse.samples.every(Number.isFinite));
+  assert.notDeepEqual(impulse.channelSamples[0], impulse.channelSamples[1]);
+  assert.match(DEFAULT_REVERB_IR_URL.pathname, /boston-hall-a\.wav$/);
+});
 
 test('default Boston Hall A asset preserves the full native stereo float capture', async () => {
   const wav = await readFile(fileURLToPath(DEFAULT_REVERB_IR_URL));

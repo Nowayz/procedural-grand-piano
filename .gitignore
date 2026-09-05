@@ -5,4 +5,5 @@ build/ir-downloads/
 *.wav
 !src/impulse-responses/genesis-6-studio-room.wav
 !src/impulse-responses/bricasti-m7-boston-hall-a.wav
+!src/impulse-responses/bricasti-m7-boston-hall-b.wav
 .DS_Store

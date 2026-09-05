@@ -9,6 +9,7 @@
     "./realtime": "./src/realtime.js",
     "./reverb": "./src/reverb.js",
     "./default-ir": "./src/impulse-responses/bricasti-m7-boston-hall-a.wav",
+    "./boston-hall-b-ir": "./src/impulse-responses/bricasti-m7-boston-hall-b.wav",
     "./small-hall-ir": "./src/impulse-responses/small-hall-tail.wav"
   },
   "files": [
